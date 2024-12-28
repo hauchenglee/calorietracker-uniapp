@@ -1,17 +1,80 @@
 {
-	"pages": [{
-		"path": "pages/index/index",
-		"style": {
-			"navigationBarTitleText": "uni-app"
-		}
-	}],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"app-plus": {
-			"background": "#efeff4"
-		}
-	}
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^fui-(.*)": "@/components/firstui/fui-$1/fui-$1.vue",
+      "^floating-button": "@/components/floating-button/floating-button.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/init/init",
+      "style": {
+        "navigationBarTitleText": "init",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "login",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/diary/diary",
+      "style": {
+        "navigationBarTitleText": "diary",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/food/food",
+      "style": {
+        "navigationBarTitleText": "food",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/more/more",
+      "style": {
+        "navigationBarTitleText": "more",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "backgroundTextStyle": "dark",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "First UI",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#EDF9FF",
+    "backgroundColorTop": "#EDF9FF",
+    "backgroundColorBottom": "#EDF9FF"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#465CFF",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/diary/diary",
+        "text": "Diary",
+        "iconPath": "static/images/tabbar/mod_default_3x.png",
+        "selectedIconPath": "static/images/tabbar/mod_selected_3x.png"
+      },
+      {
+        "pagePath": "pages/more/more",
+        "text": "More",
+        "iconPath": "static/images/tabbar/my_default_3x.png",
+        "selectedIconPath": "static/images/tabbar/my_selected_3x.png"
+      }
+    ]
+  },
+  "resizable": true
 }
