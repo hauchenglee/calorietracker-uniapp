@@ -3,7 +3,7 @@
         <view class="banner__content">
             <view class="pagination">
                 <view class="pagination-btn prev gradient" @click="changeDate(-1)">
-                    <fui-icon name="arrowleft" color="#fff" :size="40"></fui-icon>
+                    <fui-icon name="arrowleft" color="#465CFF" :size="40"></fui-icon>
                 </view>
                 <fui-button
                     class="date-button"
@@ -17,7 +17,7 @@
                 >{{ currentDate }}
                 </fui-button>
                 <view class="pagination-btn next gradient" @click="changeDate(1)">
-                    <fui-icon name="arrowright" color="#fff" :size="40"></fui-icon>
+                    <fui-icon name="arrowright" color="#465CFF" :size="40"></fui-icon>
                 </view>
             </view>
         </view>
@@ -260,7 +260,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(255, 183, 3, 0.2);
+    background: #fff;  /* 改为白色背景 */
+    border: 1px solid #465CFF;  /* 添加边框 */
     transition: all 0.3s ease;
 }
 
@@ -275,9 +276,9 @@ export default {
 }
 
 /* 渐变背景，从中间向外扩散 */
-.gradient {
+/*.gradient {
     background: radial-gradient(circle at center, var(--color-ice-blue-4), var(--color-ice-blue-4));
-}
+}*/
 
 /*  分页器 end */
 
