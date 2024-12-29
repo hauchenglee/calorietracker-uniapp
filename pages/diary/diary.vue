@@ -1,62 +1,57 @@
 <template>
-    <view class="base">
-        <view class="layout-banner">
-            <view class="banner__content">
-                <view class="pagination">
-                    <view class="pagination-btn prev gradient" @click="changeDate(-1)">
-                        <fui-icon name="arrowleft" color="#465CFF" :size="40"></fui-icon>
-                    </view>
-                    <fui-button
-                        class="date-button"
-                        background="#fff"
-                        color="#465CFF"
-                        borderColor="#465CFF"
-                        btn-size="medium"
-                        radius="96rpx"
-                        :margin="['24rpx']"
-                        @click="onShowDatePicker('date')"
-                    >{{ currentDate }}
-                    </fui-button>
-                    <view class="pagination-btn next gradient" @click="changeDate(1)">
-                        <fui-icon name="arrowright" color="#465CFF" :size="40"></fui-icon>
-                    </view>
+    <view class="layout-banner">
+        <view class="banner__content">
+            <view class="pagination">
+                <view class="pagination-btn prev gradient" @click="changeDate(-1)">
+                    <fui-icon name="arrowleft" color="#465CFF" :size="40"></fui-icon>
+                </view>
+                <fui-button
+                    class="date-button"
+                    background="#fff"
+                    color="#465CFF"
+                    btn-size="medium"
+                    radius="96rpx"
+                    :margin="['24rpx']"
+                    @click="onShowDatePicker('date')"
+                >{{ currentDate }}
+                </fui-button>
+                <view class="pagination-btn next gradient" @click="changeDate(1)">
+                    <fui-icon name="arrowright" color="#465CFF" :size="40"></fui-icon>
                 </view>
             </view>
-            <mx-date-picker
-                :show="showPicker"
-                :type="type"
-                :value="currentDate"
-                @confirm="onDatePickerConfirm"
-                @cancel="onDatePickerCancel"
-            />
         </view>
-        <view class="layout-card">
-            <fui-card full class="fui-card" title="卡路里" tag="">
-                <view class="fui-card__content">1121</view>
-            </fui-card>
-        </view>
-        <view class="layout-list">
-            <fui-list>
-                <template v-for="(mealGroup, mealIndex) in responseBody.data" :key="mealIndex">
-                    <view class="list__section-title">{{ mealGroup.meal_cn }}</view>
-                    <fui-list-cell
-                        v-for="(food, foodIndex) in mealGroup.food"
-                        :key="foodIndex"
-                        arrow
-                        :padding="[0,'32rpx']"
-                        :bottomBorder="true"
-                        @click="href(mealGroup.meal, food.id)">
-                        <view class="list__item">
-                            <text>{{ `${food.name} ${food.quantity}${food.unit} ${food.calorie}卡路里` }}</text>
-                        </view>
-                    </fui-list-cell>
-                </template>
-            </fui-list>
-            <fui-loading :isFixed="true" v-if="isLoading"></fui-loading>
-        </view>
-
-        <floating-button :bottom="floatButtonHeight" :right="floatButtonRight" @click="handleFloatingButtonClick"/>
+        <mx-date-picker
+            :show="showPicker"
+            :type="type"
+            :value="currentDate"
+            @confirm="onDatePickerConfirm"
+            @cancel="onDatePickerCancel"
+        />
     </view>
+    <view class="layout-card">
+        <view class="card-content"></view>
+    </view>
+    <view class="layout-list">
+        <fui-list>
+            <template v-for="(mealGroup, mealIndex) in responseBody.data" :key="mealIndex">
+                <view class="list__section-title">{{ mealGroup.meal_cn }}</view>
+                <fui-list-cell
+                    v-for="(food, foodIndex) in mealGroup.food"
+                    :key="foodIndex"
+                    arrow
+                    :padding="[0,'32rpx']"
+                    :bottomBorder="true"
+                    @click="href(mealGroup.meal, food.id)">
+                    <view class="list__item">
+                        <text>{{ `${food.name} ${food.quantity}${food.unit} ${food.calorie}卡路里` }}</text>
+                    </view>
+                </fui-list-cell>
+            </template>
+        </fui-list>
+        <fui-loading :isFixed="true" v-if="isLoading"></fui-loading>
+    </view>
+
+    <floating-button :bottom="floatButtonHeight" :right="floatButtonRight" @click="handleFloatingButtonClick"/>
 </template>
 
 <script>
@@ -229,10 +224,6 @@ export default {
 </script>
 
 <style>
-.base {
-    background: var(--background);
-}
-
 /* 内容容器 */
 .layout-banner {
     width: 100%;
@@ -286,19 +277,34 @@ export default {
 /*.gradient {
     background: radial-gradient(circle at center, var(--color-ice-blue-4), var(--color-ice-blue-4));
 }*/
-
 /*  分页器 end */
 
 /* Card */
-.fui-card__content {
+.layout-card {
+    height: 200px;
+    /* 为了让卡片垂直居中 */
+    display: flex;
+    align-items: center;
+    /* 如果需要水平居中也可以加上 */
+    justify-content: center;
+}
+
+.card-content {
+    width: 90%;
+    height: 160px;
     padding: var(--spacing-all-md);
-    height: 120px;
     box-sizing: border-box;
+    background-color: #fff;
+    /* 深色阴影效果 */
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.15), 
+        0 8px 24px rgba(0, 0, 0, 0.1);
+    /* 可选：添加圆角 */
+    border-radius: 8px;
 }
 
 /* List Component */
 .layout-list {
-    background: var(--color-light-white);
     width: var(--width-full);
     height: var(--height-full);;
     /*margin-top: var(--space-24);*/ /* 可以根据需要调整与card的间距 */
