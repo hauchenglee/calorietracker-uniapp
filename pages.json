@@ -40,6 +40,30 @@
       }
     },
     {
+      "path": "pages/food/add/add",
+      "style": {
+        "navigationBarTitleText": "add",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/food/all/all",
+      "style": {
+        "navigationBarTitleText": "all",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/food/favorite/favorite",
+      "style": {
+        "navigationBarTitleText": "favorite",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/more/more",
       "style": {
         "navigationBarTitleText": "more",
