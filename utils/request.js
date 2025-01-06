@@ -65,7 +65,7 @@ const request = {
             uni.uploadFile({
                 url: this.baseURL + url,
                 filePath,
-                name: meal_cn,
+                name: 'image', // 固定为'image'以匹配Java端的@RequestParam("image")
                 formData,
                 header: {
                     'Authorization': token ? `Bearer ${token}` : '',

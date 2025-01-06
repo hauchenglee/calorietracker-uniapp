@@ -1,5 +1,5 @@
 <template>
-    <view class="div"></view>
+    <view class="div-child"></view>
 </template>
 
 <script setup>
@@ -7,8 +7,11 @@
 </script>
 
 <style scoped>
-.div {
-    height: 100px;
-    background: blue;
+.div-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* 水平置中 */
+    justify-content: center;  /* 垂直置中 */
 }
 </style>

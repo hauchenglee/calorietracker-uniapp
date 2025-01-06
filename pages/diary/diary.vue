@@ -48,7 +48,8 @@
                 </fui-list-cell>
             </template>
         </fui-list>
-        <fui-loading :isFixed="true" v-if="isLoading"></fui-loading>
+        <fui-loadmore :isFixed="true" v-if="isLoading"></fui-loadmore>
+        <fui-divider dividerColor="#3A5160" color="#3A5160" text="没有更多了"></fui-divider>
     </view>
 
     <floating-button :bottom="floatButtonHeight" :right="floatButtonRight" @click="handleFloatingButtonClick"/>
@@ -318,38 +319,38 @@ export default {
 }
 
 .list__item text {
-    padding-left: var(--space-24);
-    padding-right: var(--space-12);
+    padding-left: var(--size-24);
+    padding-right: var(--size-12);
     flex-shrink: 0;
 }
 
 .list__section-title {
-    font-size: var(--size-lg);
-    line-height: var(--size-lg);
+    font-size: var(--size-32);
+    line-height: var(--size-32);
     font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-32);
-    padding-left: var(--space-20);
+    margin-bottom: var(--size-32);
+    padding-left: var(--size-20);
     position: relative;
     box-sizing: border-box;
-    margin-left: var(--space-32);
+    margin-left: var(--size-32);
 }
 
 .list__section-title {
-    padding-top: var(--space-4);
+    padding-top: var(--size-4);
 }
 
 .list__section-title:not(:first-child) {
-    padding-top: var(--space-40);
+    padding-top: var(--size-40);
 }
 
 .list__section-title::after {
     content: '';
     position: absolute;
-    width: var(--space-8);
+    width: var(--size-8);
     height: var(--height-full);
     background: var(--color-primary);
     border-radius: var(--radius-sm);
     left: 0;
-    top: var(--space-20);
+    top: var(--size-20);
 }
 </style>

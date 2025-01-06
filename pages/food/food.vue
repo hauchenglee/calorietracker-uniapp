@@ -5,7 +5,7 @@
             </view>
         </view>
         <view class="layout-segmented">
-            <fui-segmented-control :values="values2" @click="itemClick"></fui-segmented-control>
+            <fui-segmented-control color="#3A5160" :values="values2" @click="itemClick"></fui-segmented-control>
         </view>
         <view class="layout-segmented-detail">
             <component :is="currentComponent" v-if="currentComponent"></component>
@@ -32,8 +32,15 @@ export default {
                 {name: '全部', component: 'AllPage'},
                 {name: '收藏', component: 'FavoritePage'}
             ],
-            currentComponent: null // 当前显示的组件
+            currentComponent: 'AddPage' // 设置初始组件为 AddPage
         };
+    },
+    // 或者使用 created 生命周期
+    mounted() {
+        // 确保初始化时加载 AddPage
+        if (!this.currentComponent) {
+            this.currentComponent = 'AddPage';
+        }
     },
     methods: {
         itemClick(e) {
@@ -72,14 +79,9 @@ export default {
 .layout-segmented-detail {
     flex: 1;
     position: relative;
-    height: calc(100vh - 150px); /* 减去banner和segmented的总高度 */
     overflow-y: auto;
-    background-color: #f5f5f5;
+    display: flex;  /* 关键：必须设置 打开开关 */
+    flex-direction: column;  /* 关键：必须设置 调节旋钮 */
 }
 
-/* 确保子组件在detail区域内正确显示 */
-.layout-segmented-detail > * {
-    width: 100%;
-    height: 100%;
-}
 </style>

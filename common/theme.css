@@ -51,35 +51,23 @@
     --color-autumn-red-5: #c62038;
     --color-autumn-red-6: #bb031d;
 
-    /* 基础间距单位 */
-    --space-2: 2rpx;
-    --space-4: 4rpx;
-    --space-8: 8rpx;
-    --space-12: 12rpx;
-    --space-16: 16rpx;
-    --space-20: 20rpx;
-    --space-24: 24rpx;
-    --space-32: 32rpx;
-    --space-40: 40rpx;
-    --space-48: 48rpx;
-    --space-50: 50rpx;
-    --space-64: 64rpx;
-    --space-80: 80rpx;
-    --space-100: 100rpx;
-
     /* 尺寸系统 */
-    --size-xs: 20rpx;
-    --size-sm: 24rpx;
-    --size-md: 28rpx;
-    --size-lg: 32rpx;
-    --size-xl: 36rpx;
-
-    /* 间距系统 */
-    --spacing-xs: 16rpx;
-    --spacing-sm: 24rpx;
-    --spacing-md: 32rpx;
-    --spacing-lg: 48rpx;
-    --spacing-xl: 64rpx;
+    --size-2: 2rpx;
+    --size-4: 4rpx;
+    --size-8: 8rpx;
+    --size-12: 12rpx;
+    --size-16: 16rpx;
+    --size-20: 20rpx;
+    --size-24: 24rpx;
+    --size-28: 28rpx;
+    --size-32: 32rpx;
+    --size-36: 36rpx;
+    --size-40: 40rpx;
+    --size-48: 48rpx;
+    --size-50: 50rpx;
+    --size-64: 64rpx;
+    --size-80: 80rpx;
+    --size-100: 100rpx;
 
     /* 宽度百分比 */
     --width-full: 100%;
@@ -145,20 +133,20 @@
 
     /* padding/margin 组合 */
     /* 上下左右相等 */
-    --spacing-all-sm: var(--space-16);
-    --spacing-all-md: var(--space-24);
-    --spacing-all-lg: var(--space-32);
+    --spacing-all-sm: var(--size-16);
+    --spacing-all-md: var(--size-24);
+    --spacing-all-lg: var(--size-32);
 
     /* 上下相等，左右相等 */
-    --spacing-y-sm-x-md: var(--space-16) var(--space-24);
-    --spacing-y-md-x-lg: var(--space-24) var(--space-32);
+    --spacing-y-sm-x-md: var(--size-16) var(--size-24);
+    --spacing-y-md-x-lg: var(--size-24) var(--size-32);
 
     /* 上右下左分别设置 */
-    --spacing-header: var(--space-100) var(--space-50) 0 var(--space-32);
-    --spacing-card: var(--space-32) var(--space-24) var(--space-16) var(--space-24);
-    --spacing-list: var(--space-24) var(--space-32) var(--space-24) var(--space-32);
+    --spacing-header: var(--size-100) var(--size-50) 0 var(--size-32);
+    --spacing-card: var(--size-32) var(--size-24) var(--size-16) var(--size-24);
+    --spacing-list: var(--size-24) var(--size-32) var(--size-24) var(--size-32);
 
     /* 常用组合 */
-    --spacing-form: var(--space-40) var(--space-32) var(--space-20) var(--space-32);
-    --spacing-modal: var(--space-48) var(--space-32) var(--space-32) var(--space-32);
+    --spacing-form: var(--size-40) var(--size-32) var(--size-20) var(--size-32);
+    --spacing-modal: var(--size-48) var(--size-32) var(--size-32) var(--size-32);
 }
