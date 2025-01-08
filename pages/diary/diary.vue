@@ -215,7 +215,7 @@ page {
     border-radius: 32rpx;
     padding: 40rpx;
     /* #ifdef APP-PLUS */
-    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
     /* #endif */
     margin-bottom: 40rpx;
     display: flex;
@@ -252,7 +252,7 @@ page {
     border-radius: 32rpx;
     padding: 50rpx;
     /* #ifdef APP-PLUS */
-    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
     /* #endif */
     margin-bottom: 40rpx;
 }
@@ -301,17 +301,28 @@ page {
     transition: width 0.3s ease;
 }
 
-.calories { background: #3b82f6; }
-.carbs { background: #10b981; }
-.protein { background: #8b5cf6; }
-.fat { background: #f59e0b; }
+.calories {
+    background: #3b82f6;
+}
+
+.carbs {
+    background: #10b981;
+}
+
+.protein {
+    background: #8b5cf6;
+}
+
+.fat {
+    background: #f59e0b;
+}
 
 .meal-list {
     background: #ffffff;
     border-radius: 40rpx;
     padding: 40rpx;
     /* #ifdef APP-PLUS */
-    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
     /* #endif */
 }
 
