@@ -2,13 +2,21 @@
     <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
     <view class="container">
         <view class="date-picker">
-            <view class="date-display">2025年1月8日</view>
+            <view class="date-display">{{ currentDate }}</view>
             <view class="date-nav">
-                <button class="date-btn">←</button>
-                <button class="date-btn">📅</button>
-                <button class="date-btn">→</button>
+                <button class="date-btn" @click="changeDate(-1)">←</button>
+                <button class="date-btn" @click="onShowDatePicker('date')">📅</button>
+                <button class="date-btn" @click="changeDate(1)">→</button>
             </view>
         </view>
+
+        <mx-date-picker
+            :show="showPicker"
+            :type="type"
+            :value="currentDate"
+            @confirm="onDatePickerConfirm"
+            @cancel="onDatePickerCancel"
+        />
 
         <view class="nutrition-summary">
             <view class="progress-item">
@@ -77,10 +85,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🥛</view>
                         <view class="food-info">
                             <text class="food-name">全脂牛奶</text>
-                            <text class="food-macro">蛋白质 8g · 碳水 12g · 脂肪 8g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 12g</text>
+                                <text class="food-protein">蛋白质 8g</text>
+                                <text class="food-fat">脂肪 8g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -91,10 +102,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🥖</view>
                         <view class="food-info">
                             <text class="food-name">全麦面包</text>
-                            <text class="food-macro">蛋白质 6g · 碳水 28g · 脂肪 2g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 28g</text>
+                                <text class="food-protein">蛋白质 6g</text>
+                                <text class="food-fat">脂肪 2g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -115,10 +129,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🍚</view>
                         <view class="food-info">
                             <text class="food-name">糙米饭</text>
-                            <text class="food-macro">碳水 44g · 蛋白质 4g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 44g</text>
+                                <text class="food-protein">蛋白质 4g</text>
+                                <text class="food-fat">脂肪 0g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -139,10 +156,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🥘</view>
                         <view class="food-info">
                             <text class="food-name">清炒西兰花</text>
-                            <text class="food-macro">蛋白质 5g · 碳水 8g · 脂肪 3g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 8g</text>
+                                <text class="food-protein">蛋白质 5g</text>
+                                <text class="food-fat">脂肪 3g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -153,10 +173,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🍗</view>
                         <view class="food-info">
                             <text class="food-name">鸡胸肉</text>
-                            <text class="food-macro">蛋白质 25g · 碳水 0g · 脂肪 8g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 0g</text>
+                                <text class="food-protein">蛋白质 25g</text>
+                                <text class="food-fat">脂肪 8g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -167,10 +190,13 @@
 
                 <view class="food-row">
                     <view class="food-detail">
-                        <view class="food-icon">🥗</view>
                         <view class="food-info">
                             <text class="food-name">蔬菜沙拉</text>
-                            <text class="food-macro">蛋白质 3g · 碳水 15g · 脂肪 8g</text>
+                            <view>
+                                <text class="food-carbohydrate">碳水 15g</text>
+                                <text class="food-protein">蛋白质 3g</text>
+                                <text class="food-fat">脂肪 8g</text>
+                            </view>
                         </view>
                     </view>
                     <view class="food-calories">
@@ -186,17 +212,116 @@
 </template>
 
 <script>
+import {dateFormatter} from '@/utils/dateFormatter.js'
+import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
+import dietApi from "@/api/diet-api";
+
 export default {
+    components: {
+        MxDatePicker
+    },
+
     data() {
         return {
-            statusBarHeight: 0 // 适配屏幕高度
+            statusBarHeight: 0,// 适配屏幕高度
+
+            // 其他
+            isLoading: false, // 添加 loading 状态变量
+
+            // 日期
+            currentDate: '', // 添加当前日期字段
+            showPicker: false, // mx-datepicker
+            type: 'date', // mx-datepicker
+            value: '', // mx-datepicker
         }
     },
+
     onLoad() {
         // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
-    }
+
+        // 设置初始日期
+        this.currentDate = this.getCurrentDate();
+    },
+
+    methods: {
+
+        // 添加日期变更方法
+        async changeDate(days) {
+            this.isLoading = true;
+            console.log("change data: " + this.isLoading)
+
+            const date = new Date(dateFormatter.formatToSlash(this.currentDate)); // 转换为斜杠格式以确保兼容性
+            date.setDate(date.getDate() + days);
+            this.currentDate = dateFormatter.getCurrentDate(date);
+
+            await new Promise(resolve => setTimeout(resolve, 800));
+            await this.initData();
+
+            this.isLoading = false;
+        },
+
+        // 获取当前日期，格式为 YYYY-MM-DD
+        getCurrentDate(date = new Date()) {
+            return dateFormatter.getCurrentDate(date);
+        },
+
+        onShowDatePicker(type) {
+            this.type = type;
+            this.showPicker = true;
+        },
+
+        async onDatePickerConfirm(e) {
+            this.showPicker = false;
+            if (e) {
+                this.isLoading = true;
+                // 将日期格式从 yyyy/mm/dd 转换为 yyyy-mm-dd
+                this.currentDate = dateFormatter.formatToHyphen(e.value);
+
+                // 等待800ms
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // 重新获取数据
+                await this.initData();
+
+                this.isLoading = false;
+            }
+        },
+
+        onDatePickerCancel() {
+            this.showPicker = false;
+        },
+        // 日期 end
+        
+        // 页面初始化，调用api
+        async initData() {
+            try {
+                // 如果 currentDate 为空，才设置为当前日期
+                if (!this.currentDate) {
+                    this.currentDate = this.getCurrentDate();
+                }
+
+                const response = await dietApi.getByDate({date: this.currentDate});
+                console.log('API Response:', response);
+                if (response.code === 'A0001') {
+                    //
+                } else {
+                    uni.showToast({
+                        title: '获取数据失败',
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                uni.showToast({
+                    title: '获取数据失败',
+                    icon: 'none'
+                });
+            }
+        },
+
+    } // method end
 }
 </script>
 
@@ -380,16 +505,6 @@ page {
     gap: 24rpx;
 }
 
-.food-icon {
-    width: 72rpx;
-    height: 72rpx;
-    background: #ffffff;
-    border-radius: 20rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .food-info {
     flex: 1;
 }
@@ -400,9 +515,26 @@ page {
     font-size: 28rpx;
 }
 
-.food-macro {
+.food-carbohydrate, .food-protein, .food-fat {
     font-size: 24rpx;
-    color: #718096;
+    margin-right: 16rpx;
+    padding: 4rpx 12rpx;
+    border-radius: 8rpx;
+}
+
+.food-carbohydrate {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.food-protein {
+    color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.food-fat {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
 }
 
 .food-calories {
