@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日饮食记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .date-picker {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date-display {
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .date-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f5f7fa;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nutrition-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .progress-item {
+            margin-bottom: 20px;
+        }
+
+        .progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .calories { background: #3b82f6; }
+        .carbs { background: #10b981; }
+        .protein { background: #8b5cf6; }
+        .fat { background: #f59e0b; }
+
+        /* 食物记录列表 */
+        .meal-list {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .meal-category {
+            margin-bottom: 25px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #edf2f7;
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .food-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f7fafc;
+            margin-bottom: 10px;
+        }
+
+        .food-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .food-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .food-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .food-info {
+            flex: 1;
+        }
+
+        .food-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .food-macro {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        .food-calories {
+            text-align: right;
+        }
+
+        .calories-value {
+            font-weight: 600;
+        }
+
+        .calories-unit {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        /* 浮动按钮 */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: #4c51bf;
+            color: white;
+            border: none;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.05);
+        }
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="date-picker">
+        <div class="date-display">2025年1月8日</div>
+        <div class="date-nav">
+            <button class="date-btn">←</button>
+            <button class="date-btn">📅</button>
+            <button class="date-btn">→</button>
+        </div>
+    </div>
+
+    <div class="nutrition-summary">
+        <div class="progress-item">
+            <div class="progress-header">
+                <div class="progress-label">
+                    <div class="progress-icon calories">🔥</div>
+                    <span>卡路里</span>
+                </div>
+                <div>1,422 / 2,000 kcal</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill calories" style="width: 71%"></div>
+            </div>
+        </div>
+
+        <div class="progress-item">
+            <div class="progress-header">
+                <div class="progress-label">
+                    <div class="progress-icon carbs">🌾</div>
+                    <span>碳水化合物</span>
+                </div>
+                <div>175 / 250 g</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill carbs" style="width: 70%"></div>
+            </div>
+        </div>
+
+        <div class="progress-item">
+            <div class="progress-header">
+                <div class="progress-label">
+                    <div class="progress-icon protein">🥩</div>
+                    <span>蛋白质</span>
+                </div>
+                <div>60 / 75 g</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill protein" style="width: 80%"></div>
+            </div>
+        </div>
+
+        <div class="progress-item">
+            <div class="progress-header">
+                <div class="progress-label">
+                    <div class="progress-icon fat">🥑</div>
+                    <span>脂肪</span>
+                </div>
+                <div>30 / 65 g</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fat" style="width: 46%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 食物记录列表 -->
+    <div class="meal-list">
+        <div class="meal-category">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">🌅</div>
+                    <span>早餐</span>
+                </div>
+                <div>450 kcal</div>
+            </div>
+
+            <div class="food-row">
+                <div class="food-detail">
+                    <div class="food-icon">🥛</div>
+                    <div class="food-info">
+                        <div class="food-name">全脂牛奶</div>
+                        <div class="food-macro">蛋白质 8g · 碳水 12g · 脂肪 8g</div>
+                    </div>
+                </div>
+                <div class="food-calories">
+                    <div class="calories-value">150</div>
+                    <div class="calories-unit">kcal</div>
+                </div>
+            </div>
+
+            <div class="food-row">
+                <div class="food-detail">
+                    <div class="food-icon">🥖</div>
+                    <div class="food-info">
+                        <div class="food-name">全麦面包</div>
+                        <div class="food-macro">蛋白质 6g · 碳水 28g · 脂肪 2g</div>
+                    </div>
+                </div>
+                <div class="food-calories">
+                    <div class="calories-value">180</div>
+                    <div class="calories-unit">kcal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="meal-category">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">☀️</div>
+                    <span>午餐</span>
+                </div>
+                <div>680 kcal</div>
+            </div>
+
+            <div class="food-row">
+                <div class="food-detail">
+                    <div class="food-icon">🍚</div>
+                    <div class="food-info">
+                        <div class="food-name">糙米饭</div>
+                        <div class="food-macro">碳水 44g · 蛋白质 4g</div>
+                    </div>
+                </div>
+                <div class="food-calories">
+                    <div class="calories-value">200</div>
+                    <div class="calories-unit">kcal</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="floating-btn">+</button>
+</div>
+</body>
+</html>

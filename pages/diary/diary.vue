@@ -1,356 +1,428 @@
 <template>
-    <view class="layout-banner">
-        <view class="banner__content">
-            <view class="pagination">
-                <view class="pagination-btn prev gradient" @click="changeDate(-1)">
-                    <fui-icon name="arrowleft" color="#465CFF" :size="40"></fui-icon>
+    <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
+    <view class="container">
+        <view class="date-picker">
+            <view class="date-display">2025年1月8日</view>
+            <view class="date-nav">
+                <button class="date-btn">←</button>
+                <button class="date-btn">📅</button>
+                <button class="date-btn">→</button>
+            </view>
+        </view>
+
+        <view class="nutrition-summary">
+            <view class="progress-item">
+                <view class="progress-header">
+                    <view class="progress-label">
+                        <view class="progress-icon calories">🔥</view>
+                        <text>卡路里</text>
+                    </view>
+                    <text>1,422 / 2,000 kcal</text>
                 </view>
-                <fui-button
-                    class="date-button"
-                    background="#fff"
-                    color="#465CFF"
-                    btn-size="medium"
-                    radius="96rpx"
-                    :margin="['24rpx']"
-                    @click="onShowDatePicker('date')"
-                >{{ currentDate }}
-                </fui-button>
-                <view class="pagination-btn next gradient" @click="changeDate(1)">
-                    <fui-icon name="arrowright" color="#465CFF" :size="40"></fui-icon>
+                <view class="progress-bar">
+                    <view class="progress-fill calories" style="width: 71%"></view>
+                </view>
+            </view>
+
+            <view class="progress-item">
+                <view class="progress-header">
+                    <view class="progress-label">
+                        <view class="progress-icon carbs">🌾</view>
+                        <text>碳水化合物</text>
+                    </view>
+                    <text>175 / 250 g</text>
+                </view>
+                <view class="progress-bar">
+                    <view class="progress-fill carbs" style="width: 70%"></view>
+                </view>
+            </view>
+
+            <view class="progress-item">
+                <view class="progress-header">
+                    <view class="progress-label">
+                        <view class="progress-icon protein">🥩</view>
+                        <text>蛋白质</text>
+                    </view>
+                    <text>60 / 75 g</text>
+                </view>
+                <view class="progress-bar">
+                    <view class="progress-fill protein" style="width: 80%"></view>
+                </view>
+            </view>
+
+            <view class="progress-item">
+                <view class="progress-header">
+                    <view class="progress-label">
+                        <view class="progress-icon fat">🥑</view>
+                        <text>脂肪</text>
+                    </view>
+                    <text>30 / 65 g</text>
+                </view>
+                <view class="progress-bar">
+                    <view class="progress-fill fat" style="width: 46%"></view>
                 </view>
             </view>
         </view>
-        <mx-date-picker
-            :show="showPicker"
-            :type="type"
-            :value="currentDate"
-            @confirm="onDatePickerConfirm"
-            @cancel="onDatePickerCancel"
-        />
-    </view>
-    <view class="layout-card">
-        <view class="card-content"></view>
-    </view>
-    <view class="layout-list">
-        <fui-list>
-            <template v-for="(mealGroup, mealIndex) in responseBody.data" :key="mealIndex">
-                <view class="list__section-title">{{ mealGroup.meal_cn }}</view>
-                <fui-list-cell
-                    v-for="(food, foodIndex) in mealGroup.food"
-                    :key="foodIndex"
-                    arrow
-                    :padding="[0,'32rpx']"
-                    :bottomBorder="true"
-                    @click="href(mealGroup.meal, food.id)">
-                    <view class="list__item">
-                        <text>{{ `${food.name} ${food.quantity}${food.unit} ${food.calorie}卡路里` }}</text>
-                    </view>
-                </fui-list-cell>
-            </template>
-        </fui-list>
-        <fui-loadmore :isFixed="true" v-if="isLoading"></fui-loadmore>
-        <fui-divider dividerColor="#3A5160" color="#3A5160" text="没有更多了"></fui-divider>
-    </view>
 
-    <floating-button :bottom="floatButtonHeight" :right="floatButtonRight" @click="handleFloatingButtonClick"/>
+        <!-- 食物记录列表 -->
+        <view class="meal-list">
+            <view class="meal-category">
+                <view class="category-header">
+                    <view class="category-title">
+                        <view class="category-icon">🌅</view>
+                        <text>早餐</text>
+                    </view>
+                    <text>450 kcal</text>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🥛</view>
+                        <view class="food-info">
+                            <text class="food-name">全脂牛奶</text>
+                            <text class="food-macro">蛋白质 8g · 碳水 12g · 脂肪 8g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">150</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🥖</view>
+                        <view class="food-info">
+                            <text class="food-name">全麦面包</text>
+                            <text class="food-macro">蛋白质 6g · 碳水 28g · 脂肪 2g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">180</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+            </view>
+
+            <view class="meal-category">
+                <view class="category-header">
+                    <view class="category-title">
+                        <view class="category-icon">☀️</view>
+                        <text>午餐</text>
+                    </view>
+                    <text>680 kcal</text>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🍚</view>
+                        <view class="food-info">
+                            <text class="food-name">糙米饭</text>
+                            <text class="food-macro">碳水 44g · 蛋白质 4g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">200</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+            </view>
+
+            <view class="meal-category">
+                <view class="category-header">
+                    <view class="category-title">
+                        <view class="category-icon">🌙</view>
+                        <text>晚餐</text>
+                    </view>
+                    <text>520 kcal</text>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🥘</view>
+                        <view class="food-info">
+                            <text class="food-name">清炒西兰花</text>
+                            <text class="food-macro">蛋白质 5g · 碳水 8g · 脂肪 3g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">120</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🍗</view>
+                        <view class="food-info">
+                            <text class="food-name">鸡胸肉</text>
+                            <text class="food-macro">蛋白质 25g · 碳水 0g · 脂肪 8g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">250</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="food-icon">🥗</view>
+                        <view class="food-info">
+                            <text class="food-name">蔬菜沙拉</text>
+                            <text class="food-macro">蛋白质 3g · 碳水 15g · 脂肪 8g</text>
+                        </view>
+                    </view>
+                    <view class="food-calories">
+                        <text class="calories-value">150</text>
+                        <text class="calories-unit">kcal</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="floating-btn">+</view>
+    </view>
 </template>
 
 <script>
-import {mapActions} from 'vuex'
-import dietApi from '@/api/diet-api'
-import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
-import {dateFormatter} from '@/utils/dateFormatter.js'
-
 export default {
-    components: {
-        MxDatePicker
-    },
-
     data() {
         return {
-            isLoading: false, // 添加 loading 状态变量
-            responseBody: {}, // 初始化为空数组
-            height: 0,
-            floatButtonHeight: 120,
-            floatButtonRight: 40,
-            currentDate: '', // 添加当前日期字段
-            showPicker: false, // mx-datepicker
-            type: 'date', // mx-datepicker
-            value: '', // mx-datepicker
+            statusBarHeight: 0 // 适配屏幕高度
         }
     },
-
     onLoad() {
-        this.isLoading = false;
-        this.currentDate = this.getCurrentDate(); // 设置初始日期
-        this.initData();
-
-        setTimeout(() => {
-            const systemInfo = uni.getSystemInfoSync();
-            this.height = systemInfo.windowHeight - uni.upx2px(300);
-            this.floatButtonHeight = uni.upx2px(120);
-            this.floatButtonRight = uni.upx2px(120);
-
-            // #ifdef MP
-            this.getStatus().then((res) => {
-            })
-            // #endif
-        }, 50)
-    },
-
-    methods: {
-        ...mapActions(['getStatus']),
-
-        // 添加日期变更方法
-        async changeDate(days) {
-            this.isLoading = true;
-            console.log("change data: " + this.isLoading)
-
-            const date = new Date(dateFormatter.formatToSlash(this.currentDate)); // 转换为斜杠格式以确保兼容性
-            date.setDate(date.getDate() + days);
-            this.currentDate = dateFormatter.getCurrentDate(date);
-
-            await new Promise(resolve => setTimeout(resolve, 800));
-            await this.initData();
-
-            this.isLoading = false;
-        },
-
-        // 获取当前日期，格式为 YYYY-MM-DD
-        getCurrentDate(date = new Date()) {
-            return dateFormatter.getCurrentDate(date);
-        },
-
-        async initData() {
-            try {
-                // 如果 currentDate 为空，才设置为当前日期
-                if (!this.currentDate) {
-                    this.currentDate = this.getCurrentDate();
-                }
-
-                const response = await dietApi.getByDate({date: this.currentDate});
-                console.log('API Response:', response);
-                if (response.code === 'A0001') {
-                    this.responseBody = this.transformApiData(response);
-                } else {
-                    uni.showToast({
-                        title: '获取数据失败',
-                        icon: 'none'
-                    });
-                }
-            } catch (error) {
-                console.error('API Error:', error);
-                uni.showToast({
-                    title: '获取数据失败',
-                    icon: 'none'
-                });
-            }
-        },
-
-        transformApiData(apiData) {
-            if (!apiData || !apiData.data) return [];
-
-            const formatData = (item) => ({
-                name: item.name,
-                id: item.id,
-                quantity: item.quantity,
-                unit: item.unit,
-                calorie: item.calorie,
-                meal: item.meal
-            });
-
-            return {
-                date: apiData.data.date,
-                data: [
-                    {
-                        meal: 'breakfast',
-                        meal_cn: '早餐',
-                        food: apiData.data.breakfast.map(formatData)
-                    },
-                    {
-                        meal: 'lunch',
-                        meal_cn: '午餐',
-                        food: apiData.data.lunch.map(formatData)
-                    },
-                    {
-                        meal: 'dinner',
-                        meal_cn: '晚餐',
-                        food: apiData.data.dinner.map(formatData)
-                    }
-                ]
-            }
-        },
-
-        onShowDatePicker(type) {
-            this.type = type;
-            this.showPicker = true;
-        },
-
-        async onDatePickerConfirm(e) {
-            this.showPicker = false;
-            if (e) {
-                this.isLoading = true;
-                // 将日期格式从 yyyy/mm/dd 转换为 yyyy-mm-dd
-                this.currentDate = dateFormatter.formatToHyphen(e.value);
-
-                // 等待800ms
-                await new Promise(resolve => setTimeout(resolve, 800));
-
-                // 重新获取数据
-                await this.initData();
-
-                this.isLoading = false;
-            }
-        },
-
-        onDatePickerCancel() {
-            this.showPicker = false;
-        },
-
-        href(type, page) {
-            if (page) {
-                // this.fui.href(`/pages/component/${type}/${page}/${page}`)
-            } else {
-                // this.fui.href('/pages/common/coding/coding')
-            }
-        },
-
-        handleFloatingButtonClick() {
-            uni.navigateTo({
-                url: '/pages/food/food'
-            });
-        }
-    },
+        // 获取状态栏高度
+        const systemInfo = uni.getSystemInfoSync()
+        this.statusBarHeight = systemInfo.statusBarHeight
+    }
 }
 </script>
 
 <style>
-/* 内容容器 */
-.layout-banner {
-    width: 100%;
+page {
+    background: #f5f7fa;
+    color: #1a1a1a;
+}
+
+.container {
+    padding: 30rpx;
+}
+
+.date-picker {
+    background: #ffffff;
+    border-radius: 32rpx;
+    padding: 40rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    /* #endif */
+    margin-bottom: 40rpx;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-display {
+    font-size: 32rpx;
+    font-weight: 500;
+}
+
+.date-nav {
+    display: flex;
+    gap: 30rpx;
+}
+
+.date-btn {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    border: none;
+    background: #f5f7fa;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    align-items: center;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
 }
 
-.banner__content {
-    width: var(--width-full);
-    height: var(--height-lg);
-    padding: var(--spacing-header);
-    box-sizing: border-box;
+.nutrition-summary {
+    background: #ffffff;
+    border-radius: 32rpx;
+    padding: 50rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    /* #endif */
+    margin-bottom: 40rpx;
+}
+
+.progress-item {
+    margin-bottom: 40rpx;
+}
+
+.progress-item:last-child {
+    margin-bottom: 0;
+}
+
+.progress-header {
     display: flex;
+    justify-content: space-between;
+    margin-bottom: 16rpx;
+}
+
+.progress-label {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.progress-icon {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 12rpx;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    align-items: center;
+    color: #ffffff;
+    font-size: 28rpx;
 }
 
-.pagination {
+.progress-bar {
+    height: 20rpx;
+    background: #edf2f7;
+    border-radius: 10rpx;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10rpx;
+    transition: width 0.3s ease;
+}
+
+.calories { background: #3b82f6; }
+.carbs { background: #10b981; }
+.protein { background: #8b5cf6; }
+.fat { background: #f59e0b; }
+
+.meal-list {
+    background: #ffffff;
+    border-radius: 40rpx;
+    padding: 40rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+    /* #endif */
+}
+
+.meal-category {
+    margin-bottom: 50rpx;
+}
+
+.meal-category:last-child {
+    margin-bottom: 0;
+}
+
+.category-header {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20rpx;
+    border-bottom: 4rpx solid #edf2f7;
+    margin-bottom: 30rpx;
+}
+
+.category-title {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    font-weight: 600;
+}
+
+.category-icon {
+    width: 64rpx;
+    height: 64rpx;
+    background: #f7fafc;
+    border-radius: 16rpx;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20rpx;
 }
 
-.pagination-btn {
-    width: 80rpx; /* 改这行: 从62rpx改为80rpx */
-    height: 80rpx; /* 改这行: 从60rpx改为80rpx */
-    border-radius: 50%; /* 改这行: 从12rpx改为50% */
+.food-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24rpx;
+    border-radius: 24rpx;
+    background: #f7fafc;
+    margin-bottom: 20rpx;
+}
+
+.food-row:last-child {
+    margin-bottom: 0;
+}
+
+.food-detail {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+}
+
+.food-icon {
+    width: 72rpx;
+    height: 72rpx;
+    background: #ffffff;
+    border-radius: 20rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff; /* 改为白色背景 */
-    border: 1px solid #465CFF; /* 添加边框 */
-    transition: all 0.3s ease;
 }
 
-.date-button {
-    margin: 0 20rpx;
-    border: 1px solid #465CFF;
+.food-info {
+    flex: 1;
 }
 
-/* 交互状态 */
-.pagination-btn:active {
-    opacity: 0.8;
-    transform: scale(0.95);
+.food-name {
+    font-weight: 500;
+    margin-bottom: 4rpx;
+    font-size: 28rpx;
 }
 
-/* 渐变背景，从中间向外扩散 */
-/*.gradient {
-    background: radial-gradient(circle at center, var(--color-ice-blue-4), var(--color-ice-blue-4));
-}*/
-/*  分页器 end */
+.food-macro {
+    font-size: 24rpx;
+    color: #718096;
+}
 
-/* Card */
-.layout-card {
-    height: 200px;
-    /* 为了让卡片垂直居中 */
+.food-calories {
+    text-align: right;
+}
+
+.calories-value {
+    font-weight: 600;
+    font-size: 28rpx;
+}
+
+.calories-unit {
+    font-size: 24rpx;
+    color: #718096;
+}
+
+.floating-btn {
+    position: fixed;
+    bottom: 60rpx;
+    right: 60rpx;
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 60rpx;
+    background: #4c51bf;
+    color: #ffffff;
+    font-size: 48rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 8rpx 30rpx rgba(76, 81, 191, 0.3);
+    /* #endif */
     display: flex;
     align-items: center;
-    /* 如果需要水平居中也可以加上 */
     justify-content: center;
-}
-
-.card-content {
-    width: 90%;
-    height: 160px;
-    padding: var(--spacing-all-md);
-    box-sizing: border-box;
-    background-color: #fff;
-    /* 深色阴影效果 */
-    box-shadow: 
-        0 4px 16px rgba(0, 0, 0, 0.15), 
-        0 8px 24px rgba(0, 0, 0, 0.1);
-    /* 可选：添加圆角 */
-    border-radius: 8px;
-}
-
-/* List Component */
-.layout-list {
-    width: var(--width-full);
-    height: var(--height-full);;
-    /*margin-top: var(--space-24);*/ /* 可以根据需要调整与card的间距 */
-}
-
-.list__item {
-    width: var(--width-full);
-    height: 112rpx;
-    display: flex;
-    align-items: center;
-}
-
-.list__item text {
-    padding-left: var(--size-24);
-    padding-right: var(--size-12);
-    flex-shrink: 0;
-}
-
-.list__section-title {
-    font-size: var(--size-32);
-    line-height: var(--size-32);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--size-32);
-    padding-left: var(--size-20);
-    position: relative;
-    box-sizing: border-box;
-    margin-left: var(--size-32);
-}
-
-.list__section-title {
-    padding-top: var(--size-4);
-}
-
-.list__section-title:not(:first-child) {
-    padding-top: var(--size-40);
-}
-
-.list__section-title::after {
-    content: '';
-    position: absolute;
-    width: var(--size-8);
-    height: var(--height-full);
-    background: var(--color-primary);
-    border-radius: var(--radius-sm);
-    left: 0;
-    top: var(--size-20);
 }
 </style>
