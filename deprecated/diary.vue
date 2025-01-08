@@ -57,7 +57,7 @@
 
 <script>
 import {mapActions} from 'vuex'
-import dietApi from '@/api/diet-api'
+import diaryApi from '@/api/diary-api'
 import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
 import {dateFormatter} from '@/utils/dateFormatter.js'
 
@@ -128,7 +128,7 @@ export default {
                     this.currentDate = this.getCurrentDate();
                 }
 
-                const response = await dietApi.getByDate({date: this.currentDate});
+                const response = await diaryApi.getByDate({date: this.currentDate});
                 console.log('API Response:', response);
                 if (response.code === 'A0001') {
                     this.responseBody = this.transformApiData(response);

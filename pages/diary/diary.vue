@@ -74,147 +74,123 @@
 
         <!-- 食物记录列表 -->
         <view class="meal-list">
+            <!-- 早餐 -->
             <view class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">🌅</view>
                         <text>早餐</text>
                     </view>
-                    <text>450 kcal</text>
+                    <text>{{ calculateMealCalories(dietData.breakfast) }} kcal</text>
                 </view>
 
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">全脂牛奶</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 12g</text>
-                                <text class="food-protein">蛋白质 8g</text>
-                                <text class="food-fat">脂肪 8g</text>
+                <view v-if="dietData.breakfast && dietData.breakfast.length > 0">
+                    <view class="food-row" v-for="food in dietData.breakfast" :key="food.id">
+                        <view class="food-detail">
+                            <view class="food-info">
+                                <text class="food-name">{{ food.name }}</text>
+                                <view>
+                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
+                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
+                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                </view>
                             </view>
                         </view>
-                    </view>
-                    <view class="food-calories">
-                        <text class="calories-value">150</text>
-                        <text class="calories-unit">kcal</text>
+                        <view class="food-calories">
+                            <text class="calories-value">{{ food.calorie }}</text>
+                            <text class="calories-unit">kcal</text>
+                        </view>
                     </view>
                 </view>
-
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">全麦面包</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 28g</text>
-                                <text class="food-protein">蛋白质 6g</text>
-                                <text class="food-fat">脂肪 2g</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view class="food-calories">
-                        <text class="calories-value">180</text>
-                        <text class="calories-unit">kcal</text>
-                    </view>
+                <view v-else class="empty-state">
+                    <text>暂无记录</text>
                 </view>
             </view>
 
+            <!-- 午餐 -->
             <view class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">☀️</view>
                         <text>午餐</text>
                     </view>
-                    <text>680 kcal</text>
+                    <text>{{ calculateMealCalories(dietData.lunch) }} kcal</text>
                 </view>
 
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">糙米饭</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 44g</text>
-                                <text class="food-protein">蛋白质 4g</text>
-                                <text class="food-fat">脂肪 0g</text>
+                <view v-if="dietData.lunch && dietData.lunch.length > 0">
+                    <view class="food-row" v-for="food in dietData.lunch" :key="food.id">
+                        <view class="food-detail">
+                            <view class="food-info">
+                                <text class="food-name">{{ food.name }}</text>
+                                <view>
+                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
+                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
+                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                </view>
                             </view>
                         </view>
+                        <view class="food-calories">
+                            <text class="calories-value">{{ food.calorie }}</text>
+                            <text class="calories-unit">kcal</text>
+                        </view>
                     </view>
-                    <view class="food-calories">
-                        <text class="calories-value">200</text>
-                        <text class="calories-unit">kcal</text>
-                    </view>
+                </view>
+                <view v-else class="empty-state">
+                    <text>暂无记录</text>
                 </view>
             </view>
 
+            <!-- 晚餐 -->
             <view class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">🌙</view>
                         <text>晚餐</text>
                     </view>
-                    <text>520 kcal</text>
+                    <text>{{ calculateMealCalories(dietData.dinner) }} kcal</text>
                 </view>
 
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">清炒西兰花</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 8g</text>
-                                <text class="food-protein">蛋白质 5g</text>
-                                <text class="food-fat">脂肪 3g</text>
+                <view v-if="dietData.dinner && dietData.dinner.length > 0">
+                    <view class="food-row" v-for="food in dietData.dinner" :key="food.id">
+                        <view class="food-detail">
+                            <view class="food-info">
+                                <text class="food-name">{{ food.name }}</text>
+                                <view>
+                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
+                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
+                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                </view>
                             </view>
                         </view>
-                    </view>
-                    <view class="food-calories">
-                        <text class="calories-value">120</text>
-                        <text class="calories-unit">kcal</text>
+                        <view class="food-calories">
+                            <text class="calories-value">{{ food.calorie }}</text>
+                            <text class="calories-unit">kcal</text>
+                        </view>
                     </view>
                 </view>
-
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">鸡胸肉</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 0g</text>
-                                <text class="food-protein">蛋白质 25g</text>
-                                <text class="food-fat">脂肪 8g</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view class="food-calories">
-                        <text class="calories-value">250</text>
-                        <text class="calories-unit">kcal</text>
-                    </view>
-                </view>
-
-                <view class="food-row">
-                    <view class="food-detail">
-                        <view class="food-info">
-                            <text class="food-name">蔬菜沙拉</text>
-                            <view>
-                                <text class="food-carbohydrate">碳水 15g</text>
-                                <text class="food-protein">蛋白质 3g</text>
-                                <text class="food-fat">脂肪 8g</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view class="food-calories">
-                        <text class="calories-value">150</text>
-                        <text class="calories-unit">kcal</text>
-                    </view>
+                <view v-else class="empty-state">
+                    <text>暂无记录</text>
                 </view>
             </view>
         </view>
 
         <view class="floating-btn">+</view>
+
+        <!-- 添加遮罩层和 loading -->
+        <view class="loading-overlay" v-if="isLoading">
+            <view class="loading-spinner">
+                <view class="spinner-item" v-for="i in 3" :key="i"></view>
+            </view>
+        </view>
     </view>
 </template>
 
 <script>
 import {dateFormatter} from '@/utils/dateFormatter.js'
 import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
-import dietApi from "@/api/diet-api";
+import dietApi from "@/api/diary-api";
+import {Diet} from '@/models/Diet'
+import {DietSummary} from '@/models/DietSummary'
 
 export default {
     components: {
@@ -233,6 +209,15 @@ export default {
             showPicker: false, // mx-datepicker
             type: 'date', // mx-datepicker
             value: '', // mx-datepicker
+
+            // 饮食数据
+            dietData: {
+                breakfast: [],
+                lunch: [],
+                dinner: []
+            },
+            // 营养摄入汇总
+            summary: new DietSummary()
         }
     },
 
@@ -293,7 +278,7 @@ export default {
             this.showPicker = false;
         },
         // 日期 end
-        
+
         // 页面初始化，调用api
         async initData() {
             try {
@@ -305,7 +290,15 @@ export default {
                 const response = await dietApi.getByDate({date: this.currentDate});
                 console.log('API Response:', response);
                 if (response.code === 'A0001') {
-                    //
+                    // 处理摘要数据
+                    this.summary = new DietSummary(response.data.summary);
+
+                    // 处理饮食数据
+                    this.dietData = {
+                        breakfast: (response.data.breakfast || []).map(item => new Diet(item)),
+                        lunch: (response.data.lunch || []).map(item => new Diet(item)),
+                        dinner: (response.data.dinner || []).map(item => new Diet(item))
+                    };
                 } else {
                     uni.showToast({
                         title: '获取数据失败',
@@ -319,6 +312,11 @@ export default {
                     icon: 'none'
                 });
             }
+        },
+
+        // 计算每餐的总卡路里
+        calculateMealCalories(foods) {
+            return foods.reduce((sum, food) => sum + parseFloat(food.calorie || 0), 0).toFixed(1);
         },
 
     } // method end
@@ -551,6 +549,15 @@ page {
     color: #718096;
 }
 
+.empty-state {
+    padding: 40rpx 0;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 28rpx;
+    background: #f7fafc;
+    border-radius: 24rpx;
+}
+
 .floating-btn {
     position: fixed;
     bottom: 60rpx;
@@ -568,4 +575,52 @@ page {
     align-items: center;
     justify-content: center;
 }
+
+/* loading start */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    display: flex;
+    gap: 12rpx;
+}
+
+.spinner-item {
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    background-color: #4c51bf; /* 使用与浮动按钮相同的颜色 */
+    animation: bounce 0.8s infinite ease-in-out;
+}
+
+.spinner-item:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.spinner-item:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.3;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* loading end */
 </style>
