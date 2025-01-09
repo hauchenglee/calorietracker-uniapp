@@ -174,7 +174,7 @@
             </view>
         </view>
 
-        <view class="floating-btn">+</view>
+        <view class="floating-btn" @click="floatingBtnClick">+</view>
 
         <!-- 添加遮罩层和 loading -->
         <view class="loading-overlay" v-if="isLoading">
@@ -191,6 +191,7 @@ import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
 import dietApi from "@/api/diary-api";
 import {Diet} from '@/models/Diet'
 import {DietSummary} from '@/models/DietSummary'
+import bodyApi from "@/api/body-api";
 
 export default {
     components: {
@@ -203,6 +204,7 @@ export default {
 
             // 其他
             isLoading: false, // 添加 loading 状态变量
+            isBodyExist: false, // 如果已设置body数据
 
             // 日期
             currentDate: '', // 添加当前日期字段
@@ -221,13 +223,27 @@ export default {
         }
     },
 
-    onLoad() {
+    async onLoad() {
         // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
 
         // 设置初始日期
         this.currentDate = this.getCurrentDate();
+
+        // 初始化加载数据
+        try {
+            this.isLoading = true;
+            await this.initBody();
+            await this.initData();
+        } catch (error) {
+            uni.showToast({
+                title: 'onLoad error',
+                icon: 'none'
+            });
+        } finally {
+            this.isLoading = false;
+        }
     },
 
     methods: {
@@ -280,6 +296,31 @@ export default {
         // 日期 end
 
         // 页面初始化，调用api
+        async initBody() {
+            try {
+                // 如果 currentDate 为空，才设置为当前日期
+                if (!this.currentDate) {
+                    this.currentDate = this.getCurrentDate();
+                }
+
+                const response = await bodyApi.checkExist({});
+                if (response.code === 'A0001') {
+                    this.isBodyExist = response.data;
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            }
+        },
+
+        // 页面初始化，调用api
         async initData() {
             try {
                 // 如果 currentDate 为空，才设置为当前日期
@@ -301,14 +342,13 @@ export default {
                     };
                 } else {
                     uni.showToast({
-                        title: '获取数据失败',
+                        title: response.message,
                         icon: 'none'
                     });
                 }
             } catch (error) {
-                console.error('API Error:', error);
                 uni.showToast({
-                    title: '获取数据失败',
+                    title: error.message,
                     icon: 'none'
                 });
             }
@@ -318,6 +358,19 @@ export default {
         calculateMealCalories(foods) {
             return foods.reduce((sum, food) => sum + parseFloat(food.calorie || 0), 0).toFixed(1);
         },
+
+        floatingBtnClick() {
+            if (this.isBodyExist) {
+                uni.navigateTo({
+                    url: '/pages/add/add'
+                });
+            } else {
+                uni.showToast({
+                    title: '請先設置身體基礎數據',
+                    icon: 'none'
+                });
+            }
+        }
 
     } // method end
 }

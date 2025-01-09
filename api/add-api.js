@@ -10,6 +10,6 @@ export default {
 
     save(data) {
         console.log(data)
-        return request.post('/api/diet/add-by-input', data)
+        return request.post('/diary/add-by-input', data)
     }
 }

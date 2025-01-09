@@ -15,7 +15,7 @@
 
 <script>
 // 引入需要动态加载的子页面
-import AddPage from "@/pages/food/add/add.vue";
+import AddPage from "@/pages/add/add.vue";
 import AllPage from "@/pages/food/all/all.vue";
 import FavoritePage from "@/pages/food/favorite/favorite.vue";
 

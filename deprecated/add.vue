@@ -30,7 +30,7 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import ImageUpload from "@/components/image/image-upload-single-photo-picture.vue";
-import foodAddApi from '@/api/food-add-api.js';
+import addApi from '@/api/add-api.js';
 
 const imageUploadRef = ref(null);
 const isLoading = ref(false);
@@ -56,7 +56,7 @@ const analyzeImage = async () => {
 
     try {
         isLoading.value = true;
-        const response = await foodAddApi.getVersion(filePath);
+        const response = await addApi.getVersion(filePath);
 
         if (response.code === 'A0001' && response.data) {
             const {data} = response;
