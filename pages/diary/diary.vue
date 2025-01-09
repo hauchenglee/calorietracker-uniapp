@@ -18,7 +18,8 @@
             @cancel="onDatePickerCancel"
         />
 
-        <view class="nutrition-summary">
+        <!-- 有身体数据时显示的内容 -->
+        <view class="nutrition-summary" v-if="isBodyExist">
             <view class="progress-item">
                 <view class="progress-header">
                     <view class="progress-label">
@@ -69,6 +70,16 @@
                 <view class="progress-bar">
                     <view class="progress-fill fat" style="width: 46%"></view>
                 </view>
+            </view>
+        </view>
+
+        <!-- 无身体数据时显示的提示 -->
+        <view class="setup-reminder" v-else>
+            <view class="reminder-card">
+                <view class="reminder-icon">📝</view>
+                <view class="reminder-title">请先设置身体基本数据</view>
+                <view class="reminder-desc">设置基本数据后，我们将为您计算个性化的营养需求</view>
+                <button class="setup-btn" @tap="navigateToSetup">去设置</button>
             </view>
         </view>
 
@@ -357,6 +368,13 @@ export default {
         // 计算每餐的总卡路里
         calculateMealCalories(foods) {
             return foods.reduce((sum, food) => sum + parseFloat(food.calorie || 0), 0).toFixed(1);
+        },
+
+        // 导航到设置页面
+        navigateToSetup() {
+            uni.navigateTo({
+                url: 'pages/more/body/body' // 替换为你的实际设置页面路径
+            });
         },
 
         floatingBtnClick() {
@@ -663,6 +681,62 @@ page {
 .spinner-item:nth-child(2) {
     animation-delay: -0.16s;
 }
+
+/* 无身体数据时显示的提示 start */
+.setup-reminder {
+    background: #ffffff;
+    border-radius: 32rpx;
+    padding: 50rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    /* #endif */
+    margin-bottom: 40rpx;
+}
+
+.reminder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40rpx 0;
+}
+
+.reminder-icon {
+    font-size: 80rpx;
+    margin-bottom: 30rpx;
+}
+
+.reminder-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 16rpx;
+}
+
+.reminder-desc {
+    font-size: 28rpx;
+    color: #718096;
+    margin-bottom: 40rpx;
+    padding: 0 40rpx;
+}
+
+.setup-btn {
+    background: #4c51bf;
+    color: #ffffff;
+    border-radius: 16rpx;
+    padding: 20rpx 60rpx;
+    font-size: 28rpx;
+    border: none;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 12rpx rgba(76, 81, 191, 0.2);
+    /* #endif */
+}
+
+.setup-btn:active {
+    opacity: 0.9;
+}
+
+/* 无身体数据时显示的提示 end */
 
 @keyframes bounce {
     0%, 80%, 100% {
