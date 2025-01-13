@@ -1,225 +1,239 @@
 <template>
-    <view class="app-container">
-        <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
-
-        <view class="tabs-container">
-            <view class="tabs">
-                <text
-                    class="tab"
-                    :class="{ active: activeTab === 0 }"
-                    @tap="showTab(0)"
-                >拍照识别
-                </text>
-                <text
-                    class="tab"
-                    :class="{ active: activeTab === 1 }"
-                    @tap="showTab(1)"
-                >手动记录
-                </text>
-            </view>
+    <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
+    <view class="container">
+        <!-- 标签选择器 -->
+        <view class="tab-selector">
+            <button
+                class="tab-btn"
+                :class="{ active: activeTab === 0 }"
+                @click="showTab(0)"
+            >
+                <view class="tab-icon">📸</view>
+                <text>拍照识别</text>
+            </button>
+            <button
+                class="tab-btn"
+                :class="{ active: activeTab === 1 }"
+                @click="showTab(1)"
+            >
+                <view class="tab-icon">📝</view>
+                <text>手动记录</text>
+            </button>
         </view>
 
+        <!-- 拍照识别标签页 -->
         <view class="tab-content" v-show="activeTab === 0">
-            <view class="camera-options">
-                <view class="camera-option" @tap="takePicture">
-                    <view class="camera-icon">📸</view>
-                    <text class="option-label">拍照</text>
-                </view>
-                <view class="camera-option" @tap="selectFromGallery">
-                    <view class="camera-icon">🖼️</view>
-                    <text class="option-label">从相册选择</text>
+            <view v-if="!previewImage" class="photo-options">
+                <button class="photo-btn" @click="takePicture">
+                    <view class="photo-icon">📸</view>
+                    <text>拍照</text>
+                </button>
+                <button class="photo-btn" @click="selectFromGallery">
+                    <view class="photo-icon">🖼️</view>
+                    <text>从相册选择</text>
+                </button>
+            </view>
+
+            <view class="preview-card" v-if="previewImage">
+                <image
+                    :src="previewImage"
+                    class="preview-image"
+                    mode="aspectFit"
+                />
+                <view class="action-buttons">
+                    <button class="action-btn" @click="retakePhoto">重新选择</button>
+                    <button class="action-btn primary" @click="analyzeImage">开始分析</button>
+                    <button class="action-btn" @click="cancelImage">取消选取</button>
                 </view>
             </view>
 
-            <view class="card" v-if="previewImage">
-                <view class="preview-area">
-                    <image
-                        :src="previewImage"
-                        class="preview-image"
-                        mode="aspectFit"
-                    />
+            <view class="nutrition-card" v-if="analysisCompleted">
+                <view class="card-header">
+                    <text class="card-title">营养成分分析</text>
                 </view>
-                <view class="image-toolbar">
-                    <view class="tool-item" @tap="retakePhoto">
-                        <text class="tool-icon">📸</text>
-                        <text class="tool-text">重新選擇</text>
-                    </view>
-                    <view class="tool-item" @tap="analyzeImage">
-                        <text class="tool-icon">🔍</text>
-                        <text class="tool-text">开始分析</text>
-                    </view>
-                    <view class="tool-item" @tap="cancelImage">
-                        <text class="tool-icon">🗑️</text>
-                        <text class="tool-text">取消選取</text>
-                    </view>
-                </view>
-            </view>
 
-            <!-- 营养成分分析部分 -->
-            <view class="card analysis-result" v-if="analysisCompleted">
-                <view class="card-title">营养成分分析</view>
-                <view class="nutrition-container">
-                    <view class="nutrition-details">
-                        <view class="nutrition-label">名称</view>
-                    </view>
-                    <view class="nutrition-item">
+                <view class="nutrition-form">
+                    <view class="form-group">
+                        <text class="form-label">名称</text>
                         <input
                             type="text"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData1.name"
+                            placeholder="食物名称"
                         />
                     </view>
 
-                    <view class="nutrition-details">
+                    <view class="form-group">
                         <view class="label-group">
-                            <view class="nutrition-label">热量</view>
-                            <view class="nutrition-sublabel">每日推荐 2000kcal</view>
+                            <text class="form-label">热量</text>
+                            <text class="form-sublabel">每日推荐 2000kcal</text>
                         </view>
-                    </view>
-                    <view class="nutrition-item">
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData1.calorie"
+                            placeholder="0"
                         />
-                        <view class="wave calories"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">碳水化合物</view>
-                            <view class="nutrition-sublabel">每日推荐 250g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill calories" :style="{ width: '71%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">碳水化合物</text>
+                            <text class="form-sublabel">每日推荐 250g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData1.carbohydrate"
+                            placeholder="0"
                         />
-                        <view class="wave carbs"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">蛋白质</view>
-                            <view class="nutrition-sublabel">每日推荐 60g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill carbs" :style="{ width: '70%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">蛋白质</text>
+                            <text class="form-sublabel">每日推荐 60g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData1.protein"
+                            placeholder="0"
                         />
-                        <view class="wave protein"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">脂肪</view>
-                            <view class="nutrition-sublabel">每日推荐 70g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill protein" :style="{ width: '80%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">脂肪</text>
+                            <text class="form-sublabel">每日推荐 70g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData1.fat"
+                            placeholder="0"
                         />
-                        <view class="wave fat"></view>
+                        <view class="progress-bar">
+                            <view class="progress-fill fat" :style="{ width: '46%' }"></view>
+                        </view>
                     </view>
                 </view>
             </view>
 
-            <button class="submit-btn1" @click="saveData1" v-if="analysisCompleted">保存</button>
+            <button
+                class="submit-button"
+                v-if="analysisCompleted"
+                @click="saveData1"
+            >保存</button>
         </view>
 
-        <!-- 手动记录部分 -->
+        <!-- 手动记录标签页 -->
         <view class="tab-content" v-show="activeTab === 1">
-            <view class="card">
-                <view class="card-title">手动记录营养成分</view>
-                <view class="nutrition-container">
-                    <view class="nutrition-details">
-                        <view class="nutrition-label">名称</view>
-                    </view>
-                    <view class="nutrition-item">
+            <view class="nutrition-card">
+                <view class="card-header">
+                    <text class="card-title">手动记录营养成分</text>
+                </view>
+
+                <view class="nutrition-form">
+                    <!-- 与上面相同的表单结构 -->
+                    <view class="form-group">
+                        <text class="form-label">名称</text>
                         <input
                             type="text"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData2.name"
+                            placeholder="食物名称"
                         />
                     </view>
 
-                    <view class="nutrition-details">
+                    <view class="form-group">
                         <view class="label-group">
-                            <view class="nutrition-label">热量</view>
-                            <view class="nutrition-sublabel">每日推荐 2000kcal</view>
+                            <text class="form-label">热量</text>
+                            <text class="form-sublabel">每日推荐 2000kcal</text>
                         </view>
-                    </view>
-                    <view class="nutrition-item">
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData2.calorie"
+                            placeholder="0"
                         />
-                        <view class="wave calories"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">碳水化合物</view>
-                            <view class="nutrition-sublabel">每日推荐 250g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill calories" :style="{ width: '71%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">碳水化合物</text>
+                            <text class="form-sublabel">每日推荐 250g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData2.carbohydrate"
+                            placeholder="0"
                         />
-                        <view class="wave carbs"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">蛋白质</view>
-                            <view class="nutrition-sublabel">每日推荐 60g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill carbs" :style="{ width: '70%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">蛋白质</text>
+                            <text class="form-sublabel">每日推荐 60g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData2.protein"
+                            placeholder="0"
                         />
-                        <view class="wave protein"></view>
-                    </view>
-
-                    <view class="nutrition-details">
-                        <view class="label-group">
-                            <view class="nutrition-label">脂肪</view>
-                            <view class="nutrition-sublabel">每日推荐 70g</view>
+                        <view class="progress-bar">
+                            <view class="progress-fill protein" :style="{ width: '80%' }"></view>
                         </view>
                     </view>
-                    <view class="nutrition-item">
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">脂肪</text>
+                            <text class="form-sublabel">每日推荐 70g</text>
+                        </view>
                         <input
                             type="number"
-                            class="nutrition-value input-style"
+                            class="form-input"
                             v-model="formData2.fat"
+                            placeholder="0"
                         />
-                        <view class="wave fat"></view>
+                        <view class="progress-bar">
+                            <view class="progress-fill fat" :style="{ width: '46%' }"></view>
+                        </view>
                     </view>
                 </view>
             </view>
 
-            <button class="submit-btn2" @click="saveData2">保存</button>
+            <button class="submit-button" @click="saveData2">保存</button>
+        </view>
+
+        <!-- Loading遮罩 -->
+        <view class="loading-overlay" v-if="isLoading">
+            <view class="loading-spinner">
+                <view class="spinner-item" v-for="i in 3" :key="i"></view>
+            </view>
         </view>
     </view>
 </template>
 
 <script>
-
 import addApi from "@/api/add-api";
 
 export default {
@@ -451,253 +465,244 @@ export default {
 
 <style>
 page {
-    background: #F8F9FB;
-    color: #172B4D;
+    background: #f5f7fa;
+    color: #1a1a1a;
 }
 
-.app-container {
+.container {
     padding: 30rpx;
-    padding-bottom: 160rpx;
 }
 
-.tabs-container {
-    background: #FFFFFF;
+/* 标签选择器 */
+.tab-selector {
+    background: #ffffff;
+    border-radius: 32rpx;
     padding: 12rpx;
-    border-radius: 40rpx;
-    box-shadow: 0 4rpx 8rpx rgba(9, 30, 66, 0.08);
-    margin-bottom: 48rpx;
-}
-
-.tabs {
     display: flex;
     gap: 12rpx;
+    margin-bottom: 40rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
 }
 
-.tab {
+.tab-btn {
     flex: 1;
+    background: transparent;
+    border: none;
     padding: 24rpx;
-    text-align: center;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    color: #718096;
+}
+
+.tab-btn.active {
+    background: #4c51bf;
+    color: #ffffff;
+}
+
+.tab-icon {
+    font-size: 32rpx;
+}
+
+/* 卡片样式 */
+.photo-options,
+.preview-card,
+.nutrition-card {
+    background: #ffffff;
     border-radius: 32rpx;
-    color: #5E6C84;
-    font-weight: 500;
+    padding: 40rpx;
+    margin-bottom: 40rpx;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 拍照选项 */
+.photo-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24rpx;
+}
+
+.photo-btn {
+    background: #f7fafc;
+    border: none;
+    padding: 40rpx;
+    border-radius: 24rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16rpx;
+}
+
+.photo-icon {
+    font-size: 48rpx;
+    width: 96rpx;
+    height: 96rpx;
+    background: #f7fafc;
+    border-radius: 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 预览卡片 */
+.preview-image {
+    width: 100%;
+    height: 400rpx;
+    border-radius: 24rpx;
+    margin-bottom: 24rpx;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 16rpx;
+}
+
+.action-btn {
+    flex: 1;
+    background: #f7fafc;
+    border: none;
+    padding: 16rpx;
+    border-radius: 16rpx;
     font-size: 28rpx;
 }
 
-.tab.active {
+.action-btn.primary {
     background: #4c51bf;
-    color: #FFFFFF;
-    box-shadow: 0 4rpx 8rpx rgba(9, 30, 66, 0.08);
+    color: #ffffff;
 }
 
-.card {
-    background: #FFFFFF;
-    border-radius: 40rpx;
-    padding: 48rpx;
-    margin-bottom: 40rpx;
-    box-shadow: 0 8rpx 16rpx rgba(9, 30, 66, 0.12);
+/* 营养表单 */
+.card-header {
+    margin-bottom: 32rpx;
 }
 
 .card-title {
     font-size: 32rpx;
     font-weight: 600;
-    margin-bottom: 32rpx;
 }
 
-.camera-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+.nutrition-form {
+    display: flex;
+    flex-direction: column;
     gap: 32rpx;
-    margin-bottom: 48rpx;
 }
 
-.camera-option {
-    background: #FFFFFF;
-    border-radius: 40rpx;
-    padding: 48rpx;
-    text-align: center;
-    border: 4rpx dashed #E6E8EC;
-}
-
-.camera-icon {
-    width: 96rpx;
-    height: 96rpx;
-    margin: 0 auto 24rpx;
-    background: #E5F0FF;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48rpx;
-}
-
-.option-label {
-    font-size: 28rpx;
-    color: #5E6C84;
-}
-
-.preview-image {
-    width: 100%;
-    height: 400rpx;
-    border-radius: 40rpx;
-}
-
-.image-toolbar {
-    display: flex;
-    justify-content: space-around;
-    padding: 20rpx 0;
-    border-top: 2rpx solid #eee;
-    margin-top: 20rpx;
-}
-
-.tool-item {
+.form-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 16rpx 24rpx;
-    transition: all 0.3s;
-}
-
-.tool-item:active {
-    transform: scale(0.95);
-}
-
-/* 添加分析按钮特殊样式 */
-.tool-item:nth-child(2) {
-    background: #4c51bf;
-    border-radius: 16rpx;
-}
-
-.tool-item:nth-child(2) .tool-text {
-    color: #ffffff;
-}
-
-.tool-item:nth-child(2) .tool-icon {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8rpx;
-    border-radius: 50%;
-}
-
-.tool-icon {
-    font-size: 40rpx;
-    margin-bottom: 10rpx;
-}
-
-.tool-text {
-    font-size: 24rpx;
-    color: #666;
-}
-
-.nutrition-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.nutrition-item {
-    background: #ffffff;
-    border-radius: 16px;
-    height: 40px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.nutrition-details {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    gap: 12rpx;
 }
 
 .label-group {
-    margin-top: 16px;
     display: flex;
     align-items: center;
-    gap: 8rpx; /* 控制标签之间的间距 */
+    gap: 12rpx;
 }
 
-.nutrition-label {
+.form-label {
     font-size: 28rpx;
     font-weight: 500;
 }
 
-.nutrition-sublabel {
+.form-sublabel {
     font-size: 24rpx;
-    color: #636e72;
+    color: #718096;
 }
 
-.wave {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: var(--width);
+.form-input {
+    background: #f7fafc;
+    border: none;
+    padding: 16rpx;
+    border-radius: 12rpx;
+    font-size: 28rpx;
+}
+
+/* 进度条 */
+.progress-bar {
+    height: 20rpx;
+    background: #edf2f7;
+    border-radius: 10rpx;
+    overflow: hidden;
+}
+
+.progress-fill {
     height: 100%;
-    background: linear-gradient(to right, var(--color-light), var(--color));
-    opacity: 0.15;
-    border-radius: 0 16px 16px 0;
-    transition: width 0.8s ease;
-    z-index: 1;
+    border-radius: 10rpx;
+    transition: width 0.3s ease;
 }
 
-/* 营养元素特定样式 */
 .calories {
-    --color: #ff7675;
-    --color-light: #fab1a0;
-    --width: 85%;
+    background: #3b82f6;
 }
 
 .carbs {
-    --color: #74b9ff;
-    --color-light: #a0d8ef;
-    --width: 65%;
+    background: #10b981;
 }
 
 .protein {
-    --color: #55efc4;
-    --color-light: #81ecec;
-    --width: 45%;
+    background: #8b5cf6;
 }
 
 .fat {
-    --color: #ffeaa7;
-    --color-light: #fdcb6e;
-    --width: 35%;
+    background: #f59e0b;
 }
 
-/* 输入框样式 */
-.input-style {
-    background: transparent;
+/* 提交按钮 */
+.submit-button {
+    background: #4c51bf;
+    color: #ffffff;
     border: none;
-    text-align: left;
-    width: 100%;
-    height: 100%;
-    font-size: 20px;
-    z-index: 2;
+    padding: 24rpx;
+    border-radius: 16rpx;
+    font-size: 32rpx;
+    margin-top: 40rpx;
 }
 
-.input-style::placeholder {
-    color: #a0a0a0;
-    font-weight: normal;
+/* Loading遮罩 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
-.submit-btn1 {
-    color: var(--white);
+.loading-spinner {
+    display: flex;
+    gap: 12rpx;
+}
+
+.spinner-item {
+    width: 20rpx;
+    height: 20rpx;
     background: #4c51bf;
-    border-radius: 32rpx;
+    border-radius: 50%;
+    animation: bounce 0.8s infinite ease-in-out;
 }
 
-.submit-btn2 {
-    color: var(--white);
-    background: #4c51bf;
-    border-radius: 32rpx;
+.spinner-item:nth-child(1) {
+    animation-delay: -0.32s;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+.spinner-item:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.3;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
     }
 }
 </style>
