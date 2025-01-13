@@ -54,6 +54,38 @@
         "navigationStyle": "custom",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/more/recommend/recommend",
+      "style": {
+        "navigationBarTitleText": "recommend",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/more/statistic/statistic",
+      "style": {
+        "navigationBarTitleText": "statistic",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/more/setting/setting",
+      "style": {
+        "navigationBarTitleText": "setting",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/more/support/support",
+      "style": {
+        "navigationBarTitleText": "support",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {

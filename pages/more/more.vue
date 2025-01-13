@@ -1,4 +1,5 @@
 <template>
+    <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
     <view class="container">
         <!-- 个人信息卡片 -->
         <view class="profile-card">
@@ -7,24 +8,13 @@
                 <text class="username">张三</text>
                 <text class="user-level">普通会员</text>
             </view>
-        </view>
-
-        <!-- 常用功能 -->
-        <view class="menu-section">
-            <text class="section-title">常用功能</text>
-            <view class="menu-grid">
-                <view class="menu-item" v-for="(item, index) in menuItems" :key="index">
-                    <view class="menu-icon">{{ item.icon }}</view>
-                    <text class="menu-label">{{ item.label }}</text>
-                </view>
-            </view>
+            <text class="arrow">></text>
         </view>
 
         <!-- 设置列表 -->
         <view class="menu-section">
-            <text class="section-title">系统设置</text>
             <view class="list-menu">
-                <view class="list-item" v-for="(item, index) in settingItems" :key="index">
+                <view class="list-item" v-for="(item, index) in settingItems" :key="index" @tap="navigateTo(item.path)">
                     <view class="list-left">
                         <view class="list-icon">{{ item.icon }}</view>
                         <text>{{ item.label }}</text>
@@ -34,10 +24,6 @@
                 </view>
             </view>
         </view>
-
-        <view class="version">
-            <text>Version 1.0.0</text>
-        </view>
     </view>
 </template>
 
@@ -45,20 +31,37 @@
 export default {
     data() {
         return {
-            menuItems: [
-                {icon: '📊', label: '数据统计'},
-                {icon: '⭐️', label: '我的收藏'},
-                {icon: '📝', label: '饮食记录'},
-                {icon: '🎯', label: '目标设定'},
-                {icon: '📱', label: '设备管理'},
-                {icon: '🔔', label: '提醒设置'}
-            ],
+            statusBarHeight: 0,// 适配屏幕高度
+
             settingItems: [
-                {icon: '⚙️', label: '账号设置', badge: '新'},
-                {icon: '🔒', label: '隐私设置'},
-                {icon: '🌙', label: '深色模式'},
-                {icon: '❓', label: '帮助中心'}
+                {icon: '📝', label: '身体基础数据', path: '/pages/more/body/body'},
+                {icon: '🎯', label: '每日营养建议', path: '/pages/more/recommend/recommend', badge: '新'},
+                {icon: '📊', label: '数据统计', path: '/pages/more/statistic/statistic'},
+                {icon: '⚙️', label: '系统设置', path: '/pages/more/setting/setting'},
+                {icon: '💡', label: '帮助中心', path: '/pages/more/support/support'}
             ]
+        }
+    },
+
+    onLoad() {
+        // 获取状态栏高度
+        const systemInfo = uni.getSystemInfoSync()
+        this.statusBarHeight = systemInfo.statusBarHeight
+    },
+
+    methods: {
+        // 添加导航方法
+        navigateTo(path) {
+            uni.navigateTo({
+                url: path,
+                fail(err) {
+                    console.error('页面跳转失败：', err)
+                    uni.showToast({
+                        title: '页面跳转失败',
+                        icon: 'none'
+                    })
+                }
+            })
         }
     }
 }
@@ -84,6 +87,12 @@ page {
     display: flex;
     align-items: center;
     gap: 20rpx;
+    position: relative;
+}
+
+.profile-card .arrow {
+    position: absolute;
+    right: 40rpx;
 }
 
 .avatar {
@@ -119,48 +128,6 @@ page {
     padding: 30rpx;
     box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
     margin-bottom: 30rpx;
-}
-
-.section-title {
-    font-size: 32rpx;
-    font-weight: 600;
-    margin-bottom: 20rpx;
-    color: #4a5568;
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20rpx;
-    margin-bottom: 30rpx;
-}
-
-.menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12rpx;
-    padding: 20rpx;
-    background: #f7fafc;
-    border-radius: 20rpx;
-}
-
-.menu-icon {
-    width: 96rpx;
-    height: 96rpx;
-    background: #ffffff;
-    border-radius: 32rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48rpx;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
-}
-
-.menu-label {
-    font-size: 28rpx;
-    color: #4a5568;
-    text-align: center;
 }
 
 .list-menu {
@@ -208,12 +175,5 @@ page {
 
 .arrow {
     color: #a0aec0;
-}
-
-.version {
-    text-align: center;
-    color: #a0aec0;
-    font-size: 28rpx;
-    margin-top: 80rpx;
 }
 </style>

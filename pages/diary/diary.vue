@@ -188,11 +188,7 @@
         <view class="floating-btn" @click="floatingBtnClick">+</view>
 
         <!-- 添加遮罩层和 loading -->
-        <view class="loading-overlay" v-if="isLoading">
-            <view class="loading-spinner">
-                <view class="spinner-item" v-for="i in 3" :key="i"></view>
-            </view>
-        </view>
+        <loading-overlay :show="isLoading"/>
     </view>
 </template>
 
@@ -203,10 +199,12 @@ import dietApi from "@/api/diary-api";
 import {Diet} from '@/models/Diet'
 import {DietSummary} from '@/models/DietSummary'
 import bodyApi from "@/api/body-api";
+import loadingOverlay from '@/components/loading-overlay.vue'
 
 export default {
     components: {
-        MxDatePicker
+        MxDatePicker,
+        loadingOverlay
     },
 
     data() {
@@ -378,7 +376,7 @@ export default {
         },
 
         floatingBtnClick() {
-            if (this.isBodyExist) {
+            if (true) {
                 uni.navigateTo({
                     url: '/pages/add/add'
                 });
@@ -647,41 +645,6 @@ page {
     justify-content: center;
 }
 
-/* loading start */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.loading-spinner {
-    display: flex;
-    gap: 12rpx;
-}
-
-.spinner-item {
-    width: 20rpx;
-    height: 20rpx;
-    border-radius: 50%;
-    background-color: #4c51bf; /* 使用与浮动按钮相同的颜色 */
-    animation: bounce 0.8s infinite ease-in-out;
-}
-
-.spinner-item:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.spinner-item:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
 /* 无身体数据时显示的提示 start */
 .setup-reminder {
     background: #ffffff;
@@ -748,6 +711,4 @@ page {
         opacity: 1;
     }
 }
-
-/* loading end */
 </style>
