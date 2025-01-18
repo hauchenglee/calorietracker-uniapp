@@ -56,7 +56,7 @@
       }
     },
     {
-      "path": "pages/more/recommend/recommend",
+      "path": "pages/more/diet-plan/diet-plan",
       "style": {
         "navigationBarTitleText": "recommend",
         "navigationStyle": "custom",
