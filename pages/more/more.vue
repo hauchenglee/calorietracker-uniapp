@@ -36,9 +36,9 @@ export default {
             settingItems: [
                 {icon: '📝', label: '身体基础数据', path: '/pages/more/body/body'},
                 {icon: '🎯', label: '每日营养建议', path: '/pages/more/recommend/recommend', badge: '新'},
-                {icon: '📊', label: '数据统计', path: '/pages/more/statistic/statistic'},
+                // {icon: '📊', label: '数据统计', path: '/pages/more/statistic/statistic'},
                 {icon: '⚙️', label: '系统设置', path: '/pages/more/setting/setting'},
-                {icon: '💡', label: '帮助中心', path: '/pages/more/support/support'}
+                // {icon: '💡', label: '帮助中心', path: '/pages/more/support/support'}
             ]
         }
     },

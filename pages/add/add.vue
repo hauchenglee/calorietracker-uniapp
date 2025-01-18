@@ -65,6 +65,23 @@
 
                     <view class="form-group">
                         <view class="label-group">
+                            <text class="form-label">数量</text>
+                            <text class="form-sublabel">1~99</text>
+                        </view>
+                        <input
+                            type="number"
+                            class="form-input"
+                            v-model="formData1.quantity"
+                            :min="1"
+                            :max="99"
+                            maxlength="2"
+                            placeholder="1"
+                            @input="limitQuantityInput($event, 'formData1')"
+                        />
+                    </view>
+
+                    <view class="form-group">
+                        <view class="label-group">
                             <text class="form-label">热量</text>
                             <text class="form-sublabel">每日推荐 2000kcal</text>
                         </view>
@@ -133,7 +150,8 @@
                 class="submit-button"
                 v-if="analysisCompleted"
                 @click="saveData1"
-            >保存</button>
+            >保存
+            </button>
         </view>
 
         <!-- 手动记录标签页 -->
@@ -152,6 +170,23 @@
                             class="form-input"
                             v-model="formData2.name"
                             placeholder="食物名称"
+                        />
+                    </view>
+
+                    <view class="form-group">
+                        <view class="label-group">
+                            <text class="form-label">数量</text>
+                            <text class="form-sublabel">1~99</text>
+                        </view>
+                        <input
+                            type="number"
+                            class="form-input"
+                            v-model="formData2.quantity"
+                            :min="1"
+                            :max="99"
+                            maxlength="2"
+                            placeholder="1"
+                            @input="limitQuantityInput($event, 'formData2')"
                         />
                     </view>
 
@@ -245,12 +280,18 @@ export default {
             previewImage: '',
             isLoading: false,
             formData1: {
+                name: '',
+                meal: '',
+                quantity: 1,
                 calorie: '',
                 carbohydrate: '',
                 protein: '',
                 fat: ''
             },
             formData2: {
+                name: '',
+                meal: '',
+                quantity: 1,
                 calorie: '',
                 carbohydrate: '',
                 protein: '',
@@ -273,6 +314,31 @@ export default {
         showTab(index) {
             this.activeTab = index
         },
+
+        // 控制输入数量 start
+        limitQuantityInput(event, formName) {
+            // uniapp中event.detail.value获取输入值
+            let value = event.detail.value;
+
+            // 如果输入为空，设为1
+            if (!value) {
+                this[formName].quantity = 1;
+                return;
+            }
+
+            // 移除前导零
+            value = value.toString().replace(/^0+/, '');
+
+            // 转换为数字并确保在1-99范围内
+            let numValue = parseInt(value);
+            if (isNaN(numValue) || numValue < 1) {
+                numValue = 1;
+            }
+
+            this[formName].quantity = numValue;
+        },
+
+        // 控制输入数量 end
 
         async takePicture() {
             try {
@@ -334,6 +400,8 @@ export default {
                         this.analysisCompleted = false; // 重置分析状态
                         this.formData1 = {  // 清空表单数据
                             name: '',
+                            meal: '',
+                            quantity: '',
                             calorie: '',
                             carbohydrate: '',
                             protein: '',
@@ -376,6 +444,8 @@ export default {
                     // 3. 映射API返回数据到表单
                     this.formData1 = {
                         name: data.name,
+                        meal: data.meal,
+                        quantity: data.quantity,
                         calorie: data.calorie,
                         carbohydrate: data.carbohydrate,
                         protein: data.protein,
@@ -407,6 +477,8 @@ export default {
                 this.analysisCompleted = false;
                 this.formData1 = {
                     name: '',
+                    meal: '',
+                    quantity: '',
                     calorie: '',
                     carbohydrate: '',
                     protein: '',

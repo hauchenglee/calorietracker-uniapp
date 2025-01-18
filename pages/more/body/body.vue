@@ -106,6 +106,10 @@ export default {
     },
 
     methods: {
+        onBirthDateChange(e) {
+            this.formData.birthDate = e.detail.value;
+        },
+        
         selectGender(gender) {
             this.formData.gender = gender
         },
