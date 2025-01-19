@@ -470,7 +470,7 @@ export default {
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'error'
+                    icon: 'none'
                 });
 
                 // 6. 分析失败时重置状态

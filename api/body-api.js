@@ -1,11 +1,8 @@
 import request from '@/utils/request'
 
 export default {
-    getBody(filePath) {
-        return request.upload('/body/get-version', {
-            filePath: filePath,
-            name: 'image'
-        })
+    getBody(data) {
+        return request.post('/body/get-body', data)
     },
 
     checkExist() {

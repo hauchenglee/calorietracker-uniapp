@@ -75,7 +75,7 @@ const analyzeImage = async () => {
         }
     } catch (error) {
         uni.showToast({
-            title: error.message || '分析失敗',
+            title: error.message,
             icon: 'none'
         });
     } finally {

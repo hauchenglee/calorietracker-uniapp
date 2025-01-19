@@ -80,7 +80,60 @@
                     </view>
                 </view>
 
+                <!-- 日期 -->
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="progress-icon calories">📅</view>
+                        <view class="food-info">
+                            <text class="food-name">日期</text>
+                            <!-- 修复点击无反应问题 -->
+                            <picker
+                                mode="date"
+                                :value="formData1.date"
+                                @change="onDateChange1"
+                                :start="startDate"
+                                :end="endDate"
+                            >
+                                <view class="input-row">
+                                    <view class="picker-content">
+                                        <text :class="['picker-text', !formData1.date && 'empty']">
+                                            {{ formData1.date || '请选择日期' }}
+                                        </text>
+                                    </view>
+                                </view>
+                            </picker>
+                        </view>
+                    </view>
+                </view>
+
                 <view class="nutrition-form">
+                    <view class="optional-row">
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData1.meal === 'breakfast' }"
+                            @tap="selectMeal1('breakfast')"
+                        >
+                            <text class="meal-emoji">🌅</text>
+                            <text class="meal-label">早餐</text>
+                        </view>
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData1.meal === 'lunch' }"
+                            @tap="selectMeal1('lunch')"
+                        >
+                            <text class="meal-emoji">☀️</text>
+                            <text class="meal-label">午餐</text>
+                        </view>
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData1.meal === 'dinner' }"
+                            @tap="selectMeal1('dinner')"
+                        >
+                            <text class="meal-emoji">🌙</text>
+                            <text class="meal-label">晚餐</text>
+                        </view>
+                    </view>
+                    
                     <!-- 食物名称 -->
                     <view class="food-row">
                         <view class="food-detail">
@@ -91,13 +144,12 @@
                                     type="text"
                                     class="form-input"
                                     v-model="formData1.name"
-                                    placeholder="请输入食物名称"
                                 />
                             </view>
                         </view>
                     </view>
 
-                    <!-- 数量 -->
+                    <!-- 数量和单位 -->
                     <view class="food-row">
                         <view class="food-detail">
                             <view class="progress-icon carbs">🔢</view>
@@ -106,16 +158,21 @@
                                     <text class="food-name">数量</text>
                                     <text class="food-unit">1~99</text>
                                 </view>
-                                <input
-                                    type="number"
-                                    class="form-input"
-                                    v-model="formData1.quantity"
-                                    :min="1"
-                                    :max="99"
-                                    maxlength="2"
-                                    placeholder="1"
-                                    @input="limitQuantityInput($event, 'formData1')"
-                                />
+                                <view class="quantity-unit-group">
+                                    <input
+                                        type="number"
+                                        class="form-input quantity-input"
+                                        v-model="formData1.quantity"
+                                        :min="1"
+                                        :max="99"
+                                        maxlength="2"
+                                        @input="limitQuantityInput($event, 'formData1')"
+                                    />
+                                    <view class="unit-selector" @tap="showUnitSelector">
+                                        <text>{{ formData1.unit || '选择单位' }}</text>
+                                        <text class="unit-arrow">▼</text>
+                                    </view>
+                                </view>
                             </view>
                         </view>
                     </view>
@@ -231,6 +288,60 @@
                 </view>
 
                 <view class="nutrition-form">
+                    <!-- 日期 -->
+                    <view class="food-row">
+                        <view class="food-detail">
+                            <view class="progress-icon calories">📅</view>
+                            <view class="food-info">
+                                <text class="food-name">日期</text>
+                                <!-- 修复点击无反应问题 -->
+                                <picker
+                                    mode="date"
+                                    :value="formData2.date"
+                                    @change="onDateChange2"
+                                    :start="startDate"
+                                    :end="endDate"
+                                >
+                                    <view class="input-row">
+                                        <view class="picker-content">
+                                            <text :class="['picker-text', !formData2.date && 'empty']">
+                                                {{ formData2.date || '请选择日期' }}
+                                            </text>
+                                        </view>
+                                    </view>
+                                </picker>
+                            </view>
+                        </view>
+                    </view>
+                    
+                    <!-- 餐食 -->
+                    <view class="optional-row">
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData2.meal === 'breakfast' }"
+                            @tap="selectMeal2('breakfast')"
+                        >
+                            <text class="meal-emoji">🌅</text>
+                            <text class="meal-label">早餐</text>
+                        </view>
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData2.meal === 'lunch' }"
+                            @tap="selectMeal2('lunch')"
+                        >
+                            <text class="meal-emoji">☀️</text>
+                            <text class="meal-label">午餐</text>
+                        </view>
+                        <view
+                            class="meal-option"
+                            :class="{ active: formData2.meal === 'dinner' }"
+                            @tap="selectMeal2('dinner')"
+                        >
+                            <text class="meal-emoji">🌙</text>
+                            <text class="meal-label">晚餐</text>
+                        </view>
+                    </view>
+                    
                     <!-- 食物名称 -->
                     <view class="food-row">
                         <view class="food-detail">
@@ -241,13 +352,12 @@
                                     type="text"
                                     class="form-input"
                                     v-model="formData2.name"
-                                    placeholder="请输入食物名称"
                                 />
                             </view>
                         </view>
                     </view>
 
-                    <!-- 数量 -->
+                    <!-- 数量和单位 -->
                     <view class="food-row">
                         <view class="food-detail">
                             <view class="progress-icon carbs">🔢</view>
@@ -256,16 +366,21 @@
                                     <text class="food-name">数量</text>
                                     <text class="food-unit">1~99</text>
                                 </view>
-                                <input
-                                    type="number"
-                                    class="form-input"
-                                    v-model="formData2.quantity"
-                                    :min="1"
-                                    :max="99"
-                                    maxlength="2"
-                                    placeholder="1"
-                                    @input="limitQuantityInput($event, 'formData2')"
-                                />
+                                <view class="quantity-unit-group">
+                                    <input
+                                        type="number"
+                                        class="form-input quantity-input"
+                                        v-model="formData2.quantity"
+                                        :min="1"
+                                        :max="99"
+                                        maxlength="2"
+                                        @input="limitQuantityInput($event, 'formData2')"
+                                    />
+                                    <view class="unit-selector" @tap="showUnitSelector">
+                                        <text>{{ formData2.unit || '选择单位' }}</text>
+                                        <text class="unit-arrow">▼</text>
+                                    </view>
+                                </view>
                             </view>
                         </view>
                     </view>
@@ -366,15 +481,50 @@
             <button class="setup-btn submit-btn" @click="saveData2">保存</button>
         </view>
 
+        <!-- 单位选择弹窗 -->
+        <view class="unit-popup" v-if="showUnitPopup" @tap="closeUnitSelector">
+            <view class="unit-popup-content" @tap.stop>
+                <view class="unit-popup-header">
+                    <text class="unit-popup-title">选择单位</text>
+                    <text class="unit-popup-close" @tap="closeUnitSelector">✕</text>
+                </view>
+                <!-- 常用单位快速选择 -->
+                <view class="quick-units">
+                    <view
+                        class="quick-unit-item"
+                        :class="{ active: formData2.unit === unit }"
+                        v-for="unit in quickUnits"
+                        :key="unit"
+                        @tap="selectUnit(unit)"
+                    >
+                        {{ unit }}
+                    </view>
+                </view>
+                <!-- 自定义单位输入 -->
+                <view class="custom-unit">
+                    <input
+                        type="text"
+                        class="custom-unit-input"
+                        v-model="customUnit"
+                        placeholder="输入自定义单位"
+                        @confirm="addCustomUnit"
+                    />
+                    <button class="custom-unit-btn" @tap="addCustomUnit">确定</button>
+                </view>
+            </view>
+        </view>
+
         <!-- Loading遮罩 -->
         <loading-overlay :show="isLoading"/>
     </view>
 </template>
 
 <script>
+import loadingOverlay from "@/components/loading-overlay.vue";
 import addApi from "@/api/add-api";
 
 export default {
+    components: {loadingOverlay},
     data() {
         return {
             statusBarHeight: 0,// 适配屏幕高度
@@ -383,27 +533,40 @@ export default {
             previewImage: '',
             isLoading: false,
             formData1: {
-                name: '',
+                date: '',
                 meal: '',
+                name: '',
                 quantity: 1,
-                calorie: '',
-                carbohydrate: '',
-                protein: '',
-                fat: ''
+                unit: 'pics',
+                calorie: 0,
+                carbohydrate: 0,
+                protein: 0,
+                fat: 0
             },
             formData2: {
-                name: '',
+                date: '',
                 meal: '',
+                name: '',
                 quantity: 1,
-                calorie: '',
-                carbohydrate: '',
-                protein: '',
-                fat: ''
+                unit: 'pics',
+                calorie: 0,
+                carbohydrate: 0,
+                protein: 0,
+                fat: 0
             },
 
             // 图片分析参数
             analysisCompleted: false,
             isAnalyzing: false,
+
+            // 添加日期范围
+            startDate: '1940-01-01', // 能手动选择的最早日期
+            endDate: '2099-12-31',
+            
+            // 单位量词
+            showUnitPopup: false,
+            quickUnits: ['份', '个', 'g', 'ml', '碗', '勺', '块', '片'],
+            customUnit: '',
         }
     },
 
@@ -416,6 +579,24 @@ export default {
     methods: {
         showTab(index) {
             this.activeTab = index
+        },
+
+        onDateChange1(e) {
+            this.formData1.date = e.detail.value;
+        },
+
+        onDateChange2(e) {
+            this.formData2.date = e.detail.value;
+        },
+
+        selectMeal1(meal) {
+            console.log(meal)
+            this.formData1.meal = meal
+        },
+
+        selectMeal2(meal) {
+            console.log(meal)
+            this.formData2.meal = meal
         },
 
         // 控制输入数量 start
@@ -440,9 +621,31 @@ export default {
 
             this[formName].quantity = numValue;
         },
-
         // 控制输入数量 end
 
+        // 单位量词 start
+        showUnitSelector() {
+            this.showUnitPopup = true;
+        },
+
+        closeUnitSelector() {
+            this.showUnitPopup = false;
+            this.customUnit = '';
+        },
+
+        selectUnit(unit) {
+            this.formData2.unit = unit;
+            this.closeUnitSelector();
+        },
+
+        addCustomUnit() {
+            if (this.customUnit.trim()) {
+                this.formData2.unit = this.customUnit.trim();
+                this.closeUnitSelector();
+            }
+        },
+        // 单位量词 end
+        
         async takePicture() {
             try {
                 const res = await uni.chooseImage({
@@ -573,7 +776,7 @@ export default {
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'error'
+                    icon: 'none'
                 });
 
                 // 6. 分析失败时重置状态
@@ -599,14 +802,19 @@ export default {
             this.isLoading = true
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 1500))
+                const response = await addApi.save(this.formData1);
                 uni.showToast({
-                    title: '保存成功',
+                    title: response.message,
                     icon: 'success'
                 })
+
+                // 刷新页面
+                setTimeout(() => {
+                    uni.reLaunch({ url: '/pages/current-page/current-page' });
+                }, 1000); // 延迟 1000ms，等待提示消息显示
             } catch (e) {
                 uni.showToast({
-                    title: '保存失敗',
+                    title: error.message,
                     icon: 'none'
                 })
             } finally {
@@ -620,14 +828,19 @@ export default {
             this.isLoading = true
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 1500))
+                const response = await addApi.save(this.formData2);
                 uni.showToast({
-                    title: '保存成功',
+                    title: response.message,
                     icon: 'success'
                 })
+
+                // 刷新页面
+                setTimeout(() => {
+                    uni.reLaunch({ url: '/pages/current-page/current-page' });
+                }, 1000); // 延迟 1000ms，等待提示消息显示
             } catch (e) {
                 uni.showToast({
-                    title: '保存失敗',
+                    title: error.message,
                     icon: 'none'
                 })
             } finally {
@@ -738,6 +951,15 @@ page {
     margin-bottom: 30rpx;
 }
 
+/* 日期选择 */
+.picker-text {
+    font-size: 28rpx;
+}
+
+.picker-text.empty {
+    color: #94a3b8;
+}
+
 /* 表单样式 */
 .food-row {
     display: flex;
@@ -780,6 +1002,41 @@ page {
 .form-input {
     font-size: 28rpx;
     width: 100%;
+}
+
+/* meal 选单 */
+.optional-row {
+    display: flex;
+    gap: 20rpx;
+    margin-bottom: 20rpx;
+}
+
+.meal-option {
+    flex: 1;
+    padding: 24rpx;
+    background: #f7fafc;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16rpx;
+}
+
+.meal-option.active {
+    background: rgba(76, 81, 191, 0.1);
+}
+
+.meal-option.active .meal-label {
+    color: #4c51bf;
+}
+
+.meal-emoji {
+    font-size: 32rpx;
+}
+
+.meal-label {
+    font-size: 28rpx;
+    color: #1a1a1a;
 }
 
 /* 进度条组样式 */
@@ -905,6 +1162,115 @@ page {
 
 .setup-btn:active {
     opacity: 0.9;
+}
+
+/* 数量和单位输入组样式 */
+.quantity-unit-group {
+    display: flex;
+    gap: 12rpx;
+    align-items: center;
+}
+
+.quantity-input {
+    flex: 0 0 120rpx;
+    text-align: center;
+}
+
+.unit-selector {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    padding: 12rpx 24rpx;
+    background: #ffffff;
+    border-radius: 12rpx;
+    color: #4a5568;
+    font-size: 28rpx;
+}
+
+.unit-arrow {
+    font-size: 20rpx;
+    color: #718096;
+}
+
+/* 单位选择弹窗样式 */
+.unit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    z-index: 999;
+}
+
+.unit-popup-content {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 32rpx 32rpx 0 0;
+    padding: 40rpx;
+}
+
+.unit-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30rpx;
+}
+
+.unit-popup-title {
+    font-size: 32rpx;
+    font-weight: 600;
+}
+
+.unit-popup-close {
+    padding: 20rpx;
+    font-size: 32rpx;
+    color: #718096;
+}
+
+.quick-units {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20rpx;
+    margin-bottom: 30rpx;
+}
+
+.quick-unit-item {
+    padding: 16rpx 32rpx;
+    background: #f7fafc;
+    border-radius: 16rpx;
+    font-size: 28rpx;
+    color: #4a5568;
+}
+
+.quick-unit-item.active {
+    background: #4c51bf;
+    color: #ffffff;
+}
+
+.custom-unit {
+    display: flex;
+    gap: 20rpx;
+}
+
+.custom-unit-input {
+    flex: 1;
+    padding: 16rpx 24rpx;
+    background: #f7fafc;
+    border-radius: 16rpx;
+    font-size: 28rpx;
+}
+
+.custom-unit-btn {
+    width: 160rpx;
+    background: #4c51bf;
+    color: #ffffff;
+    border: none;
+    border-radius: 16rpx;
+    font-size: 28rpx;
 }
 
 /* Loading样式 */

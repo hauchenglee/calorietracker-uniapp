@@ -196,8 +196,8 @@
 import {dateFormatter} from '@/utils/dateFormatter.js'
 import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue"
 import dietApi from "@/api/diary-api";
-import {Diet} from '@/models/Diet'
-import {DietSummary} from '@/models/DietSummary'
+import DietRecord from '@/models/diet-record'
+import {DietSummary} from '@/models/diet-summary'
 import bodyApi from "@/api/body-api";
 import loadingOverlay from '@/components/loading-overlay.vue'
 
@@ -239,12 +239,17 @@ export default {
 
         // 设置初始日期
         this.currentDate = this.getCurrentDate();
-
+    },
+    
+    async onShow() {
         // 初始化加载数据
         try {
             this.isLoading = true;
-            await this.initBody();
+            await this.checkBody();
             await this.initData();
+
+            // 添加 0.5 秒的延迟
+            await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
             uni.showToast({
                 title: 'onLoad error',
@@ -305,13 +310,8 @@ export default {
         // 日期 end
 
         // 页面初始化，调用api
-        async initBody() {
+        async checkBody() {
             try {
-                // 如果 currentDate 为空，才设置为当前日期
-                if (!this.currentDate) {
-                    this.currentDate = this.getCurrentDate();
-                }
-
                 const response = await bodyApi.checkExist({});
                 if (response.code === 'A0001') {
                     this.isBodyExist = response.data;
@@ -338,16 +338,15 @@ export default {
                 }
 
                 const response = await dietApi.getByDate({date: this.currentDate});
-                console.log('API Response:', response);
                 if (response.code === 'A0001') {
                     // 处理摘要数据
                     this.summary = new DietSummary(response.data.summary);
 
                     // 处理饮食数据
                     this.dietData = {
-                        breakfast: (response.data.breakfast || []).map(item => new Diet(item)),
-                        lunch: (response.data.lunch || []).map(item => new Diet(item)),
-                        dinner: (response.data.dinner || []).map(item => new Diet(item))
+                        breakfast: (response.data.breakfast || []).map(item => new DietRecord(item)),
+                        lunch: (response.data.lunch || []).map(item => new DietRecord(item)),
+                        dinner: (response.data.dinner || []).map(item => new DietRecord(item))
                     };
                 } else {
                     uni.showToast({

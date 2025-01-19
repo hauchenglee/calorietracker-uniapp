@@ -23,15 +23,15 @@
                 <!-- 修复点击无反应问题 -->
                 <picker
                     mode="date"
-                    :value="formData.birthDate"
-                    @change="onBirthDateChange"
+                    :value="formData.birthday"
+                    @change="onBirthDayChange"
                     :start="startDate"
                     :end="endDate"
                 >
                     <view class="input-row">
                         <view class="picker-content">
-                            <text :class="['picker-text', !formData.birthDate && 'empty']">
-                                {{ formData.birthDate || '请选择出生日期' }}
+                            <text :class="['picker-text', !formData.birthday && 'empty']">
+                                {{ formData.birthday || '请选择出生日期' }}
                             </text>
                         </view>
                     </view>
@@ -114,6 +114,8 @@
 
 <script>
 import loadingOverlay from "@/components/loading-overlay.vue";
+import bodyApi from "@/api/body-api";
+import Body from "@/models/body";
 
 export default {
     components: {loadingOverlay},
@@ -121,9 +123,13 @@ export default {
         return {
             statusBarHeight: 0,// 适配屏幕高度
 
-            isLoading: false,
+            // 其他
+            isLoading: false, // 添加 loading 状态变量
+            isBodyExist: false, // 如果已设置body数据
+
             formData: {
-                birthDate: '',
+                id: '',
+                birthday: '',
                 gender: 'male',
                 height: '',
                 weight: ''
@@ -131,40 +137,142 @@ export default {
 
             // 添加日期范围
             startDate: '1940-01-01', // 能手动选择的最早日期
-            endDate: new Date().toISOString().split('T')[0] // 今天
+            endDate: new Date().toISOString().split('T')[0], // 今天
+            
+            // entity
+            body: new Body()
         }
     },
 
-    onLoad() {
+    async onLoad() {
         // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
+
+        // 初始化加载数据
+        try {
+            this.isLoading = true;
+            await this.checkBody();
+            
+            if (this.isBodyExist) {
+                await this.initData();
+            }
+        } catch (error) {
+            uni.showToast({
+                title: 'onLoad error',
+                icon: 'none'
+            });
+        } finally {
+            this.isLoading = false;
+        }
     },
 
     methods: {
-        onBirthDateChange(e) {
-            this.formData.birthDate = e.detail.value;
+        onBirthDayChange(e) {
+            this.formData.birthday = e.detail.value;
         },
 
         selectGender(gender) {
             this.formData.gender = gender
         },
 
+        // 页面初始化，调用api
+        async checkBody() {
+            try {
+                const response = await bodyApi.checkExist({});
+                if (response.code === 'A0001') {
+                    this.isBodyExist = response.data;
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            }
+        },
+
+        // 页面初始化，调用api
+        async initData() {
+            try {
+                const response = await bodyApi.getBody({});
+                if (response.code === 'A0001') {
+                    this.body = new Body(response.data);
+
+                    // 映射API返回数据到表单
+                    this.formData = {
+                        id: this.body.id, 
+                        birthday: this.body.birthday,
+                        gender: this.body.gender,
+                        height: this.body.height,
+                        weight: this.body.weight,
+                    };
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            }
+        },
+
         async onSubmit() {
             try {
                 this.isLoading = true
-                // 在这里添加表单验证和提交逻辑
-                await new Promise(resolve => setTimeout(resolve, 1000)) // 模拟API调用
-                uni.navigateTo({
-                    url: '/pages/nutrition-setup/nutrition-setup'
-                })
+
+                // 调用API
+                console.log(this.formData)
+                const response = await bodyApi.save(this.formData);
+
+                // 2. 处理响应结果
+                if (response.code === 'A0001' && response.data) {
+                    const {data} = response;
+
+                    // 3. 映射API返回数据到表单
+                    this.formData = {
+                        id: data.id,
+                        birthday: data.birthday,
+                        gender: data.gender,
+                        height: data.height,
+                        weight: data.weight,
+                    };
+
+                    // 4. 显示成功提示
+                    uni.showToast({
+                        title: '分析成功',
+                        icon: 'success'
+                    });
+
+                    // 刷新页面
+                    setTimeout(() => {
+                        uni.reLaunch({ url: '/pages/current-page/current-page' });
+                    }, 1000); // 延迟 1000ms，等待提示消息显示
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
             } catch (error) {
                 uni.showToast({
-                    title: '提交失败，请重试',
+                    title: error.message,
                     icon: 'none'
-                })
+                });
+
+                // 失败时重置状态
+                this.isLoading = false;
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
+                uni.hideLoading();
             }
         }
     }
