@@ -26,10 +26,10 @@
                         <view class="progress-icon calories">🔥</view>
                         <text>卡路里</text>
                     </view>
-                    <text>1,422 / 2,000 kcal</text>
+                    <text>{{summary.calorieIntake}} / {{summary.calorieTotal}} kcal</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill calories" style="width: 71%"></view>
+                    <view class="progress-fill calories" :style="{ width: summary.caloriePercent + '%' }"></view>
                 </view>
             </view>
 
@@ -39,10 +39,10 @@
                         <view class="progress-icon carbs">🌾</view>
                         <text>碳水化合物</text>
                     </view>
-                    <text>175 / 250 g</text>
+                    <text>{{summary.carbohydrateIntake}} / {{summary.carbohydrateTotal}} g</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill carbs" style="width: 70%"></view>
+                    <view class="progress-fill carbs" :style="{ width: summary.carbohydratePercent + '%' }"></view>
                 </view>
             </view>
 
@@ -52,10 +52,10 @@
                         <view class="progress-icon protein">🥩</view>
                         <text>蛋白质</text>
                     </view>
-                    <text>60 / 75 g</text>
+                    <text>{{summary.proteinIntake}} / {{summary.proteinTotal}} g</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill protein" style="width: 80%"></view>
+                    <view class="progress-fill protein" :style="{ width: summary.proteinPercent + '%' }"></view>
                 </view>
             </view>
 
@@ -65,10 +65,10 @@
                         <view class="progress-icon fat">🥑</view>
                         <text>脂肪</text>
                     </view>
-                    <text>30 / 65 g</text>
+                    <text>{{summary.fatIntake}} / {{summary.fatTotal}} g</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill fat" style="width: 46%"></view>
+                    <view class="progress-fill fat" :style="{ width: summary.fatPercent + '%' }"></view>
                 </view>
             </view>
         </view>
@@ -246,13 +246,15 @@ export default {
         try {
             this.isLoading = true;
             await this.checkBody();
-            await this.initData();
+            if (this.isBodyExist) {
+                await this.initData();
+            }
 
             // 添加 0.5 秒的延迟
             await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
             uni.showToast({
-                title: 'onLoad error',
+                title: 'onShow error',
                 icon: 'none'
             });
         } finally {

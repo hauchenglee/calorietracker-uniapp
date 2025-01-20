@@ -98,19 +98,19 @@
                 </view>
             </view>
 
-            <!-- 基础代谢 -->
+            <!-- 卡路里 -->
             <view class="nutrient-row">
                 <view class="food-detail">
                     <view class="progress-icon calories">🔥</view>
                     <view class="food-info">
-                        <text class="food-name">基础代谢</text>
+                        <text class="food-name">卡路里</text>
                         <view>
                             <text class="value-tag calories">建议值</text>
                         </view>
                     </view>
                 </view>
                 <view class="food-calories">
-                    <text class="calories-value">2000</text>
+                    <text class="calories-value">{{ dietPlan.calorie }}</text>
                     <text class="calories-unit">kcal</text>
                 </view>
                 <button class="edit-btn">✏️</button>
@@ -128,7 +128,7 @@
                     </view>
                 </view>
                 <view class="food-calories">
-                    <text class="calories-value">250</text>
+                    <text class="calories-value">{{ dietPlan.carbohydrate }}</text>
                     <text class="calories-unit">g</text>
                 </view>
                 <button class="edit-btn">✏️</button>
@@ -146,7 +146,7 @@
                     </view>
                 </view>
                 <view class="food-calories">
-                    <text class="calories-value">75</text>
+                    <text class="calories-value">{{ dietPlan.protein }}</text>
                     <text class="calories-unit">g</text>
                 </view>
                 <button class="edit-btn">✏️</button>
@@ -164,7 +164,7 @@
                     </view>
                 </view>
                 <view class="food-calories">
-                    <text class="calories-value">67</text>
+                    <text class="calories-value">{{ dietPlan.fat }}</text>
                     <text class="calories-unit">g</text>
                 </view>
                 <button class="edit-btn">✏️</button>
@@ -172,7 +172,7 @@
 
             <!-- 底部按钮 -->
             <view class="button-group">
-                <button class="reset-btn" @tap="resetToDefault">恢复默认值</button>
+                <button class="reset-btn" @tap="resetToDefault">重新分析</button>
                 <button class="setup-btn" @tap="saveSettings">保存设置</button>
             </view>
         </view>
@@ -184,6 +184,8 @@
 
 <script>
 import loadingOverlay from "@/components/loading-overlay.vue";
+import dietPlanApi from "@/api/diet-plan-api";
+import DietPlan from '@/models/diet-plan'
 
 export default {
     components: {loadingOverlay},
@@ -195,14 +197,9 @@ export default {
 
             isAdviceExpanded: false, // 控制建议列表的展开状态
 
-            implementationAdvice: [
-                "控制碳水化合物摄入，选择全谷物，避免精制淀粉",
-                "增加蛋白质摄入，保护肌肉，增加饱腹感",
-                "每周进行3-4次有氧运动，每次30-60分钟",
-                "选择健康脂肪来源，避免反式脂肪",
-                "建立规律的饮食时间，避免夜间进食",
-                "建议使用小份量餐具，细嚼慢咽"
-            ],
+            dietPlan: new DietPlan(),
+
+            implementationAdvice: [], // 初始化为空数组
         }
     },
 
@@ -212,10 +209,59 @@ export default {
         this.statusBarHeight = systemInfo.statusBarHeight
     },
 
+    async onShow() {
+        // 初始化加载数据
+        try {
+            this.isLoading = true;
+            await this.initData();
+
+            // 添加 0.5 秒的延迟
+            await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (error) {
+            uni.showToast({
+                title: 'onShow error',
+                icon: 'none'
+            });
+        } finally {
+            this.isLoading = false;
+        }
+    },
+
     methods: {
         toggleAdvice() {
             this.isAdviceExpanded = !this.isAdviceExpanded;
-        }
+        },
+
+        // 添加一个处理detailedSuggestion的方法
+        parseDetailedSuggestion(text) {
+            if (!text) return [];
+            // 分割文本并移除空行
+            return text.split('\n')
+                .map(line => line.trim()) // 移除前后空格
+                .filter(line => line) // 移除空行
+                .map(line => line.replace(/^\d+\.\s*/, '')); // 移除数字序号和点
+        },
+
+        async initData() {
+            try {
+                const response = await dietPlanApi.getDietPlan({});
+                if (response.code === 'A0001') {
+                    console.log(response.data)
+                    this.dietPlan = new DietPlan(response.data);
+                    this.implementationAdvice = this.parseDetailedSuggestion(this.dietPlan.detailedSuggestion);
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            }
+        },
     }
 }
 </script>
