@@ -133,7 +133,7 @@
                             <text class="meal-label">晚餐</text>
                         </view>
                     </view>
-                    
+
                     <!-- 食物名称 -->
                     <view class="food-row">
                         <view class="food-detail">
@@ -313,7 +313,7 @@
                             </view>
                         </view>
                     </view>
-                    
+
                     <!-- 餐食 -->
                     <view class="optional-row">
                         <view
@@ -341,7 +341,7 @@
                             <text class="meal-label">晚餐</text>
                         </view>
                     </view>
-                    
+
                     <!-- 食物名称 -->
                     <view class="food-row">
                         <view class="food-detail">
@@ -562,7 +562,7 @@ export default {
             // 添加日期范围
             startDate: '1940-01-01', // 能手动选择的最早日期
             endDate: '2099-12-31',
-            
+
             // 单位量词
             showUnitPopup: false,
             quickUnits: ['份', '个', 'g', 'ml', '碗', '勺', '块', '片'],
@@ -645,7 +645,7 @@ export default {
             }
         },
         // 单位量词 end
-        
+
         async takePicture() {
             try {
                 const res = await uni.chooseImage({
@@ -810,7 +810,7 @@ export default {
 
                 // 刷新页面
                 setTimeout(() => {
-                    uni.reLaunch({ url: '/pages/current-page/current-page' });
+                    uni.reLaunch({url: '/pages/current-page/current-page'});
                 }, 1000); // 延迟 1000ms，等待提示消息显示
             } catch (e) {
                 uni.showToast({
@@ -836,7 +836,7 @@ export default {
 
                 // 刷新页面
                 setTimeout(() => {
-                    uni.reLaunch({ url: '/pages/current-page/current-page' });
+                    uni.reLaunch({url: '/pages/current-page/current-page'});
                 }, 1000); // 延迟 1000ms，等待提示消息显示
             } catch (e) {
                 uni.showToast({
