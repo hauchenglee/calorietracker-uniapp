@@ -119,14 +119,11 @@
                             @change="onDateChange1"
                             :start="startDate"
                             :end="endDate"
+                            class="picker-full"
                         >
-                            <view class="input-row">
-                                <view class="picker-content">
-                                    <text :class="['picker-text', !formData1.date && 'empty']">
-                                        {{ formData1.date || '请选择日期' }}
-                                    </text>
-                                </view>
-                            </view>
+                            <text :class="['picker-text', !formData1.date && 'empty']">
+                                {{ formData1.date || '请选择日期' }}
+                            </text>
                         </picker>
                     </view>
 
@@ -327,14 +324,11 @@
                             @change="onDateChange2"
                             :start="startDate"
                             :end="endDate"
+                            class="picker-full"
                         >
-                            <view class="input-row">
-                                <view class="picker-content">
-                                    <text :class="['picker-text', !formData2.date && 'empty']">
-                                        {{ formData2.date || '请选择日期' }}
-                                    </text>
-                                </view>
-                            </view>
+                            <text :class="['picker-text', !formData2.date && 'empty']">
+                                {{ formData2.date || '请选择日期' }}
+                            </text>
                         </picker>
                     </view>
 
@@ -983,6 +977,10 @@ page {
 }
 
 /* 日期选择 */
+.picker-full {
+    width: 100%; /* 让picker占满整行 */
+}
+
 .picker-text {
     font-size: 28rpx;
 }

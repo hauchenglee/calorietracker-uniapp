@@ -28,10 +28,16 @@
 </template>
 
 <script>
+import bodyApi from "@/api/body-api";
+
 export default {
     data() {
         return {
             statusBarHeight: 0,// 适配屏幕高度
+
+            // 其他
+            isLoading: false, // 添加 loading 状态变量
+            isBodyExist: false, // 如果已设置body数据
 
             settingItems: [
                 {icon: '📝', label: '身体基础数据', path: '/pages/more/body/body'},
@@ -49,9 +55,36 @@ export default {
         this.statusBarHeight = systemInfo.statusBarHeight
     },
 
+    async onShow() {
+        // 初始化加载数据
+        try {
+            this.isLoading = true;
+            await this.checkBody();
+        } catch (error) {
+            uni.showToast({
+                title: 'onShow error',
+                icon: 'none'
+            });
+        } finally {
+            this.isLoading = false;
+        }
+    },
+
     methods: {
         // 添加导航方法
         navigateTo(path) {
+            // 判断是否是diet-plan页面
+            if (path.includes('diet-plan')) {
+                // 如果是diet-plan页面且没有body数据
+                if (!this.isBodyExist) {
+                    uni.showToast({
+                        title: '請先設置身體基礎數據',
+                        icon: 'none'
+                    });
+                    return; // 阻止路由跳转
+                }
+            }
+
             uni.navigateTo({
                 url: path,
                 fail(err) {
@@ -62,7 +95,27 @@ export default {
                     })
                 }
             })
-        }
+        },
+
+        // 页面初始化，调用api
+        async checkBody() {
+            try {
+                const response = await bodyApi.checkExist({});
+                if (response.code === 'A0001') {
+                    this.isBodyExist = response.data;
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            }
+        },
     }
 }
 </script>
