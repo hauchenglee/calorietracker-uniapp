@@ -229,7 +229,68 @@ export default {
             }
         },
 
+        // 添加验证方法
+        validateFormData() {
+            const requiredFields = {
+                birthday: '出生日期',
+                gender: '性别',
+                height: '身高',
+                weight: '体重'
+            };
+
+            // 检查必填字段
+            for (const [field, label] of Object.entries(requiredFields)) {
+                if (!this.formData[field]) {
+                    uni.showToast({
+                        title: `请填写${label}`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            // 检查数值字段
+            const numericFields = ['height', 'weight'];
+            for (const field of numericFields) {
+                const value = Number(this.formData[field]);
+                if (isNaN(value) || value <= 0) {
+                    uni.showToast({
+                        title: `${requiredFields[field]}必须大于0`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            // 检查身高范围（例如：100-250cm）
+            const height = Number(this.formData.height);
+            if (height < 100 || height > 250) {
+                uni.showToast({
+                    title: '身高必须在100-250cm之间',
+                    icon: 'none'
+                });
+                return false;
+            }
+
+            // 检查体重范围（例如：20-200kg）
+            const weight = Number(this.formData.weight);
+            if (weight < 20 || weight > 200) {
+                uni.showToast({
+                    title: '体重必须在20-200kg之间',
+                    icon: 'none'
+                });
+                return false;
+            }
+
+            return true;
+        },
+
         async onSubmit() {
+            // 添加表单验证
+            if (!this.validateFormData()) {
+                return;
+            }
+            
             try {
                 this.isLoading = true
                 await new Promise(resolve => setTimeout(resolve, 500));
