@@ -123,7 +123,7 @@
                     <view class="food-info">
                         <text class="food-name">碳水化合物</text>
                         <view>
-                            <text class="value-tag carbs">50%</text>
+                            <text class="value-tag carbs">{{ nutritionPercentages.carbs }}%</text>
                         </view>
                     </view>
                 </view>
@@ -141,7 +141,7 @@
                     <view class="food-info">
                         <text class="food-name">蛋白质</text>
                         <view>
-                            <text class="value-tag protein">15%</text>
+                            <text class="value-tag protein">{{ nutritionPercentages.protein }}%</text>
                         </view>
                     </view>
                 </view>
@@ -159,7 +159,7 @@
                     <view class="food-info">
                         <text class="food-name">脂肪</text>
                         <view>
-                            <text class="value-tag fat">35%</text>
+                            <text class="value-tag fat">{{ nutritionPercentages.fat }}%</text>
                         </view>
                     </view>
                 </view>
@@ -172,8 +172,8 @@
 
             <!-- 底部按钮 -->
             <view class="button-group">
-                <button class="reset-btn" @tap="resetToDefault">重新分析</button>
-                <button class="setup-btn" @tap="saveSettings">保存设置</button>
+                <button class="reset-btn" @tap="renew">重新分析</button>
+                <button class="setup-btn" @tap="save">保存设置</button>
             </view>
         </view>
 
@@ -210,13 +210,9 @@ export default {
     },
 
     async onShow() {
-        // 初始化加载数据
         try {
             this.isLoading = true;
             await this.initData();
-
-            // 添加 0.5 秒的延迟
-            await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
@@ -224,6 +220,29 @@ export default {
             });
         } finally {
             this.isLoading = false;
+        }
+    },
+
+    computed: {
+        // 计算各营养素的卡路里和百分比
+        nutritionPercentages() {
+            // 碳水化合物：1g = 4kcal
+            const carbsCalories = this.dietPlan.carbohydrate * 4;
+            const carbsPercentage = this.calculatePercentage(carbsCalories);
+
+            // 蛋白质：1g = 4kcal
+            const proteinCalories = this.dietPlan.protein * 4;
+            const proteinPercentage = this.calculatePercentage(proteinCalories);
+
+            // 脂肪：1g = 9kcal
+            const fatCalories = this.dietPlan.fat * 9;
+            const fatPercentage = this.calculatePercentage(fatCalories);
+
+            return {
+                carbs: Math.round(carbsPercentage),
+                protein: Math.round(proteinPercentage),
+                fat: Math.round(fatPercentage)
+            };
         }
     },
 
@@ -240,6 +259,12 @@ export default {
                 .map(line => line.trim()) // 移除前后空格
                 .filter(line => line) // 移除空行
                 .map(line => line.replace(/^\d+\.\s*/, '')); // 移除数字序号和点
+        },
+
+        // 计算百分比的辅助方法
+        calculatePercentage(calories) {
+            if (!this.dietPlan.calorie || this.dietPlan.calorie === 0) return 0;
+            return (calories / this.dietPlan.calorie) * 100;
         },
 
         async initData() {
@@ -262,6 +287,62 @@ export default {
                 });
             }
         },
+
+        async renew() {
+            try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const response = await dietPlanApi.renew({});
+                if (response.code === 'A0001') {
+                    this.dietPlan = new DietPlan(response.data);
+                    this.implementationAdvice = this.parseDetailedSuggestion(this.dietPlan.detailedSuggestion);
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                this.isLoading = false
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            } finally {
+                this.isLoading = false;
+                uni.hideLoading();
+            }
+        },
+
+        async save() {
+            try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const response = await dietPlanApi.save({});
+                if (response.code === 'A0001') {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'success'
+                    })
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                this.isLoading = false
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            } finally {
+                this.isLoading = false;
+                uni.hideLoading();
+            }
+        }
     }
 }
 </script>

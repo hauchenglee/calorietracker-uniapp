@@ -388,7 +388,7 @@
                             <view class="progress-icon calories">🔥</view>
                             <view class="label-group">
                                 <text>热量</text>
-                                <text class="form-sublabel">每日推荐 2000kcal</text>
+                                <text class="form-sublabel">每日推荐 {{ dietPlan.calorie }} kcal</text>
                             </view>
                         </view>
                         <input
@@ -410,7 +410,7 @@
                             <view class="progress-icon carbs">🌾</view>
                             <view class="label-group">
                                 <text>碳水化合物</text>
-                                <text class="form-sublabel">每日推荐 250g</text>
+                                <text class="form-sublabel">每日推荐 {{ dietPlan.carbohydrate }} g</text>
                             </view>
                         </view>
                         <input
@@ -432,7 +432,7 @@
                             <view class="progress-icon protein">🥩</view>
                             <view class="label-group">
                                 <text>蛋白质</text>
-                                <text class="form-sublabel">每日推荐 60g</text>
+                                <text class="form-sublabel">每日推荐 {{ dietPlan.protein }} g</text>
                             </view>
                         </view>
                         <input
@@ -454,7 +454,7 @@
                             <view class="progress-icon fat">🥑</view>
                             <view class="label-group">
                                 <text>脂肪</text>
-                                <text class="form-sublabel">每日推荐 70g</text>
+                                <text class="form-sublabel">每日推荐 {{ dietPlan.fat }} g</text>
                             </view>
                         </view>
                         <input
@@ -499,6 +499,7 @@
                         class="custom-unit-input"
                         v-model="customUnit"
                         placeholder="输入自定义单位"
+                        maxlength="10"
                         @confirm="addCustomUnit"
                     />
                     <button class="custom-unit-btn" @tap="addCustomUnit">确定</button>
@@ -566,6 +567,20 @@ export default {
         // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
+    },
+
+    async onShow() {
+        try {
+            this.isLoading = true;
+            await this.renew();
+        } catch (error) {
+            uni.showToast({
+                title: 'onShow error',
+                icon: 'none'
+            });
+        } finally {
+            this.isLoading = false;
+        }
     },
 
     methods: {
@@ -791,54 +806,48 @@ export default {
         async saveData1() {
             if (this.isLoading) return
 
-            this.isLoading = true
-
             try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData1);
                 uni.showToast({
                     title: response.message,
                     icon: 'success'
                 })
-
-                // 刷新页面
-                setTimeout(() => {
-                    uni.reLaunch({url: '/pages/current-page/current-page'});
-                }, 1000); // 延迟 1000ms，等待提示消息显示
-            } catch (e) {
+            } catch (error) {
+                this.isLoading = false
                 uni.showToast({
                     title: error.message,
                     icon: 'none'
                 })
             } finally {
                 this.isLoading = false
+                uni.hideLoading();
             }
         },
 
         async saveData2() {
             if (this.isLoading) return
 
-            this.isLoading = true
-
             try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData2);
                 uni.showToast({
                     title: response.message,
                     icon: 'success'
                 })
-
-                // 刷新页面
-                setTimeout(() => {
-                    uni.reLaunch({url: '/pages/current-page/current-page'});
-                }, 1000); // 延迟 1000ms，等待提示消息显示
-            } catch (e) {
+            } catch (error) {
+                this.isLoading = false
                 uni.showToast({
                     title: error.message,
                     icon: 'none'
                 })
             } finally {
                 this.isLoading = false
+                uni.hideLoading();
             }
-        }
+        },
     }
 }
 </script>

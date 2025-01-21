@@ -138,28 +138,31 @@ export default {
             // 添加日期范围
             startDate: '1940-01-01', // 能手动选择的最早日期
             endDate: new Date().toISOString().split('T')[0], // 今天
-            
+
             // entity
             body: new Body()
         }
     },
 
-    async onLoad() {
+    onLoad() {
         // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
+    },
 
+    async onShow() {
         // 初始化加载数据
         try {
             this.isLoading = true;
             await this.checkBody();
-            
+
             if (this.isBodyExist) {
                 await this.initData();
             }
         } catch (error) {
+            this.isLoading = false;
             uni.showToast({
-                title: 'onLoad error',
+                title: 'onShow error',
                 icon: 'none'
             });
         } finally {
@@ -199,13 +202,14 @@ export default {
         // 页面初始化，调用api
         async initData() {
             try {
+                await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await bodyApi.getBody({});
                 if (response.code === 'A0001') {
                     this.body = new Body(response.data);
 
                     // 映射API返回数据到表单
                     this.formData = {
-                        id: this.body.id, 
+                        id: this.body.id,
                         birthday: this.body.birthday,
                         gender: this.body.gender,
                         height: this.body.height,
@@ -228,34 +232,13 @@ export default {
         async onSubmit() {
             try {
                 this.isLoading = true
-
-                // 调用API
-                console.log(this.formData)
+                await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await bodyApi.save(this.formData);
-
-                // 2. 处理响应结果
                 if (response.code === 'A0001' && response.data) {
-                    const {data} = response;
-
-                    // 3. 映射API返回数据到表单
-                    this.formData = {
-                        id: data.id,
-                        birthday: data.birthday,
-                        gender: data.gender,
-                        height: data.height,
-                        weight: data.weight,
-                    };
-
-                    // 4. 显示成功提示
                     uni.showToast({
-                        title: '分析成功',
+                        title: response.message,
                         icon: 'success'
                     });
-
-                    // 刷新页面
-                    setTimeout(() => {
-                        uni.reLaunch({ url: '/pages/current-page/current-page' });
-                    }, 1000); // 延迟 1000ms，等待提示消息显示
                 } else {
                     uni.showToast({
                         title: response.message,
