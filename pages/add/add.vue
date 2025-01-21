@@ -515,6 +515,8 @@
 <script>
 import loadingOverlay from "@/components/loading-overlay.vue";
 import addApi from "@/api/add-api";
+import dietPlanApi from "@/api/diet-plan-api";
+import DietPlan from '@/models/diet-plan'
 
 export default {
     components: {loadingOverlay},
@@ -547,6 +549,8 @@ export default {
                 protein: 0,
                 fat: 0
             },
+
+            dietPlan: new DietPlan(),
 
             // 图片分析参数
             analysisCompleted: false,
@@ -845,6 +849,32 @@ export default {
                 })
             } finally {
                 this.isLoading = false
+                uni.hideLoading();
+            }
+        },
+
+        async renew() {
+            try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const response = await dietPlanApi.renew({});
+                if (response.code === 'A0001') {
+                    this.dietPlan = new DietPlan(response.data);
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                this.isLoading = false
+                uni.showToast({
+                    title: error.message,
+                    icon: 'none'
+                });
+            } finally {
+                this.isLoading = false;
                 uni.hideLoading();
             }
         },
