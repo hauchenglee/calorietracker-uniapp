@@ -33,19 +33,22 @@
                 </view>
 
                 <view class="photo-options">
-                    <view class="photo-row" @click="takePicture">
-                        <view class="photo-detail">
+                    <view class="food-row" @click="takePicture">
+                        <view class="food-detail">
                             <view class="progress-icon calories">📸</view>
-                            <text class="photo-name">拍照</text>
+                            <view class="food-info">
+                                <text class="food-name">拍照</text>
+                            </view>
                         </view>
                     </view>
 
-                    <view class="photo-row" @click="selectFromGallery">
-                        <view class="photo-detail">
+                    <view class="food-row" @click="selectFromGallery">
+                        <view class="food-detail">
                             <view class="progress-icon carbs">🖼️</view>
-                            <text class="photo-name">从相册选择</text>
+                            <view class="food-info">
+                                <text class="food-name">从相册选择</text>
+                            </view>
                         </view>
-
                     </view>
                 </view>
             </view>
@@ -77,6 +80,32 @@
                     </view>
                 </view>
 
+                <!-- 日期 -->
+                <view class="food-row">
+                    <view class="food-detail">
+                        <view class="progress-icon calories">📅</view>
+                        <view class="food-info">
+                            <text class="food-name">日期</text>
+                            <!-- 修复点击无反应问题 -->
+                            <picker
+                                mode="date"
+                                :value="formData1.date"
+                                @change="onDateChange1"
+                                :start="startDate"
+                                :end="endDate"
+                            >
+                                <view class="input-row">
+                                    <view class="picker-content">
+                                        <text :class="['picker-text', !formData1.date && 'empty']">
+                                            {{ formData1.date || '请选择日期' }}
+                                        </text>
+                                    </view>
+                                </view>
+                            </picker>
+                        </view>
+                    </view>
+                </view>
+
                 <view class="nutrition-form">
                     <view class="optional-row">
                         <view
@@ -105,170 +134,145 @@
                         </view>
                     </view>
 
-                    <!-- 日期 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">📅</view>
-                            <text class="food-name">日期</text>
-                        </view>
-                    </view>
-                    <view class="food-row">
-                        <picker
-                            mode="date"
-                            :value="formData1.date"
-                            @change="onDateChange1"
-                            :start="startDate"
-                            :end="endDate"
-                        >
-                            <view class="input-row">
-                                <view class="picker-content">
-                                    <text :class="['picker-text', !formData1.date && 'empty']">
-                                        {{ formData1.date || '请选择日期' }}
-                                    </text>
-                                </view>
-                            </view>
-                        </picker>
-                    </view>
-
                     <!-- 食物名称 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🍽️</view>
-                            <text class="food-name">食物名称</text>
-                        </view>
-                    </view>
                     <view class="food-row">
-                        <input
-                            type="text"
-                            class="form-input"
-                            v-model="formData1.name"
-                        />
+                        <view class="food-detail">
+                            <view class="progress-icon calories">🍽️</view>
+                            <view class="food-info">
+                                <text class="food-name">食物名称</text>
+                                <input
+                                    type="text"
+                                    class="form-input"
+                                    v-model="formData1.name"
+                                />
+                            </view>
+                        </view>
                     </view>
 
                     <!-- 数量和单位 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🔢</view>
-                            <view class="food-header">
-                                <text class="food-name">数量</text>
-                                <text class="food-unit">1~99</text>
-                            </view>
-                        </view>
-                    </view>
                     <view class="food-row">
-                        <view class="quantity-unit-group">
-                            <input
-                                type="number"
-                                class="form-input quantity-input"
-                                v-model="formData1.quantity"
-                                :min="1"
-                                :max="99"
-                                maxlength="2"
-                                @input="limitQuantityInput($event, 'formData1')"
-                            />
-                            <view class="unit-selector" @tap="showUnitSelector">
-                                <text>{{ formData1.unit || '选择单位' }}</text>
-                                <text class="unit-arrow">▼</text>
+                        <view class="food-detail">
+                            <view class="progress-icon carbs">🔢</view>
+                            <view class="food-info">
+                                <view class="food-header">
+                                    <text class="food-name">数量</text>
+                                    <text class="food-unit">1~99</text>
+                                </view>
+                                <view class="quantity-unit-group">
+                                    <input
+                                        type="number"
+                                        class="form-input quantity-input"
+                                        v-model="formData1.quantity"
+                                        :min="1"
+                                        :max="99"
+                                        maxlength="2"
+                                        @input="limitQuantityInput($event, 'formData1')"
+                                    />
+                                    <view class="unit-selector" @tap="showUnitSelector">
+                                        <text>{{ formData1.unit || '选择单位' }}</text>
+                                        <text class="unit-arrow">▼</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+
+                    <!-- 营养素进度条组 -->
+                    <view class="progress-group">
+                        <!-- 热量 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon calories">🔥</view>
+                                    <view class="label-group">
+                                        <text>热量</text>
+                                        <text class="form-sublabel">每日推荐 2000kcal</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData1.calorie"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill calories" style="width: 71%"></view>
+                            </view>
+                        </view>
+
+                        <!-- 碳水化合物 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon carbs">🌾</view>
+                                    <view class="label-group">
+                                        <text>碳水化合物</text>
+                                        <text class="form-sublabel">每日推荐 250g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData1.carbohydrate"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill carbs" style="width: 70%"></view>
+                            </view>
+                        </view>
+
+                        <!-- 蛋白质 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon protein">🥩</view>
+                                    <view class="label-group">
+                                        <text>蛋白质</text>
+                                        <text class="form-sublabel">每日推荐 60g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData1.protein"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill protein" style="width: 80%"></view>
+                            </view>
+                        </view>
+
+                        <!-- 脂肪 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon fat">🥑</view>
+                                    <view class="label-group">
+                                        <text>脂肪</text>
+                                        <text class="form-sublabel">每日推荐 70g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData1.fat"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill fat" style="width: 46%"></view>
                             </view>
                         </view>
                     </view>
                 </view>
             </view>
-        </view>
 
-        <view class="meal-list-progress-group" v-show="activeTab === 0" v-if="analysisCompleted">
-            <!-- 营养素进度条组 -->
-            <view class="progress-group">
-                <!-- 热量 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon calories">🔥</view>
-                            <view class="label-group">
-                                <text>热量</text>
-                                <text class="form-sublabel">每日推荐 2000kcal</text>
-                            </view>
-                        </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData1.calorie"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill calories" style="width: 71%"></view>
-                    </view>
-                </view>
-
-                <!-- 碳水化合物 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon carbs">🌾</view>
-                            <view class="label-group">
-                                <text>碳水化合物</text>
-                                <text class="form-sublabel">每日推荐 250g</text>
-                            </view>
-                        </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData1.carbohydrate"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill carbs" style="width: 70%"></view>
-                    </view>
-                </view>
-
-                <!-- 蛋白质 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon protein">🥩</view>
-                            <view class="label-group">
-                                <text>蛋白质</text>
-                                <text class="form-sublabel">每日推荐 60g</text>
-                            </view>
-                        </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData1.protein"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill protein" style="width: 80%"></view>
-                    </view>
-                </view>
-
-                <!-- 脂肪 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon fat">🥑</view>
-                            <view class="label-group">
-                                <text>脂肪</text>
-                                <text class="form-sublabel">每日推荐 70g</text>
-                            </view>
-                        </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData1.fat"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill fat" style="width: 46%"></view>
-                    </view>
-                </view>
-            </view>
-
-            <button class="setup-btn submit-btn" v-if="analysisCompleted" @click="saveData1">保存</button>
+            <button class="setup-btn submit-btn" v-if="analysisCompleted" @click="saveData1">
+                保存
+            </button>
         </view>
 
         <!-- 手动记录标签页 -->
@@ -284,6 +288,31 @@
                 </view>
 
                 <view class="nutrition-form">
+                    <!-- 日期 -->
+                    <view class="food-row">
+                        <view class="food-detail">
+                            <view class="progress-icon calories">📅</view>
+                            <view class="food-info">
+                                <text class="food-name">日期</text>
+                                <!-- 修复点击无反应问题 -->
+                                <picker
+                                    mode="date"
+                                    :value="formData2.date"
+                                    @change="onDateChange2"
+                                    :start="startDate"
+                                    :end="endDate"
+                                >
+                                    <view class="input-row">
+                                        <view class="picker-content">
+                                            <text :class="['picker-text', !formData2.date && 'empty']">
+                                                {{ formData2.date || '请选择日期' }}
+                                            </text>
+                                        </view>
+                                    </view>
+                                </picker>
+                            </view>
+                        </view>
+                    </view>
 
                     <!-- 餐食 -->
                     <view class="optional-row">
@@ -313,165 +342,138 @@
                         </view>
                     </view>
 
-                    <!-- 日期 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">📅</view>
-                            <text class="food-name">日期</text>
-                        </view>
-                    </view>
-                    <view class="food-row">
-                        <picker
-                            mode="date"
-                            :value="formData2.date"
-                            @change="onDateChange2"
-                            :start="startDate"
-                            :end="endDate"
-                        >
-                            <view class="input-row">
-                                <view class="picker-content">
-                                    <text :class="['picker-text', !formData2.date && 'empty']">
-                                        {{ formData2.date || '请选择日期' }}
-                                    </text>
-                                </view>
-                            </view>
-                        </picker>
-                    </view>
-
                     <!-- 食物名称 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🍽️</view>
-                            <text class="food-name">食物名称</text>
-                        </view>
-                    </view>
                     <view class="food-row">
-                        <input
-                            type="text"
-                            class="form-input"
-                            v-model="formData2.name"
-                        />
+                        <view class="food-detail">
+                            <view class="progress-icon calories">🍽️</view>
+                            <view class="food-info">
+                                <text class="food-name">食物名称</text>
+                                <input
+                                    type="text"
+                                    class="form-input"
+                                    v-model="formData2.name"
+                                />
+                            </view>
+                        </view>
                     </view>
 
                     <!-- 数量和单位 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🔢</view>
-                            <view class="food-header">
-                                <text class="food-name">数量</text>
-                                <text class="food-unit">1~99</text>
-                            </view>
-                        </view>
-                    </view>
                     <view class="food-row">
-                        <view class="quantity-unit-group">
-                            <input
-                                type="number"
-                                class="form-input quantity-input"
-                                v-model="formData2.quantity"
-                                :min="1"
-                                :max="99"
-                                maxlength="2"
-                                @input="limitQuantityInput($event, 'formData2')"
-                            />
-                            <view class="unit-selector" @tap="showUnitSelector">
-                                <text>{{ formData2.unit || '选择单位' }}</text>
-                                <text class="unit-arrow">▼</text>
+                        <view class="food-detail">
+                            <view class="progress-icon carbs">🔢</view>
+                            <view class="food-info">
+                                <view class="food-header">
+                                    <text class="food-name">数量</text>
+                                    <text class="food-unit">1~99</text>
+                                </view>
+                                <view class="quantity-unit-group">
+                                    <input
+                                        type="number"
+                                        class="form-input quantity-input"
+                                        v-model="formData2.quantity"
+                                        :min="1"
+                                        :max="99"
+                                        maxlength="2"
+                                        @input="limitQuantityInput($event, 'formData2')"
+                                    />
+                                    <view class="unit-selector" @tap="showUnitSelector">
+                                        <text>{{ formData2.unit || '选择单位' }}</text>
+                                        <text class="unit-arrow">▼</text>
+                                    </view>
+                                </view>
                             </view>
                         </view>
                     </view>
-                </view>
-            </view>
-        </view>
 
-        <view class="meal-list-progress-group" v-show="activeTab === 1">
-            <!-- 营养素进度条组 -->
-            <view class="progress-group">
-                <!-- 热量 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon calories">🔥</view>
-                            <view class="label-group">
-                                <text>热量</text>
-                                <text class="form-sublabel">每日推荐 2000kcal</text>
+                    <!-- 营养素进度条组 -->
+                    <view class="progress-group">
+                        <!-- 热量 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon calories">🔥</view>
+                                    <view class="label-group">
+                                        <text>热量</text>
+                                        <text class="form-sublabel">每日推荐 2000kcal</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData2.calorie"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill calories" style="width: 71%"></view>
                             </view>
                         </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData2.calorie"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill calories" style="width: 71%"></view>
-                    </view>
-                </view>
 
-                <!-- 碳水化合物 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon carbs">🌾</view>
-                            <view class="label-group">
-                                <text>碳水化合物</text>
-                                <text class="form-sublabel">每日推荐 250g</text>
+                        <!-- 碳水化合物 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon carbs">🌾</view>
+                                    <view class="label-group">
+                                        <text>碳水化合物</text>
+                                        <text class="form-sublabel">每日推荐 250g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData2.carbohydrate"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill carbs" style="width: 70%"></view>
                             </view>
                         </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData2.carbohydrate"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill carbs" style="width: 70%"></view>
-                    </view>
-                </view>
 
-                <!-- 蛋白质 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon protein">🥩</view>
-                            <view class="label-group">
-                                <text>蛋白质</text>
-                                <text class="form-sublabel">每日推荐 60g</text>
+                        <!-- 蛋白质 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon protein">🥩</view>
+                                    <view class="label-group">
+                                        <text>蛋白质</text>
+                                        <text class="form-sublabel">每日推荐 60g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData2.protein"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill protein" style="width: 80%"></view>
                             </view>
                         </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData2.protein"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill protein" style="width: 80%"></view>
-                    </view>
-                </view>
 
-                <!-- 脂肪 -->
-                <view class="progress-item">
-                    <view class="progress-header">
-                        <view class="progress-label">
-                            <view class="progress-icon fat">🥑</view>
-                            <view class="label-group">
-                                <text>脂肪</text>
-                                <text class="form-sublabel">每日推荐 70g</text>
+                        <!-- 脂肪 -->
+                        <view class="progress-item">
+                            <view class="progress-header">
+                                <view class="progress-label">
+                                    <view class="progress-icon fat">🥑</view>
+                                    <view class="label-group">
+                                        <text>脂肪</text>
+                                        <text class="form-sublabel">每日推荐 70g</text>
+                                    </view>
+                                </view>
+                                <input
+                                    type="number"
+                                    class="progress-input"
+                                    v-model="formData2.fat"
+                                    placeholder="0"
+                                />
+                            </view>
+                            <view class="progress-bar">
+                                <view class="progress-fill fat" style="width: 46%"></view>
                             </view>
                         </view>
-                        <input
-                            type="number"
-                            class="progress-input"
-                            v-model="formData2.fat"
-                            placeholder="0"
-                        />
-                    </view>
-                    <view class="progress-bar">
-                        <view class="progress-fill fat" style="width: 46%"></view>
                     </view>
                 </view>
             </view>
@@ -898,16 +900,6 @@ page {
     background: #ffffff;
     border-radius: 32rpx;
     padding: 40rpx;
-    margin-bottom: 30rpx; /* 针对第一个list设置bottom，对第二个list间隙 */
-    /* #ifdef APP-PLUS */
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
-    /* #endif */
-}
-
-.meal-list-progress-group {
-    background: #ffffff;
-    border-radius: 32rpx;
-    padding: 40rpx;
     /* #ifdef APP-PLUS */
     box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
     /* #endif */
@@ -950,29 +942,6 @@ page {
     gap: 20rpx;
 }
 
-.photo-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24rpx;
-    border-radius: 24rpx;
-    background: #f7fafc;
-    margin-bottom: 20rpx;
-}
-
-.photo-detail {
-    display: flex;
-    align-items: center;
-    gap: 24rpx;
-    flex: 1;
-}
-
-.photo-name {
-    font-weight: 500;
-    font-size: 28rpx;
-    flex: 1;
-}
-
 /* 预览图片 */
 .preview-image {
     width: 100%;
@@ -992,31 +961,6 @@ page {
 }
 
 /* 表单样式 */
-.row-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24rpx 0 24rpx 0; /* 按顺序：上 右 下 左 */
-    background: transparent;
-}
-
-.row-detail {
-    display: flex;
-    align-items: center;
-    gap: 24rpx;
-    flex: 1;
-}
-
-.row-icon {
-    width: 64rpx;
-    height: 64rpx;
-    border-radius: 12rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f7fafc;
-}
-
 .food-row {
     display: flex;
     justify-content: space-between;
@@ -1025,6 +969,17 @@ page {
     border-radius: 24rpx;
     background: #f7fafc;
     margin-bottom: 20rpx;
+}
+
+.food-detail {
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+    flex: 1;
+}
+
+.food-info {
+    flex: 1;
 }
 
 .food-header {
@@ -1176,9 +1131,6 @@ page {
 }
 
 .reset-btn {
-    display: flex; /* 将按钮设置为 Flex 容器 */
-    justify-content: center; /* 水平方向居中 */
-    align-items: center; /* 垂直方向居中 */
     flex: 1;
     height: 88rpx;
     background: #f7fafc;
@@ -1190,9 +1142,6 @@ page {
 }
 
 .setup-btn {
-    display: flex; /* 将按钮设置为 Flex 容器 */
-    justify-content: center; /* 水平方向居中 */
-    align-items: center; /* 垂直方向居中 */
     flex: 1;
     height: 88rpx;
     background: #4c51bf;
