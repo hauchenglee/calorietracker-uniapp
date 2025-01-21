@@ -807,8 +807,91 @@ export default {
             }
         },
 
+        validateFormData1() {
+            const requiredFields = {
+                date: '日期',
+                meal: '餐食类型',
+                name: '食物名称',
+                quantity: '数量',
+                unit: '单位',
+                calorie: '热量',
+                carbohydrate: '碳水化合物',
+                protein: '蛋白质',
+                fat: '脂肪'
+            };
+
+            for (const [field, label] of Object.entries(requiredFields)) {
+                if (!this.formData2[field]) {
+                    uni.showToast({
+                        title: `请填写${label}`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            // 检查数值字段是否为有效数字
+            const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
+            for (const field of numericFields) {
+                const value = Number(this.formData2[field]);
+                if (isNaN(value) || value <= 0) {
+                    uni.showToast({
+                        title: `${requiredFields[field]}必须大于0`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        validateFormData2() {
+            const requiredFields = {
+                date: '日期',
+                meal: '餐食类型',
+                name: '食物名称',
+                quantity: '数量',
+                unit: '单位',
+                calorie: '热量',
+                carbohydrate: '碳水化合物',
+                protein: '蛋白质',
+                fat: '脂肪'
+            };
+
+            for (const [field, label] of Object.entries(requiredFields)) {
+                if (!this.formData2[field]) {
+                    uni.showToast({
+                        title: `请填写${label}`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            // 检查数值字段是否为有效数字
+            const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
+            for (const field of numericFields) {
+                const value = Number(this.formData2[field]);
+                if (isNaN(value) || value <= 0) {
+                    uni.showToast({
+                        title: `${requiredFields[field]}必须大于0`,
+                        icon: 'none'
+                    });
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
         async saveData1() {
             if (this.isLoading) return
+
+            // 添加表单验证
+            if (!this.validateFormData1()) {
+                return;
+            }
 
             try {
                 this.isLoading = true
@@ -832,6 +915,11 @@ export default {
 
         async saveData2() {
             if (this.isLoading) return
+
+            // 添加表单验证
+            if (!this.validateFormData2()) {
+                return;
+            }
 
             try {
                 this.isLoading = true
