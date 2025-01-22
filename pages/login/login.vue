@@ -1,148 +1,373 @@
 <template>
-  <view class="login-container">
-    <view class="input-group">
-      <input 
-        class="input-item" 
-        type="text" 
-        v-model="userEmail" 
-        placeholder="请输入邮箱账号" 
-      />
-      <input 
-        class="input-item" 
-        type="password" 
-        v-model="password" 
-        placeholder="请输入密码" 
-      />
-    </view>
+    <view :style="{ paddingTop: statusBarHeight + 'px' }"></view>
+    <view class="container">
+        <!-- Logo区域 -->
+        <view class="logo-section">
+            <view class="logo-icon">🥗</view>
+            <text class="logo-text">饮食记录</text>
+            <text class="logo-subtitle">记录美食，追踪营养</text>
+        </view>
 
-    <!-- 测试账号信息 -->
-    <view class="test-account">
-      <text>测试账号：test@example.com</text>
-      <text>测试密码：123456</text>
-    </view>
+        <!-- 登录表单 -->
+        <view class="login-form">
+            <!-- 账号输入 -->
+            <view class="input-group">
+                <view class="input-label">
+                    <view class="input-icon">👤</view>
+                    <text>账号</text>
+                </view>
+                <view class="input-row">
+                    <input
+                        type="text"
+                        class="form-input"
+                        v-model="formData.username"
+                        placeholder="请输入账号"
+                    />
+                </view>
+            </view>
 
-    <button class="login-btn" @click="handleLogin">登录</button>
-  </view>
+            <!-- 密码输入 -->
+            <view class="input-group">
+                <view class="input-label">
+                    <view class="input-icon">🔒</view>
+                    <text>密码</text>
+                </view>
+                <view class="input-row">
+                    <input
+                        :type="showPassword ? 'text' : 'password'"
+                        class="form-input"
+                        v-model="formData.password"
+                        placeholder="请输入密码"
+                    />
+                    <text
+                        class="password-toggle"
+                        @tap="togglePasswordVisibility"
+                    >
+                        {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+                    </text>
+                </view>
+            </view>
+
+            <!-- 登录按钮 -->
+            <button
+                class="login-btn"
+                :disabled="isLoading"
+                @tap="handleLogin"
+            >
+                登录
+            </button>
+
+            <!-- 其他选项 -->
+            <view class="other-options">
+                <text class="option-text" @tap="navigateToRegister">注册账号</text>
+                <text class="option-text" @tap="navigateToForgotPassword">忘记密码</text>
+            </view>
+
+            <!-- 第三方登录 -->
+            <view class="third-party-login">
+                <view class="divider">
+                    <text class="divider-text">其他登录方式</text>
+                </view>
+                <view class="login-methods">
+                    <view class="login-method-item" @tap="handleThirdPartyLogin('wechat')">
+                        <view class="method-icon">💬</view>
+                        <text class="method-name">微信</text>
+                    </view>
+                    <view class="login-method-item" @tap="handleThirdPartyLogin('apple')">
+                        <view class="method-icon">🍎</view>
+                        <text class="method-name">Apple</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <!-- Loading遮罩 -->
+        <loading-overlay :show="isLoading"/>
+    </view>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import loginApi from '@/api/login-api'
+<script>
+import loadingOverlay from "@/components/loading-overlay.vue"
 
-const userEmail = ref('')  // 改为 userEmail
-const password = ref('')
+export default {
+    components: {
+        loadingOverlay
+    },
 
-const handleLogin = async () => {
-    console.log("aaa");
-  // 设置测试账号
-  userEmail.value = 'test@example.com'
-  password.value = '123456'
-  
-  // 表单验证
-  if (!userEmail.value || !password.value) {
-    uni.showToast({
-      title: '请填写完整信息',
-      icon: 'none'
-    })
-    return
-  }
+    data() {
+        return {
+            statusBarHeight: 0,
+            isLoading: false,
+            showPassword: false,
+            formData: {
+                username: '',
+                password: ''
+            }
+        }
+    },
 
-  // 邮箱格式验证
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(userEmail.value)) {
-    uni.showToast({
-      title: '请输入正确的邮箱格式',
-      icon: 'none'
-    })
-    return
-  }
+    onLoad() {
+        const systemInfo = uni.getSystemInfoSync()
+        this.statusBarHeight = systemInfo.statusBarHeight
+    },
 
-  // 密码长度验证
-  if (password.value.length < 6 || password.value.length > 20) {
-    uni.showToast({
-      title: '密码长度应为6-20位',
-      icon: 'none'
-    })
-    return
-  }
+    methods: {
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword
+        },
 
-  try {
-      console.log("bbb");
-    uni.showLoading({
-      title: '登录中...'
-    })
-    
-    console.log("ccc");
+        async handleLogin() {
+            // if (!this.formData.username || !this.formData.password) {
+            //     uni.showToast({
+            //         title: '请输入账号和密码',
+            //         icon: 'none'
+            //     })
+            //     return
+            // }
 
-    const response = await loginApi.login({
-      email: userEmail.value,    // 与后端字段对应
-      password: password.value    // 与后端字段对应
-    });
+            try {
+                this.isLoading = true
+                await new Promise(resolve => setTimeout(resolve, 800))
 
-    // 处理返回数据
-    if (response && response.data) {
-      const { token, ...userInfo } = response.data
+                // 这里添加实际的登录逻辑
 
-      // 存储 token 和登录状态
-      uni.setStorageSync('token', token)
-      uni.setStorageSync('userInfo', userInfo)
-      uni.setStorageSync('isLoggedIn', 'true')
+                uni.showToast({
+                    title: '登录成功',
+                    icon: 'success'
+                })
+            } catch (error) {
+                uni.showToast({
+                    title: error.message || '登录失败',
+                    icon: 'none'
+                })
+            } finally {
+                this.isLoading = false
+            }
+        },
 
-      uni.showToast({
-        title: '登录成功',
-        icon: 'success'
-      })
+        navigateToRegister() {
+            uni.navigateTo({
+                url: '/pages/register/register'
+            })
+        },
 
-      // 登录成功后跳转
-      setTimeout(() => {
-        uni.reLaunch({
-          url: '/pages/diary/diary'
-        })
-      }, 1500)
+        navigateToForgotPassword() {
+            uni.navigateTo({
+                url: '/pages/forgot-password/forgot-password'
+            })
+        },
+
+        handleThirdPartyLogin(type) {
+            uni.showToast({
+                title: `${type}登录开发中`,
+                icon: 'none'
+            })
+        }
     }
-
-  } catch (error) {
-      log
-    // 处理错误
-    uni.showToast({
-      title: error.message || '登录失败',
-      icon: 'none'
-    })
-  } finally {
-    uni.hideLoading()
-  }
 }
 </script>
 
 <style>
-	.login-container {
-		padding: 40rpx;
-	}
+page {
+    background: #f5f7fa;
+    color: #1a1a1a;
+}
 
-	.input-group {
-		margin-top: 100rpx;
-	}
+.container {
+    padding: 30rpx;
+}
 
-	.input-item {
-		height: 90rpx;
-		background: #F8F8F8;
-		border-radius: 45rpx;
-		padding: 0 40rpx;
-		margin-bottom: 35rpx;
-		font-size: 32rpx;
-	}
+/* Logo区域样式 */
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60rpx 0;
+}
 
-	.login-btn {
-		margin-top: 60rpx;
-		height: 90rpx;
-		line-height: 90rpx;
-		background: #007AFF;
-		color: #FFFFFF;
-		border-radius: 45rpx;
-		font-size: 32rpx;
-	}
+.logo-icon {
+    font-size: 120rpx;
+    margin-bottom: 30rpx;
+}
 
-	.login-btn::after {
-		border: none;
-	}
+.logo-text {
+    font-size: 48rpx;
+    font-weight: 600;
+    margin-bottom: 16rpx;
+}
+
+.logo-subtitle {
+    font-size: 28rpx;
+    color: #718096;
+}
+
+/* 登录表单样式 */
+.login-form {
+    background: #ffffff;
+    border-radius: 32rpx;
+    padding: 40rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    /* #endif */
+}
+
+.input-group {
+    margin-bottom: 30rpx;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    margin-bottom: 16rpx;
+}
+
+.input-icon {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 12rpx;
+    background: #f7fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24rpx;
+}
+
+.input-row {
+    position: relative;
+    background: #f7fafc;
+    border-radius: 16rpx;
+    padding: 24rpx;
+}
+
+.form-input {
+    width: 100%;
+    font-size: 28rpx;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 24rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24rpx;
+}
+
+/* 登录按钮样式 */
+.login-btn {
+    width: 100%;
+    height: 88rpx;
+    background: #4c51bf;
+    color: #ffffff;
+    border-radius: 16rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    margin: 40rpx 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 12rpx rgba(76, 81, 191, 0.2);
+    /* #endif */
+}
+
+.login-btn:active {
+    opacity: 0.9;
+}
+
+.login-btn[disabled] {
+    opacity: 0.7;
+    background: #a0aec0;
+}
+
+/* 其他选项样式 */
+.other-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20rpx;
+    margin-bottom: 60rpx;
+}
+
+.option-text {
+    color: #4c51bf;
+    font-size: 26rpx;
+}
+
+/* 第三方登录样式 */
+.third-party-login {
+    margin-top: 60rpx;
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+    margin-bottom: 40rpx;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 2rpx;
+    background: #e2e8f0;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.divider-text {
+    background: #ffffff;
+    padding: 0 30rpx;
+    color: #718096;
+    font-size: 26rpx;
+}
+
+.login-methods {
+    display: flex;
+    justify-content: center;
+    gap: 60rpx;
+}
+
+.login-method-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12rpx;
+}
+
+.method-icon {
+    width: 88rpx;
+    height: 88rpx;
+    background: #f7fafc;
+    border-radius: 24rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36rpx;
+}
+
+.method-name {
+    font-size: 24rpx;
+    color: #4a5568;
+}
+
+/* Loading动画 */
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.3;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 </style>
