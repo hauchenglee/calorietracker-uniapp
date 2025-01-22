@@ -396,10 +396,14 @@
                             class="progress-input"
                             v-model="formData2.calorie"
                             placeholder="0"
+                            @input="updateProgress('calorie', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill calories" style="width: 71%"></view>
+                        <view
+                            class="progress-fill calories"
+                            :style="{ width: progressPercentages.calorie + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -418,10 +422,14 @@
                             class="progress-input"
                             v-model="formData2.carbohydrate"
                             placeholder="0"
+                            @input="updateProgress('carbohydrate', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill carbs" style="width: 70%"></view>
+                        <view
+                            class="progress-fill carbs"
+                            :style="{ width: progressPercentages.carbohydrate + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -440,10 +448,14 @@
                             class="progress-input"
                             v-model="formData2.protein"
                             placeholder="0"
+                            @input="updateProgress('protein', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill protein" style="width: 80%"></view>
+                        <view
+                            class="progress-fill protein"
+                            :style="{ width: progressPercentages.protein + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -462,10 +474,14 @@
                             class="progress-input"
                             v-model="formData2.fat"
                             placeholder="0"
+                            @input="updateProgress('fat', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill fat" style="width: 46%"></view>
+                        <view
+                            class="progress-fill fat"
+                            :style="{ width: progressPercentages.fat + '%' }"
+                        ></view>
                     </view>
                 </view>
             </view>
@@ -564,6 +580,14 @@ export default {
             showUnitPopup: false,
             quickUnits: ['份', '个', 'g', 'ml', '碗', '勺', '块', '片'],
             customUnit: '',
+
+            // bar 进度条百分比
+            progressPercentages: {
+                calorie: 0,
+                carbohydrate: 0,
+                protein: 0,
+                fat: 0
+            }
         }
     },
 
@@ -805,6 +829,20 @@ export default {
                 this.isAnalyzing = false;
                 uni.hideLoading();
             }
+        },
+
+        updateProgress(nutrientType, event) {
+            const inputValue = Number(event.detail.value);
+            const recommendedValue = this.dietPlan[nutrientType];
+
+            // 计算百分比，不超过100%
+            let percentage = Math.min((inputValue / recommendedValue) * 100, 100);
+
+            // 确保百分比是有效数字
+            percentage = isNaN(percentage) ? 0 : Math.round(percentage);
+
+            // 更新对应的进度条
+            this.progressPercentages[nutrientType] = percentage;
         },
 
         validateFormData1() {
