@@ -135,6 +135,13 @@ export default {
                     title: '登录成功',
                     icon: 'success'
                 })
+
+                // 登录成功后跳转
+                setTimeout(() => {
+                    uni.reLaunch({
+                        url: '/pages/diary/diary'
+                    })
+                }, 1500)
             } catch (error) {
                 uni.showToast({
                     title: error.message || '登录失败',
