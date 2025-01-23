@@ -26,7 +26,7 @@
                         <view class="progress-icon calories">🔥</view>
                         <text>卡路里</text>
                     </view>
-                    <text>{{summary.calorieIntake}} / {{summary.calorieTotal}} kcal</text>
+                    <text>{{ summary.calorieIntake }} / {{ summary.calorieTotal }} kcal</text>
                 </view>
                 <view class="progress-bar">
                     <view class="progress-fill calories" :style="{ width: summary.caloriePercent + '%' }"></view>
@@ -39,7 +39,7 @@
                         <view class="progress-icon carbs">🌾</view>
                         <text>碳水化合物</text>
                     </view>
-                    <text>{{summary.carbohydrateIntake}} / {{summary.carbohydrateTotal}} g</text>
+                    <text>{{ summary.carbohydrateIntake }} / {{ summary.carbohydrateTotal }} g</text>
                 </view>
                 <view class="progress-bar">
                     <view class="progress-fill carbs" :style="{ width: summary.carbohydratePercent + '%' }"></view>
@@ -52,7 +52,7 @@
                         <view class="progress-icon protein">🥩</view>
                         <text>蛋白质</text>
                     </view>
-                    <text>{{summary.proteinIntake}} / {{summary.proteinTotal}} g</text>
+                    <text>{{ summary.proteinIntake }} / {{ summary.proteinTotal }} g</text>
                 </view>
                 <view class="progress-bar">
                     <view class="progress-fill protein" :style="{ width: summary.proteinPercent + '%' }"></view>
@@ -65,7 +65,7 @@
                         <view class="progress-icon fat">🥑</view>
                         <text>脂肪</text>
                     </view>
-                    <text>{{summary.fatIntake}} / {{summary.fatTotal}} g</text>
+                    <text>{{ summary.fatIntake }} / {{ summary.fatTotal }} g</text>
                 </view>
                 <view class="progress-bar">
                     <view class="progress-fill fat" :style="{ width: summary.fatPercent + '%' }"></view>
@@ -240,7 +240,7 @@ export default {
         // 设置初始日期
         this.currentDate = this.getCurrentDate();
     },
-    
+
     async onShow() {
         // 初始化加载数据
         try {
@@ -255,7 +255,7 @@ export default {
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
-                icon: 'none'
+                icon: 'error'
             });
         } finally {
             this.isLoading = false;
@@ -320,13 +320,13 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         },
@@ -353,14 +353,18 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
+                this.isLoading = false
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
+            } finally {
+                this.isLoading = false
+                uni.hideLoading();
             }
         },
 
@@ -377,14 +381,14 @@ export default {
         },
 
         floatingBtnClick() {
-            if (true) {
+            if (this.isBodyExist) {
                 uni.navigateTo({
                     url: '/pages/add/add'
                 });
             } else {
                 uni.showToast({
                     title: '請先設置身體基礎數據',
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         }

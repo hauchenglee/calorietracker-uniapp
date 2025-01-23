@@ -4,8 +4,8 @@
         <!-- Logo区域 -->
         <view class="logo-section">
             <view class="logo-icon">🥗</view>
-            <text class="logo-text">饮食记录</text>
-            <text class="logo-subtitle">记录美食，追踪营养</text>
+            <text class="logo-text">飲食紀錄</text>
+            <text class="logo-subtitle">紀錄美食，追蹤營養</text>
         </view>
 
         <!-- 登录表单 -->
@@ -14,13 +14,13 @@
             <view class="input-group">
                 <view class="input-label">
                     <view class="input-icon">👤</view>
-                    <text>账号</text>
+                    <text>Account</text>
                 </view>
                 <view class="input-row">
                     <input
                         type="text"
                         class="form-input"
-                        v-model="formData.username"
+                        v-model="formData.email"
                         placeholder="请输入账号"
                     />
                 </view>
@@ -30,7 +30,7 @@
             <view class="input-group">
                 <view class="input-label">
                     <view class="input-icon">🔒</view>
-                    <text>密码</text>
+                    <text>Password</text>
                 </view>
                 <view class="input-row">
                     <input
@@ -52,15 +52,15 @@
             <button
                 class="login-btn"
                 :disabled="isLoading"
-                @tap="handleLogin"
+                @tap="checkLoginRequest"
             >
-                登录
+                Login
             </button>
 
             <!-- 其他选项 -->
             <view class="other-options">
-                <text class="option-text" @tap="navigateToRegister">注册账号</text>
-                <text class="option-text" @tap="navigateToForgotPassword">忘记密码</text>
+                <!--                <text class="option-text" @tap="navigateToRegister">注册账号</text>-->
+                <!--                <text class="option-text" @tap="navigateToForgotPassword">忘记密码</text>-->
             </view>
 
             <!-- 第三方登录 -->
@@ -88,6 +88,7 @@
 
 <script>
 import loadingOverlay from "@/components/loading-overlay.vue"
+import loginApi from "@/api/login-api";
 
 export default {
     components: {
@@ -97,12 +98,17 @@ export default {
     data() {
         return {
             statusBarHeight: 0,
+
             isLoading: false,
+            isAccountExist: false,
+            isRegisterSuccess: false,
+
             showPassword: false,
+
             formData: {
-                username: '',
+                email: '',
                 password: ''
-            }
+            },
         }
     },
 
@@ -116,36 +122,145 @@ export default {
             this.showPassword = !this.showPassword
         },
 
-        async handleLogin() {
-            // if (!this.formData.username || !this.formData.password) {
-            //     uni.showToast({
-            //         title: '请输入账号和密码',
-            //         icon: 'none'
-            //     })
-            //     return
-            // }
+        async checkLoginRequest() {
+            if (!this.formData.email || !this.formData.password) {
+                uni.showToast({
+                    title: '请输入账号和密码',
+                    icon: 'none'
+                })
+                return
+            }
 
             try {
-                this.isLoading = true
-                await new Promise(resolve => setTimeout(resolve, 800))
+                await this.checkAccountExist();
+                if (this.isAccountExist) {
+                    await this.login();
+                } else {
+                    // 使用原生彈窗
+                    uni.showModal({
+                        title: '账号不存在',
+                        content: '是否使用当前账号密码进行注册？',
+                        success: async (res) => {
+                            if (res.confirm) {
+                                // 用戶點擊確定
+                                try {
+                                    uni.showLoading({
+                                        title: '正在注册'
+                                    });
+                                    await this.register();
+                                    await this.login();
+                                    uni.hideLoading();
+                                    uni.showToast({
+                                        title: '注册并登录成功',
+                                        icon: 'success'
+                                    });
+                                } catch (error) {
+                                    uni.hideLoading();
+                                    uni.showToast({
+                                        title: error.message || '注册失败',
+                                        icon: 'error'
+                                    });
+                                }
+                            } else {
 
-                // 这里添加实际的登录逻辑
-
-                uni.showToast({
-                    title: '登录成功',
-                    icon: 'success'
-                })
-
-                // 登录成功后跳转
-                setTimeout(() => {
-                    uni.reLaunch({
-                        url: '/pages/diary/diary'
-                    })
-                }, 1500)
+                                // 用戶點擊取消
+                                uni.showToast({
+                                    title: '您可以使用其他账号登录',
+                                    icon: 'none'
+                                });
+                            }
+                        }
+                    });
+                }
             } catch (error) {
                 uni.showToast({
-                    title: error.message || '登录失败',
-                    icon: 'none'
+                    title: error.message || '操作失败',
+                    icon: 'error'
+                });
+            }
+        },
+
+        async checkAccountExist() {
+            try {
+                this.isLoading = true
+                const response = await loginApi.checkExist(this.formData);
+                if (response.code === 'A0001') {
+                    this.isAccountExist = response.data === 'true';
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'error'
+                    });
+                }
+            } catch (error) {
+                this.isLoading = false
+                uni.showToast({
+                    title: error.message,
+                    icon: 'error'
+                })
+            } finally {
+                this.isLoading = false
+                uni.hideLoading();
+            }
+        },
+
+        async login() {
+            try {
+                this.isLoading = true
+                const response = await loginApi.login(this.formData);
+
+                if (response.code === 'A0001') {
+                    // 存儲 token 和用戶信息
+                    uni.setStorageSync('token', response.data.token);
+                    uni.setStorageSync('userInfo', response.data);
+
+                    uni.showToast({
+                        title: '登入成功',
+                        icon: 'success'
+                    })
+
+                    // 登录成功后跳转
+                    setTimeout(() => {
+                        uni.reLaunch({
+                            url: '/pages/diary/diary'
+                        })
+                    }, 1500)
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'error'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'error'
+                })
+            } finally {
+                this.isLoading = false
+            }
+        },
+
+        async register() {
+            try {
+                this.isLoading = true
+                const response = await loginApi.register(this.formData);
+                if (response.code === 'A0001') {
+                    this.isRegisterSuccess = true;
+                    uni.showToast({
+                        title: '註冊成功',
+                        icon: 'success'
+                    })
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'error'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    icon: 'error'
                 })
             } finally {
                 this.isLoading = false
@@ -154,13 +269,13 @@ export default {
 
         navigateToRegister() {
             uni.navigateTo({
-                url: '/pages/register/register'
+                url: '/pages/login/register'
             })
         },
 
         navigateToForgotPassword() {
             uni.navigateTo({
-                url: '/pages/forgot-password/forgot-password'
+                url: '/pages/login/forgot-password'
             })
         },
 
