@@ -126,7 +126,7 @@ export default {
             if (!this.formData.email || !this.formData.password) {
                 uni.showToast({
                     title: '请输入账号和密码',
-                    icon: 'none'
+                    icon: 'error'
                 })
                 return
             }
