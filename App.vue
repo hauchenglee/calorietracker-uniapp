@@ -22,7 +22,6 @@
 	/*每个页面公共css */
 	@import '@/uni_modules/uni-scss/index.scss';
     @import './common/theme.css';
-    @import './components/firstui/fui-theme/fui-theme.css';
 	/* #ifndef APP-NVUE */
 	@import '@/static/customicons.css';
 

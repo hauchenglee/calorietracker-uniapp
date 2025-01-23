@@ -2,7 +2,6 @@
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^fui-(.*)": "@/components/firstui/fui-$1/fui-$1.vue",
       "^floating-button": "@/components/floating-button/floating-button.vue"
     }
   },

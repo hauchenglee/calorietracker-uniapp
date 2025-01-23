@@ -1,6 +1,6 @@
 // utils/request.js
 const request = {
-    baseURL: 'http://127.0.0.1:8080/api',
+    baseURL: 'http://srv415056.hstgr.cloud:8080/api',
 
     // 基础请求方法
     async request(options) {
