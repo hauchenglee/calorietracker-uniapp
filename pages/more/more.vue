@@ -63,7 +63,7 @@ export default {
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
-                icon: 'none'
+                icon: 'error'
             });
         } finally {
             this.isLoading = false;
@@ -79,7 +79,7 @@ export default {
                 if (!this.isBodyExist) {
                     uni.showToast({
                         title: '請先設置身體基礎數據',
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return; // 阻止路由跳转
                 }
@@ -91,7 +91,7 @@ export default {
                     console.error('页面跳转失败：', err)
                     uni.showToast({
                         title: '页面跳转失败',
-                        icon: 'none'
+                        icon: 'error'
                     })
                 }
             })
@@ -106,13 +106,13 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         },

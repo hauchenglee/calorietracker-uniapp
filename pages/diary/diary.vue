@@ -357,13 +357,13 @@ export default {
                     });
                 }
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
                     icon: 'error'
                 });
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.hideLoading();
             }
         },

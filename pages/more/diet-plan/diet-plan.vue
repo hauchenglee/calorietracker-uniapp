@@ -216,7 +216,7 @@ export default {
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
-                icon: 'none'
+                icon: 'error'
             });
         } finally {
             this.isLoading = false;
@@ -277,20 +277,20 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         },
 
         async renew() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 const response = await dietPlanApi.renew({});
@@ -300,14 +300,14 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             } finally {
                 this.isLoading = false;
@@ -317,7 +317,7 @@ export default {
 
         async save() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 const response = await dietPlanApi.save({});
@@ -329,14 +329,14 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             } finally {
                 this.isLoading = false;

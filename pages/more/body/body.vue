@@ -163,7 +163,7 @@ export default {
             this.isLoading = false;
             uni.showToast({
                 title: 'onShow error',
-                icon: 'none'
+                icon: 'error'
             });
         } finally {
             this.isLoading = false;
@@ -188,13 +188,13 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         },
@@ -218,13 +218,13 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             }
         },
@@ -243,7 +243,7 @@ export default {
                 if (!this.formData[field]) {
                     uni.showToast({
                         title: `请填写${label}`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -256,7 +256,7 @@ export default {
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
                         title: `${requiredFields[field]}必须大于0`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -267,7 +267,7 @@ export default {
             if (height < 100 || height > 250) {
                 uni.showToast({
                     title: '身高必须在100-250cm之间',
-                    icon: 'none'
+                    icon: 'error'
                 });
                 return false;
             }
@@ -277,7 +277,7 @@ export default {
             if (weight < 20 || weight > 200) {
                 uni.showToast({
                     title: '体重必须在20-200kg之间',
-                    icon: 'none'
+                    icon: 'error'
                 });
                 return false;
             }
@@ -292,7 +292,7 @@ export default {
             }
             
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await bodyApi.save(this.formData);
                 if (response.code === 'A0001' && response.data) {
@@ -303,13 +303,13 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
 
                 // 失败时重置状态

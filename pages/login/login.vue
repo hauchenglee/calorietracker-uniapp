@@ -162,11 +162,10 @@ export default {
                                     });
                                 }
                             } else {
-
                                 // 用戶點擊取消
                                 uni.showToast({
                                     title: '您可以使用其他账号登录',
-                                    icon: 'none'
+                                    icon: 'error'
                                 });
                             }
                         }
@@ -182,7 +181,7 @@ export default {
 
         async checkAccountExist() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 const response = await loginApi.checkExist(this.formData);
                 if (response.code === 'A0001') {
                     this.isAccountExist = response.data === 'true';
@@ -193,20 +192,20 @@ export default {
                     });
                 }
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
                     icon: 'error'
                 })
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.hideLoading();
             }
         },
 
         async login() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 const response = await loginApi.login(this.formData);
 
                 if (response.code === 'A0001') {
@@ -237,13 +236,13 @@ export default {
                     icon: 'error'
                 })
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
             }
         },
 
         async register() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 const response = await loginApi.register(this.formData);
                 if (response.code === 'A0001') {
                     this.isRegisterSuccess = true;
@@ -263,7 +262,7 @@ export default {
                     icon: 'error'
                 })
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
             }
         },
 
@@ -282,7 +281,7 @@ export default {
         handleThirdPartyLogin(type) {
             uni.showToast({
                 title: `${type}登录开发中`,
-                icon: 'none'
+                icon: 'error'
             })
         }
     }

@@ -87,7 +87,7 @@ export default {
                     console.error('页面跳转失败：', err)
                     uni.showToast({
                         title: '页面跳转失败',
-                        icon: 'none'
+                        icon: 'error'
                     })
                 }
             })

@@ -604,7 +604,7 @@ export default {
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
-                icon: 'none'
+                icon: 'error'
             });
         } finally {
             this.isLoading = false;
@@ -691,7 +691,7 @@ export default {
             } catch (e) {
                 uni.showToast({
                     title: '拍照失敗',
-                    icon: 'none'
+                    icon: 'error'
                 })
             }
         },
@@ -706,7 +706,7 @@ export default {
             } catch (e) {
                 uni.showToast({
                     title: '選取圖片失敗',
-                    icon: 'none'
+                    icon: 'error'
                 })
             }
         },
@@ -805,16 +805,17 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
 
                 // 6. 分析失败时重置状态
+                this.isLoading = false;
                 this.analysisCompleted = false;
                 this.formData1 = {
                     name: '',
@@ -862,7 +863,7 @@ export default {
                 if (!this.formData2[field]) {
                     uni.showToast({
                         title: `请填写${label}`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -875,7 +876,7 @@ export default {
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
                         title: `${requiredFields[field]}必须大于0`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -901,7 +902,7 @@ export default {
                 if (!this.formData2[field]) {
                     uni.showToast({
                         title: `请填写${label}`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -914,7 +915,7 @@ export default {
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
                         title: `${requiredFields[field]}必须大于0`,
-                        icon: 'none'
+                        icon: 'error'
                     });
                     return false;
                 }
@@ -932,7 +933,7 @@ export default {
             }
 
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData1);
                 uni.showToast({
@@ -940,13 +941,13 @@ export default {
                     icon: 'success'
                 })
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 })
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.hideLoading();
             }
         },
@@ -960,7 +961,7 @@ export default {
             }
 
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData2);
                 uni.showToast({
@@ -968,20 +969,20 @@ export default {
                     icon: 'success'
                 })
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 })
             } finally {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.hideLoading();
             }
         },
 
         async renew() {
             try {
-                this.isLoading = true
+                this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 const response = await dietPlanApi.renew({});
@@ -990,14 +991,14 @@ export default {
                 } else {
                     uni.showToast({
                         title: response.message,
-                        icon: 'none'
+                        icon: 'error'
                     });
                 }
             } catch (error) {
-                this.isLoading = false
+                this.isLoading = false;
                 uni.showToast({
                     title: error.message,
-                    icon: 'none'
+                    icon: 'error'
                 });
             } finally {
                 this.isLoading = false;
