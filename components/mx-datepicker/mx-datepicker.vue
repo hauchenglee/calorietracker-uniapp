@@ -1,3 +1,4 @@
+@use "sass:math";
 <template>
 	<view v-if="isShow" class="picker">
 		<!-- 日期选择器 -->
@@ -620,14 +621,14 @@
 
 		&-time {
 			width: $calendar-size - 80upx !important;
-			left: ((750upx - $calendar-size) / 2 + 40upx) !important;
+            left: calc((750upx - $calendar-size) / 2 + 40upx) !important;
 		}
 
 		&-modal {
 			background: #fff;
 			position: absolute;
 			top: 50%;
-			left: (750upx - $calendar-size) / 2;
+            left: calc((750upx - $calendar-size) / 2);
 			width: $calendar-size;
 			transform: translateY(-50%);
 			box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
