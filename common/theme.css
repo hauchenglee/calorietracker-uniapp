@@ -1,0 +1,152 @@
+/* theme.css */
+:root {
+    /* 颜色系统 */
+    --color-primary: #3c9cff;
+    --color-success: #09BE4F;
+    --color-warning: #FFB703;
+    --color-danger: #FF2B2B;
+    --color-info: #909399;
+
+    /* 背景色 */
+    --color-background: #fafbff;
+    --color-light-gray-white: #F2F3F8;
+    --color-light-blue-gray: #F1F4FA;
+    --color-banner-light-blue: #EDF9FF;
+
+    /* 基础色系 */
+    --white: #FFFFFF;
+    --grey: #3A5160;
+    --black: #000000;
+    --red: #FF0000;
+    --green: #2E7D32;
+    --yellow: #FFC107;
+    --orange: #F57C00;
+    --blue: #1976D2;
+    --purple: #7B1FA2;
+
+    /* 其他颜色 */
+    --circle-forward: #4f93ea;
+    --circle-backward: #ebefff;
+    --circle-text: #393e68;
+
+    /* 主题色系 */
+    --color-green-1: #ecede8;
+    --color-green-2: #e4e6d9;
+    --color-green-3: #c0cfb2;
+    --color-green-4: #8ba888;
+    --color-green-5: #49654e;
+    --color-green-6: #253528;
+
+    --color-ice-blue-1: #f1f4fb;
+    --color-ice-blue-2: #d5deef;
+    --color-ice-blue-3: #b2caee;
+    --color-ice-blue-4: #89afe0;
+    --color-ice-blue-5: #618fca;
+    --color-ice-blue-6: #3a5985;
+
+    --color-autumn-red-1: #ddd5d2;
+    --color-autumn-red-2: #dedddb;
+    --color-autumn-red-3: #dbc2bd;
+    --color-autumn-red-4: #e0576b;
+    --color-autumn-red-5: #c62038;
+    --color-autumn-red-6: #bb031d;
+
+    /* 尺寸系统 */
+    --size-2: 2rpx;
+    --size-4: 4rpx;
+    --size-8: 8rpx;
+    --size-12: 12rpx;
+    --size-16: 16rpx;
+    --size-20: 20rpx;
+    --size-24: 24rpx;
+    --size-28: 28rpx;
+    --size-32: 32rpx;
+    --size-36: 36rpx;
+    --size-40: 40rpx;
+    --size-48: 48rpx;
+    --size-50: 50rpx;
+    --size-64: 64rpx;
+    --size-80: 80rpx;
+    --size-100: 100rpx;
+
+    /* 宽度百分比 */
+    --width-full: 100%;
+    --width-3-4: 75%;
+    --width-2-3: 66.666667%;
+    --width-1-2: 50%;
+    --width-1-3: 33.333333%;
+    --width-1-4: 25%;
+    --width-1-5: 20%;
+    --width-auto: auto;
+
+    /* 高度百分比 */
+    --height-full: 100%;
+    --height-3-4: 75%;
+    --height-2-3: 66.666667%;
+    --height-1-2: 50%;
+    --height-1-3: 33.333333%;
+    --height-1-4: 25%;
+    --height-1-5: 20%;
+    --height-auto: auto;
+
+    /* 固定宽度 */
+    --width-xs: 480rpx;
+    --width-sm: 576rpx;
+    --width-md: 720rpx;
+    --width-lg: 960rpx;
+    --width-xl: 1080rpx;
+
+    /* 固定高度 */
+    --height-xs: 80rpx;
+    --height-sm: 120rpx;
+    --height-md: 160rpx;
+    --height-lg: 200rpx;
+    --height-xl: 240rpx;
+
+    /* 字体家族 */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-family-code: Monaco, Menlo, Consolas, monospace;
+
+    /* 字重 */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 600;
+
+    /* 圆角 */
+    --radius-sm: 4rpx;
+    --radius-md: 8rpx;
+    --radius-lg: 16rpx;
+    --radius-pill: 999rpx;
+
+    /* 阴影 */
+    --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+
+    /* 常用层级 */
+    --z-index-1: 100;
+    --z-index-2: 200;
+    --z-index-3: 300;
+    --z-index-modal: 1000;
+    --z-index-popup: 1200;
+    --z-index-toast: 1500;
+
+    /* padding/margin 组合 */
+    /* 上下左右相等 */
+    --spacing-all-sm: var(--size-16);
+    --spacing-all-md: var(--size-24);
+    --spacing-all-lg: var(--size-32);
+
+    /* 上下相等，左右相等 */
+    --spacing-y-sm-x-md: var(--size-16) var(--size-24);
+    --spacing-y-md-x-lg: var(--size-24) var(--size-32);
+
+    /* 上右下左分别设置 */
+    --spacing-header: var(--size-100) var(--size-50) 0 var(--size-32);
+    --spacing-card: var(--size-32) var(--size-24) var(--size-16) var(--size-24);
+    --spacing-list: var(--size-24) var(--size-32) var(--size-24) var(--size-32);
+
+    /* 常用组合 */
+    --spacing-form: var(--size-40) var(--size-32) var(--size-20) var(--size-32);
+    --spacing-modal: var(--size-48) var(--size-32) var(--size-32) var(--size-32);
+}
