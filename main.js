@@ -12,14 +12,17 @@ let i18nConfig = {
     messages
 }
 
-// VUE2
 // #ifndef VUE3
 import Vue from 'vue'
+import App from './App'
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 const i18n = new VueI18n(i18nConfig)
+
 Vue.config.productionTip = false
+
 App.mpType = 'app'
+
 const app = new Vue({
     i18n,
     ...App
@@ -27,9 +30,9 @@ const app = new Vue({
 app.$mount()
 // #endif
 
-// VUE3
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
+import App from './App.vue'
 import { createI18n } from 'vue-i18n'// v9.x
 const i18n = createI18n(i18nConfig)
 export function createApp() {

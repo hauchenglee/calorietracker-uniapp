@@ -29,14 +29,16 @@
 		onHide: function() {
 			console.log('App Hide')
 		},
-        getPreferredLanguage(systemLang) {
-            // 根据系统语言判断使用简体还是繁体
-            if (systemLang === 'zh-CN') {
-                return 'zh-Hans'
-            } else if (systemLang === 'zh-TW' || systemLang === 'zh-HK') {
-                return 'zh-Hant'
+        methods: {
+            getPreferredLanguage(systemLang) {
+                // 根据系统语言判断使用简体还是繁体
+                if (systemLang === 'zh-CN') {
+                    return 'zh-Hans'
+                } else if (systemLang === 'zh-TW' || systemLang === 'zh-HK') {
+                    return 'zh-Hant'
+                }
+                return 'zh-Hant' // 默认繁体
             }
-            return 'zh-Hant' // 默认繁体
         }
 	}
 </script>
