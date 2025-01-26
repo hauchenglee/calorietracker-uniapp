@@ -5,8 +5,8 @@
         <view class="profile-card">
             <view class="avatar">👤</view>
             <view class="user-info">
-                <text class="username">张三</text>
-                <text class="user-level">普通会员</text>
+                <text class="username">Hello 你好</text>
+                <text class="user-level">普通會員</text>
             </view>
             <text class="arrow">></text>
         </view>

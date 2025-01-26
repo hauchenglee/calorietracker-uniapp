@@ -163,7 +163,7 @@
                                 maxlength="2"
                                 @input="limitQuantityInput($event, 'formData1')"
                             />
-                            <view class="unit-selector" @tap="showUnitSelector">
+                            <view class="unit-selector" @tap="showUnitSelector1">
                                 <text>{{ formData1.unit || '选择单位' }}</text>
                                 <text class="unit-arrow">▼</text>
                             </view>
@@ -190,11 +190,15 @@
                             type="number"
                             class="progress-input"
                             v-model="formData1.calorie"
-                            placeholder="0"
+                            maxlength="4"
+                            @input="updateProgress('calorie', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill calories" style="width: 71%"></view>
+                        <view
+                            class="progress-fill calories"
+                            :style="{ width: progressPercentages.calorie + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -212,11 +216,15 @@
                             type="number"
                             class="progress-input"
                             v-model="formData1.carbohydrate"
-                            placeholder="0"
+                            maxlength="4"
+                            @input="updateProgress('carbohydrate', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill carbs" style="width: 70%"></view>
+                        <view
+                            class="progress-fill carbs"
+                            :style="{ width: progressPercentages.carbohydrate + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -234,11 +242,15 @@
                             type="number"
                             class="progress-input"
                             v-model="formData1.protein"
-                            placeholder="0"
+                            maxlength="4"
+                            @input="updateProgress('protein', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill protein" style="width: 80%"></view>
+                        <view
+                            class="progress-fill protein"
+                            :style="{ width: progressPercentages.protein + '%' }"
+                        ></view>
                     </view>
                 </view>
 
@@ -256,11 +268,15 @@
                             type="number"
                             class="progress-input"
                             v-model="formData1.fat"
-                            placeholder="0"
+                            maxlength="4"
+                            @input="updateProgress('fat', $event)"
                         />
                     </view>
                     <view class="progress-bar">
-                        <view class="progress-fill fat" style="width: 46%"></view>
+                        <view
+                            class="progress-fill fat"
+                            :style="{ width: progressPercentages.fat + '%' }"
+                        ></view>
                     </view>
                 </view>
             </view>
@@ -368,7 +384,7 @@
                                 maxlength="2"
                                 @input="limitQuantityInput($event, 'formData2')"
                             />
-                            <view class="unit-selector" @tap="showUnitSelector">
+                            <view class="unit-selector" @tap="showUnitSelector2">
                                 <text>{{ formData2.unit || '选择单位' }}</text>
                                 <text class="unit-arrow">▼</text>
                             </view>
@@ -395,7 +411,7 @@
                             type="number"
                             class="progress-input"
                             v-model="formData2.calorie"
-                            placeholder="0"
+                            maxlength="4"
                             @input="updateProgress('calorie', $event)"
                         />
                     </view>
@@ -421,7 +437,7 @@
                             type="number"
                             class="progress-input"
                             v-model="formData2.carbohydrate"
-                            placeholder="0"
+                            maxlength="4"
                             @input="updateProgress('carbohydrate', $event)"
                         />
                     </view>
@@ -447,7 +463,7 @@
                             type="number"
                             class="progress-input"
                             v-model="formData2.protein"
-                            placeholder="0"
+                            maxlength="4"
                             @input="updateProgress('protein', $event)"
                         />
                     </view>
@@ -473,7 +489,7 @@
                             type="number"
                             class="progress-input"
                             v-model="formData2.fat"
-                            placeholder="0"
+                            maxlength="4"
                             @input="updateProgress('fat', $event)"
                         />
                     </view>
@@ -489,21 +505,21 @@
             <button class="setup-btn submit-btn" @click="saveData2">保存</button>
         </view>
 
-        <!-- 单位选择弹窗 -->
-        <view class="unit-popup" v-if="showUnitPopup" @tap="closeUnitSelector">
+        <!-- 单位选择弹窗1 -->
+        <view class="unit-popup" v-if="showUnitPopup1" @tap="closeUnitSelector1">
             <view class="unit-popup-content" @tap.stop>
                 <view class="unit-popup-header">
                     <text class="unit-popup-title">选择单位</text>
-                    <text class="unit-popup-close" @tap="closeUnitSelector">✕</text>
+                    <text class="unit-popup-close" @tap="closeUnitSelector1">✕</text>
                 </view>
                 <!-- 常用单位快速选择 -->
                 <view class="quick-units">
                     <view
                         class="quick-unit-item"
-                        :class="{ active: formData2.unit === unit }"
-                        v-for="unit in quickUnits"
+                        :class="{ active: formData1.unit === unit }"
+                        v-for="unit in quickUnits1"
                         :key="unit"
-                        @tap="selectUnit(unit)"
+                        @tap="selectUnit1(unit)"
                     >
                         {{ unit }}
                     </view>
@@ -513,12 +529,46 @@
                     <input
                         type="text"
                         class="custom-unit-input"
-                        v-model="customUnit"
+                        v-model="customUnit1"
                         placeholder="输入自定义单位"
                         maxlength="10"
-                        @confirm="addCustomUnit"
+                        @confirm="addCustomUnit1"
                     />
-                    <button class="custom-unit-btn" @tap="addCustomUnit">确定</button>
+                    <button class="custom-unit-btn" @tap="addCustomUnit1">确定</button>
+                </view>
+            </view>
+        </view>
+
+        <!-- 单位选择弹窗2 -->
+        <view class="unit-popup" v-if="showUnitPopup2" @tap="closeUnitSelector2">
+            <view class="unit-popup-content" @tap.stop>
+                <view class="unit-popup-header">
+                    <text class="unit-popup-title">选择单位</text>
+                    <text class="unit-popup-close" @tap="closeUnitSelector2">✕</text>
+                </view>
+                <!-- 常用单位快速选择 -->
+                <view class="quick-units">
+                    <view
+                        class="quick-unit-item"
+                        :class="{ active: formData2.unit === unit }"
+                        v-for="unit in quickUnits2"
+                        :key="unit"
+                        @tap="selectUnit2(unit)"
+                    >
+                        {{ unit }}
+                    </view>
+                </view>
+                <!-- 自定义单位输入 -->
+                <view class="custom-unit">
+                    <input
+                        type="text"
+                        class="custom-unit-input"
+                        v-model="customUnit2"
+                        placeholder="输入自定义单位"
+                        maxlength="10"
+                        @confirm="addCustomUnit2"
+                    />
+                    <button class="custom-unit-btn" @tap="addCustomUnit2">确定</button>
                 </view>
             </view>
         </view>
@@ -543,23 +593,33 @@ export default {
             activeTab: 0,
             previewImage: '',
             isLoading: false,
+
+            // 单位量词
+            showUnitPopup1: false,
+            quickUnits1: ['份', '公克', '毫升', '碗', '盤', '湯匙', '片'],
+            customUnit1: '',
+
+            showUnitPopup2: false,
+            quickUnits2: ['份', '公克', '毫升', '碗', '盤', '湯匙', '片'],
+            customUnit2: '',
+
             formData1: {
-                date: '',
+                date: new Date().toISOString().split('T')[0],
                 meal: '',
                 name: '',
                 quantity: 1,
-                unit: 'pics',
+                unit: '份',
                 calorie: 0,
                 carbohydrate: 0,
                 protein: 0,
                 fat: 0
             },
             formData2: {
-                date: '',
+                date: new Date().toISOString().split('T')[0],
                 meal: '',
                 name: '',
                 quantity: 1,
-                unit: 'pics',
+                unit: '份',
                 calorie: 0,
                 carbohydrate: 0,
                 protein: 0,
@@ -575,11 +635,6 @@ export default {
             // 添加日期范围
             startDate: '1940-01-01', // 能手动选择的最早日期
             endDate: '2099-12-31',
-
-            // 单位量词
-            showUnitPopup: false,
-            quickUnits: ['份', '个', 'g', 'ml', '碗', '勺', '块', '片'],
-            customUnit: '',
 
             // bar 进度条百分比
             progressPercentages: {
@@ -658,28 +713,51 @@ export default {
         },
         // 控制输入数量 end
 
-        // 单位量词 start
-        showUnitSelector() {
-            this.showUnitPopup = true;
+        // 单位量词1 start
+        showUnitSelector1() {
+            this.showUnitPopup1 = true;
         },
 
-        closeUnitSelector() {
-            this.showUnitPopup = false;
-            this.customUnit = '';
+        closeUnitSelector1() {
+            this.showUnitPopup1 = false;
+            this.customUnit1 = '';
         },
 
-        selectUnit(unit) {
-            this.formData2.unit = unit;
-            this.closeUnitSelector();
+        selectUnit1(unit) {
+            this.formData1.unit = unit;
+            this.closeUnitSelector1();
         },
 
-        addCustomUnit() {
-            if (this.customUnit.trim()) {
-                this.formData2.unit = this.customUnit.trim();
-                this.closeUnitSelector();
+        addCustomUnit1() {
+            if (this.customUnit1.trim()) {
+                this.formData1.unit = this.customUnit1.trim();
+                this.closeUnitSelector1();
             }
         },
-        // 单位量词 end
+        // 单位量词1 end
+
+        // 单位量词2 start
+        showUnitSelector2() {
+            this.showUnitPopup2 = true;
+        },
+
+        closeUnitSelector2() {
+            this.showUnitPopup2 = false;
+            this.customUnit2 = '';
+        },
+
+        selectUnit2(unit) {
+            this.formData2.unit = unit;
+            this.closeUnitSelector2();
+        },
+
+        addCustomUnit2() {
+            if (this.customUnit2.trim()) {
+                this.formData2.unit = this.customUnit2.trim();
+                this.closeUnitSelector2();
+            }
+        },
+        // 单位量词2 end
 
         async takePicture() {
             try {
@@ -785,13 +863,15 @@ export default {
                     // 3. 映射API返回数据到表单
                     this.formData1 = {
                         name: data.name,
-                        meal: data.meal,
-                        quantity: data.quantity,
                         calorie: data.calorie,
                         carbohydrate: data.carbohydrate,
                         protein: data.protein,
                         fat: data.fat
                     };
+
+                    this.date = new Date().toISOString().split('T')[0];
+                    this.formData1.quantity = '1';
+                    this.formData1.unit = this.quickUnits1[0];
 
                     // 4. 显示成功提示
                     uni.showToast({
@@ -875,7 +955,7 @@ export default {
                 const value = Number(this.formData2[field]);
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: `${requiredFields[field]}必须大于0`,
+                        title: `${requiredFields[field]}不可以小于0`,
                         icon: 'error'
                     });
                     return false;
@@ -912,9 +992,9 @@ export default {
             const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
             for (const field of numericFields) {
                 const value = Number(this.formData2[field]);
-                if (isNaN(value) || value <= 0) {
+                if (isNaN(value) || value < 0) {
                     uni.showToast({
-                        title: `${requiredFields[field]}必须大于0`,
+                        title: `${requiredFields[field]}不可以小于0`,
                         icon: 'error'
                     });
                     return false;
@@ -936,10 +1016,17 @@ export default {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData1);
-                uni.showToast({
-                    title: response.message,
-                    icon: 'success'
-                })
+                if (response.code === 'A0001') {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'success'
+                    })
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'error'
+                    });
+                }
             } catch (error) {
                 this.isLoading = false;
                 uni.showToast({
@@ -964,10 +1051,17 @@ export default {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const response = await addApi.save(this.formData2);
-                uni.showToast({
-                    title: response.message,
-                    icon: 'success'
-                })
+                if (response.code === 'A0001') {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'success'
+                    })
+                } else {
+                    uni.showToast({
+                        title: response.message,
+                        icon: 'error'
+                    });
+                }
             } catch (error) {
                 this.isLoading = false;
                 uni.showToast({
@@ -1297,9 +1391,10 @@ page {
 }
 
 .progress-input {
-    width: 120rpx;
-    text-align: right;
+    width: 200rpx;
+    text-align: left;
     font-size: 28rpx;
+    background: white;
 }
 
 .progress-bar {
