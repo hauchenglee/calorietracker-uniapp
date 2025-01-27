@@ -1,5 +1,223 @@
 {
   "index.title": "您好",
-  "common.submit": "提交",
-  "common.cancel": "取消"
+  "common": {
+    "confirm": "確定",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "編輯",
+    "reanalyze": "重新分析"
+  },
+  "nutrition": {
+    "calorie": {
+      "name": "卡路里",
+      "unit": "kcal"
+    },
+    "carbohydrate": {
+      "name": "碳水化合物",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "蛋白質",
+      "unit": "g"
+    },
+    "fat": {
+      "name": "脂肪",
+      "unit": "g"
+    }
+  },
+  "meal": {
+    "breakfast": "早餐",
+    "lunch": "午餐",
+    "dinner": "晚餐"
+  },
+  "page": {
+    "login": {
+      "logo-text": "飲食紀錄",
+      "logo-subtitle": "紀錄美食，追蹤營養",
+      "account": "帳號",
+      "account-placeholder": "請輸入帳號",
+      "password": "密碼",
+      "password-placeholder": "請輸入密碼",
+      "login-button": "登入",
+      "register-account": "註冊帳號",
+      "forgot-password": "忘記密碼",
+      "account-not-exist": "帳號不存在",
+      "register-confirm": "是否使用當前帳號密碼進行註冊？",
+      "registering": "正在註冊",
+      "register-login-success": "註冊並登入成功",
+      "register-failed": "註冊失敗",
+      "use-other-account": "您可以使用其他帳號登入",
+      "operation-failed": "操作失敗",
+      "login-success": "登入成功",
+      "register-success": "註冊成功",
+      "third-party-login": "其他登入方式",
+      "third-party-google": "Google",
+      "third-party-apple": "Apple",
+      "messages": {
+        "input-required": "請輸入帳號和密碼",
+        "account-not-exist": "帳號不存在",
+        "register-confirm": "是否使用當前帳號密碼進行註冊？",
+        "registering": "正在註冊",
+        "register-login-success": "註冊並登入成功",
+        "register-failed": "註冊失敗",
+        "use-other-account": "您可以使用其他帳號登入",
+        "login-success": "登入成功",
+        "register-success": "註冊成功",
+        "developing": "登入開發中"
+      }
+    },
+    "diary": {
+      "reminder-title": "請先設定身體基本數據",
+      "reminder-desc": "設定基本數據後，我們將為您計算個人化的營養需求",
+      "please-setup-body": "請先設置身體基礎數據",
+      "setup-btn": "去設置",
+      "empty-state": "暫無記錄",
+      "date": {
+        "get-data-error": "獲取數據失敗"
+      }
+    },
+    "add": {
+      "tab": {
+        "photo": "拍照識別",
+        "manual": "手動記錄"
+      },
+      "photo": {
+        "title": "選擇方式",
+        "take-photo": "拍照",
+        "select-gallery": "從相冊選擇",
+        "preview-title": "圖片預覽",
+        "retake": "重新選擇",
+        "analyze": "開始分析",
+        "cancel": "取消選取",
+        "analyzing": "正在分析...",
+        "analysis-complete": "分析成功",
+        "cancel-confirm": {
+          "title": "取消選取",
+          "content": "確定要取消選取當前圖片嗎？",
+          "success": "已取消選取"
+        }
+      },
+      "manual": {
+        "title": "手動記錄"
+      },
+      "form": {
+        "date": "日期",
+        "date-placeholder": "請選擇日期",
+        "food-name": "食物名稱",
+        "quantity": "數量",
+        "quantity-range": "1~99",
+        "unit": {
+          "title": "選擇單位",
+          "placeholder": "選擇單位",
+          "custom-placeholder": "輸入自定義單位"
+        },
+        "daily-recommended": "每日推薦"
+      },
+      "validation": {
+        "required": "請填寫{field}",
+        "positive": "{field}不可以小於0"
+      },
+      "message": {
+        "take-picture": "拍照失敗",
+        "select-gallery": "選取圖片失敗"
+      }
+    },
+    "more": {
+      "greeting": "Hello 你好",
+      "member-level": "普通會員",
+      "menu": {
+        "body-data": "身體基礎數據",
+        "diet-plan": "每日營養建議",
+        "statistics": "數據統計",
+        "settings": "系統設置",
+        "help": "幫助中心"
+      },
+      "badge": {
+        "new": "新"
+      },
+      "messages": {
+        "setup-body-first": "請先設置身體基礎數據",
+        "navigation-failed": "導航失敗"
+      }
+    },
+    "body": {
+      "header": {
+        "title": "基礎數據設置",
+        "description": "請填寫您的基本信息，我們將為您計算個性化的營養建議"
+      },
+      "form": {
+        "birthday": {
+          "label": "出生日期",
+          "placeholder": "請選擇出生日期"
+        },
+        "gender": {
+          "label": "性別",
+          "male": "男",
+          "female": "女"
+        },
+        "height": {
+          "label": "身高",
+          "placeholder": "請輸入身高",
+          "unit": "cm"
+        },
+        "weight": {
+          "label": "體重",
+          "placeholder": "請輸入體重",
+          "unit": "kg"
+        }
+      },
+      "validation": {
+        "required": "請填寫{field}",
+        "positive": "{field}必須大於0",
+        "height-range": "身高必須在100-300cm之間",
+        "weight-range": "體重必須在20-300kg之間"
+      }
+    },
+    "diet-plan": {
+      "header": {
+        "title": "營養建議設置",
+        "description": "根據您的身體數據，我們為您計算了以下營養建議值"
+      },
+      "sources": {
+        "title": "營養素來源建議",
+        "carbs": {
+          "name": "碳水化合物",
+          "sources": [
+            "全穀物",
+            "水果",
+            "蔬菜",
+            "燕麥"
+          ]
+        },
+        "protein": {
+          "name": "蛋白質",
+          "sources": [
+            "瘦肉",
+            "魚",
+            "蛋",
+            "豆製品",
+            "雞胸肉"
+          ]
+        },
+        "fat": {
+          "name": "脂肪",
+          "sources": [
+            "堅果",
+            "橄欖油",
+            "牛油果",
+            "魚油"
+          ]
+        }
+      },
+      "implementation": {
+        "title": "具體實施建議",
+        "expand": "展開",
+        "collapse": "收起"
+      },
+      "daily-intake": {
+        "title": "每日推薦攝入",
+        "suggested-value": "建議值"
+      }
+    }
+  }
 }

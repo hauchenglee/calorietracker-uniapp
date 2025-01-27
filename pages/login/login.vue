@@ -4,8 +4,8 @@
         <!-- Logo区域 -->
         <view class="logo-section">
             <view class="logo-icon">🥗</view>
-            <text class="logo-text">飲食紀錄</text>
-            <text class="logo-subtitle">紀錄美食，追蹤營養</text>
+            <text class="logo-text">{{ $t('page.login.logo-text') }}</text>
+            <text class="logo-subtitle">{{ $t('page.login.logo-subtitle') }}</text>
         </view>
 
         <!-- 登录表单 -->
@@ -14,14 +14,14 @@
             <view class="input-group">
                 <view class="input-label">
                     <view class="input-icon">👤</view>
-                    <text>Account</text>
+                    <text>{{ $t('page.login.account') }}</text>
                 </view>
                 <view class="input-row">
                     <input
-                        type="text"
-                        class="form-input"
                         v-model="formData.email"
-                        placeholder="请输入账号"
+                        :placeholder="$t('page.login.account-placeholder')"
+                        class="form-input"
+                        type="text"
                     />
                 </view>
             </view>
@@ -30,14 +30,14 @@
             <view class="input-group">
                 <view class="input-label">
                     <view class="input-icon">🔒</view>
-                    <text>Password</text>
+                    <text>{{ $t('page.login.password') }}</text>
                 </view>
                 <view class="input-row">
                     <input
+                        v-model="formData.password"
+                        :placeholder="$t('page.login.password-placeholder')"
                         :type="showPassword ? 'text' : 'password'"
                         class="form-input"
-                        v-model="formData.password"
-                        placeholder="请输入密码"
                     />
                     <text
                         class="password-toggle"
@@ -50,32 +50,36 @@
 
             <!-- 登录按钮 -->
             <button
-                class="login-btn"
                 :disabled="isLoading"
+                class="login-btn"
                 @tap="checkLoginRequest"
             >
-                Login
+                {{ $t('page.login.login-button') }}
             </button>
 
             <!-- 其他选项 -->
             <view class="other-options">
-                <!--                <text class="option-text" @tap="navigateToRegister">注册账号</text>-->
-                <!--                <text class="option-text" @tap="navigateToForgotPassword">忘记密码</text>-->
+                <!--                <text class="option-text" @tap="navigateToRegister">-->
+                <!--                    {{ $t('page.login.register-account') }}-->
+                <!--                </text>-->
+                <!--                <text class="option-text" @tap="navigateToForgotPassword">-->
+                <!--                    {{ $t('page.login.forgot-password') }}-->
+                <!--                </text>-->
             </view>
 
             <!-- 第三方登录 -->
             <view class="third-party-login">
                 <view class="divider">
-                    <text class="divider-text">其他登录方式</text>
+                    <text class="divider-text">{{ $t('page.login.third-party-login') }}</text>
                 </view>
                 <view class="login-methods">
-                    <view class="login-method-item" @tap="handleThirdPartyLogin('wechat')">
-                        <view class="method-icon">💬</view>
-                        <text class="method-name">微信</text>
+                    <view class="login-method-item" @tap="handleThirdPartyLogin('google')">
+                        <view class="method-icon">🅶</view>
+                        <text class="method-name">{{ $t('page.login.third-party-google') }}</text>
                     </view>
                     <view class="login-method-item" @tap="handleThirdPartyLogin('apple')">
-                        <view class="method-icon">🍎</view>
-                        <text class="method-name">Apple</text>
+                        <view class="method-icon">🅰</view>
+                        <text class="method-name">{{ $t('page.login.third-party-apple') }}</text>
                     </view>
                 </view>
             </view>
@@ -125,7 +129,7 @@ export default {
         async checkLoginRequest() {
             if (!this.formData.email || !this.formData.password) {
                 uni.showToast({
-                    title: '请输入账号和密码',
+                    title: this.$t('page.login.messages.input-required'),
                     icon: 'error'
                 })
                 return
@@ -136,35 +140,32 @@ export default {
                 if (this.isAccountExist) {
                     await this.login();
                 } else {
-                    // 使用原生彈窗
                     uni.showModal({
-                        title: '账号不存在',
-                        content: '是否使用当前账号密码进行注册？',
+                        title: this.$t('page.login.messages.account-not-exist'),
+                        content: this.$t('page.login.messages.register-confirm'),
                         success: async (res) => {
                             if (res.confirm) {
-                                // 用戶點擊確定
                                 try {
                                     uni.showLoading({
-                                        title: '正在注册'
+                                        title: this.$t('page.login.messages.registering')
                                     });
                                     await this.register();
                                     await this.login();
                                     uni.hideLoading();
                                     uni.showToast({
-                                        title: '注册并登录成功',
+                                        title: this.$t('page.login.messages.register-login-success'),
                                         icon: 'success'
                                     });
                                 } catch (error) {
                                     uni.hideLoading();
                                     uni.showToast({
-                                        title: error.message || '注册失败',
+                                        title: this.$t('page.login.messages.register-failed'),
                                         icon: 'error'
                                     });
                                 }
                             } else {
-                                // 用戶點擊取消
                                 uni.showToast({
-                                    title: '您可以使用其他账号登录',
+                                    title: this.$t('page.login.messages.use-other-account'),
                                     icon: 'error'
                                 });
                             }
@@ -173,7 +174,7 @@ export default {
                 }
             } catch (error) {
                 uni.showToast({
-                    title: error.message || '操作失败',
+                    title: error.message,
                     icon: 'error'
                 });
             }
@@ -214,7 +215,7 @@ export default {
                     uni.setStorageSync('userInfo', response.data);
 
                     uni.showToast({
-                        title: '登入成功',
+                        title: this.$t('page.login.messages.login-success'),
                         icon: 'success'
                     })
 
@@ -247,7 +248,7 @@ export default {
                 if (response.code === 'A0001') {
                     this.isRegisterSuccess = true;
                     uni.showToast({
-                        title: '註冊成功',
+                        title: this.$t('page.login.messages.register-success'),
                         icon: 'success'
                     })
                 } else {
@@ -280,7 +281,7 @@ export default {
 
         handleThirdPartyLogin(type) {
             uni.showToast({
-                title: `${type}登录开发中`,
+                title: this.$t('page.login.messages.developing', {type}),
                 icon: 'error'
             })
         }

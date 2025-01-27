@@ -5,8 +5,8 @@
         <view class="setup-reminder">
             <view class="reminder-card">
                 <view class="reminder-icon">📝</view>
-                <view class="reminder-title">基础数据设置</view>
-                <view class="reminder-desc">请填写您的基本信息，我们将为您计算个性化的营养建议</view>
+                <view class="reminder-title">{{ $t('page.body.header.title') }}</view>
+                <view class="reminder-desc">{{ $t('page.body.header.description') }}</view>
             </view>
         </view>
 
@@ -16,22 +16,21 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📅</view>
-                        <text>出生日期</text>
+                        <text>{{ $t('page.body.form.birthday.label') }}</text>
                     </view>
                 </view>
 
-                <!-- 修复点击无反应问题 -->
                 <picker
-                    mode="date"
-                    :value="formData.birthday"
-                    @change="onBirthDayChange"
-                    :start="startDate"
                     :end="endDate"
+                    :start="startDate"
+                    :value="formData.birthday"
+                    mode="date"
+                    @change="onBirthDayChange"
                 >
                     <view class="input-row">
                         <view class="picker-content">
                             <text :class="['picker-text', !formData.birthday && 'empty']">
-                                {{ formData.birthday || '请选择出生日期' }}
+                                {{ formData.birthday || $t('page.body.form.birthday.placeholder') }}
                             </text>
                         </view>
                     </view>
@@ -42,26 +41,26 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">👤</view>
-                        <text>性别</text>
+                        <text>{{ $t('page.body.form.gender.label') }}</text>
                     </view>
                 </view>
 
                 <view class="gender-row">
                     <view
-                        class="gender-option"
                         :class="{ active: formData.gender === 'male' }"
+                        class="gender-option"
                         @tap="selectGender('male')"
                     >
                         <text class="gender-emoji">👨</text>
-                        <text class="gender-label">男</text>
+                        <text class="gender-label">{{ $t('page.body.form.gender.male') }}</text>
                     </view>
                     <view
-                        class="gender-option"
                         :class="{ active: formData.gender === 'female' }"
+                        class="gender-option"
                         @tap="selectGender('female')"
                     >
                         <text class="gender-emoji">👩</text>
-                        <text class="gender-label">女</text>
+                        <text class="gender-label">{{ $t('page.body.form.gender.female') }}</text>
                     </view>
                 </view>
             </view>
@@ -70,18 +69,18 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📏</view>
-                        <text>身高</text>
+                        <text>{{ $t('page.body.form.height.label') }}</text>
                     </view>
                 </view>
 
                 <view class="input-row">
                     <input
-                        type="number"
-                        class="form-input"
-                        placeholder="请输入身高"
                         v-model="formData.height"
+                        :placeholder="$t('page.body.form.height.placeholder')"
+                        class="form-input"
+                        type="number"
                     />
-                    <text class="input-unit">cm</text>
+                    <text class="input-unit">{{ $t('page.body.form.height.unit') }}</text>
                 </view>
             </view>
 
@@ -89,25 +88,24 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">⚖️</view>
-                        <text>体重</text>
+                        <text>{{ $t('page.body.form.weight.label') }}</text>
                     </view>
                 </view>
 
                 <view class="input-row">
                     <input
-                        type="number"
-                        class="form-input"
-                        placeholder="请输入体重"
                         v-model="formData.weight"
+                        :placeholder="$t('page.body.form.weight.placeholder')"
+                        class="form-input"
+                        type="number"
                     />
-                    <text class="input-unit">kg</text>
+                    <text class="input-unit">{{ $t('page.body.form.weight.unit') }}</text>
                 </view>
             </view>
         </view>
 
-        <button class="setup-btn" @tap="onSubmit">储存</button>
+        <button class="setup-btn" @tap="onSubmit">{{ $t('common.save') }}</button>
 
-        <!-- 添加遮罩层和 loading -->
         <loading-overlay :show="isLoading"/>
     </view>
 </template>
@@ -232,17 +230,17 @@ export default {
         // 添加验证方法
         validateFormData() {
             const requiredFields = {
-                birthday: '出生日期',
-                gender: '性别',
-                height: '身高',
-                weight: '体重'
+                birthday: this.$t('page.body.form.birthday.label'),
+                gender: this.$t('page.body.form.gender.label'),
+                height: this.$t('page.body.form.height.label'),
+                weight: this.$t('page.body.form.weight.label')
             };
 
             // 检查必填字段
             for (const [field, label] of Object.entries(requiredFields)) {
                 if (!this.formData[field]) {
                     uni.showToast({
-                        title: `请填写${label}`,
+                        title: this.$t('page.body.validation.required', {field: label}),
                         icon: 'error'
                     });
                     return false;
@@ -255,28 +253,28 @@ export default {
                 const value = Number(this.formData[field]);
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: `${requiredFields[field]}必须大于0`,
+                        title: this.$t('page.body.validation.positive', {field: requiredFields[field]}),
                         icon: 'error'
                     });
                     return false;
                 }
             }
 
-            // 检查身高范围（例如：100-250cm）
+            // 检查身高范围
             const height = Number(this.formData.height);
-            if (height < 100 || height > 250) {
+            if (height < 100 || height > 300) {
                 uni.showToast({
-                    title: '身高必须在100-250cm之间',
+                    title: this.$t('page.body.validation.height-range'),
                     icon: 'error'
                 });
                 return false;
             }
 
-            // 检查体重范围（例如：20-200kg）
+            // 检查体重范围
             const weight = Number(this.formData.weight);
-            if (weight < 20 || weight > 200) {
+            if (weight < 20 || weight > 300) {
                 uni.showToast({
-                    title: '体重必须在20-200kg之间',
+                    title: this.$t('page.body.validation.weight-range'),
                     icon: 'error'
                 });
                 return false;
@@ -290,7 +288,7 @@ export default {
             if (!this.validateFormData()) {
                 return;
             }
-            
+
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));

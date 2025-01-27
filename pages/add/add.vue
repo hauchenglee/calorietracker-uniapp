@@ -4,31 +4,31 @@
         <!-- 顶部切换卡片 -->
         <view class="date-picker">
             <button
-                class="tab-btn"
                 :class="{ active: activeTab === 0 }"
+                class="tab-btn"
                 @click="showTab(0)"
             >
                 <view class="category-icon">📸</view>
-                <text>拍照识别</text>
+                <text>{{ $t('page.add.tab.photo') }}</text>
             </button>
             <button
-                class="tab-btn"
                 :class="{ active: activeTab === 1 }"
+                class="tab-btn"
                 @click="showTab(1)"
             >
                 <view class="category-icon">📝</view>
-                <text>手动记录</text>
+                <text>{{ $t('page.add.tab.manual') }}</text>
             </button>
         </view>
 
         <!-- 拍照识别标签页 -->
-        <view class="meal-list" v-show="activeTab === 0">
+        <view v-show="activeTab === 0" class="meal-list">
             <!-- 拍照选项卡片 -->
-            <view class="meal-category" v-if="!previewImage">
+            <view v-if="!previewImage" class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📸</view>
-                        <text>选择方式</text>
+                        <text>{{ $t('page.add.photo.title') }}</text>
                     </view>
                 </view>
 
@@ -36,72 +36,71 @@
                     <view class="photo-row" @click="takePicture">
                         <view class="photo-detail">
                             <view class="progress-icon calories">📸</view>
-                            <text class="photo-name">拍照</text>
+                            <text class="photo-name">{{ $t('page.add.photo.take-photo') }}</text>
                         </view>
                     </view>
 
                     <view class="photo-row" @click="selectFromGallery">
                         <view class="photo-detail">
                             <view class="progress-icon carbs">🖼️</view>
-                            <text class="photo-name">从相册选择</text>
+                            <text class="photo-name">{{ $t('page.add.photo.select-gallery') }}</text>
                         </view>
-
                     </view>
                 </view>
             </view>
 
             <!-- 预览卡片 -->
-            <view class="meal-category" v-if="previewImage">
+            <view v-if="previewImage" class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">🖼️</view>
-                        <text>图片预览</text>
+                        <text>{{ $t('page.add.photo.preview-title') }}</text>
                     </view>
                 </view>
 
                 <image :src="previewImage" class="preview-image" mode="aspectFit"/>
 
                 <view class="button-group">
-                    <button class="reset-btn" @click="retakePhoto">重新选择</button>
-                    <button class="setup-btn" @click="analyzeImage">开始分析</button>
-                    <button class="reset-btn" @click="cancelImage">取消选取</button>
+                    <button class="reset-btn" @click="retakePhoto">{{ $t('page.add.photo.retake') }}</button>
+                    <button class="setup-btn" @click="analyzeImage">{{ $t('page.add.photo.analyze') }}</button>
+                    <button class="reset-btn" @click="cancelImage">{{ $t('page.add.photo.cancel') }}</button>
                 </view>
             </view>
 
             <!-- 分析结果表单 -->
-            <view class="meal-category" v-if="analysisCompleted">
+            <view v-if="analysisCompleted" class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📊</view>
-                        <text>营养成分分析</text>
+                        <text>{{ $t('page.add.form.nutrition.title') }}</text>
                     </view>
                 </view>
 
                 <view class="nutrition-form">
                     <view class="optional-row">
                         <view
-                            class="meal-option"
                             :class="{ active: formData1.meal === 'breakfast' }"
+                            class="meal-option"
                             @tap="selectMeal1('breakfast')"
                         >
                             <text class="meal-emoji">🌅</text>
-                            <text class="meal-label">早餐</text>
+                            <text class="meal-label">{{ $t('meal.breakfast') }}</text>
                         </view>
                         <view
-                            class="meal-option"
                             :class="{ active: formData1.meal === 'lunch' }"
+                            class="meal-option"
                             @tap="selectMeal1('lunch')"
                         >
                             <text class="meal-emoji">☀️</text>
-                            <text class="meal-label">午餐</text>
+                            <text class="meal-label">{{ $t('meal.lunch') }}</text>
                         </view>
                         <view
-                            class="meal-option"
                             :class="{ active: formData1.meal === 'dinner' }"
+                            class="meal-option"
                             @tap="selectMeal1('dinner')"
                         >
                             <text class="meal-emoji">🌙</text>
-                            <text class="meal-label">晚餐</text>
+                            <text class="meal-label">{{ $t('meal.dinner') }}</text>
                         </view>
                     </view>
 
@@ -109,20 +108,20 @@
                     <view class="row-title">
                         <view class="row-detail">
                             <view class="row-icon">📅</view>
-                            <text class="food-name">日期</text>
+                            <text class="food-name">{{ $t('page.add.form.date') }}</text>
                         </view>
                     </view>
                     <view class="food-row">
                         <picker
-                            mode="date"
-                            :value="formData1.date"
-                            @change="onDateChange1"
-                            :start="startDate"
                             :end="endDate"
+                            :start="startDate"
+                            :value="formData1.date"
                             class="picker-full"
+                            mode="date"
+                            @change="onDateChange1"
                         >
                             <text :class="['picker-text', !formData1.date && 'empty']">
-                                {{ formData1.date || '请选择日期' }}
+                                {{ formData1.date || $t('page.add.form.date-placeholder') }}
                             </text>
                         </picker>
                     </view>
@@ -131,14 +130,14 @@
                     <view class="row-title">
                         <view class="row-detail">
                             <view class="row-icon">🍽️</view>
-                            <text class="food-name">食物名称</text>
+                            <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
                         </view>
                     </view>
                     <view class="food-row">
                         <input
-                            type="text"
-                            class="form-input"
                             v-model="formData1.name"
+                            class="form-input"
+                            type="text"
                         />
                     </view>
 
@@ -147,24 +146,24 @@
                         <view class="row-detail">
                             <view class="row-icon">🔢</view>
                             <view class="food-header">
-                                <text class="food-name">数量</text>
-                                <text class="food-unit">1~99</text>
+                                <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
+                                <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
                             </view>
                         </view>
                     </view>
                     <view class="food-row">
                         <view class="quantity-unit-group">
                             <input
-                                type="number"
-                                class="form-input quantity-input"
                                 v-model="formData1.quantity"
-                                :min="1"
                                 :max="99"
+                                :min="1"
+                                class="form-input quantity-input"
                                 maxlength="2"
+                                type="number"
                                 @input="limitQuantityInput($event, 'formData1')"
                             />
                             <view class="unit-selector" @tap="showUnitSelector1">
-                                <text>{{ formData1.unit || '选择单位' }}</text>
+                                <text>{{ formData1.unit || $t('page.add.form.unit.placeholder') }}</text>
                                 <text class="unit-arrow">▼</text>
                             </view>
                         </view>
@@ -173,7 +172,7 @@
             </view>
         </view>
 
-        <view class="meal-list-progress-group" v-show="activeTab === 0" v-if="analysisCompleted">
+        <view v-if="analysisCompleted" v-show="activeTab === 0" class="meal-list-progress-group">
             <!-- 营养素进度条组 -->
             <view class="progress-group">
                 <!-- 热量 -->
@@ -182,22 +181,22 @@
                         <view class="progress-label">
                             <view class="progress-icon calories">🔥</view>
                             <view class="label-group">
-                                <text>热量</text>
-                                <text class="form-sublabel">每日推荐 2000kcal</text>
+                                <text>{{ $t('nutrition.calorie.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.calorie }} {{ $t('nutrition.calorie.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData1.calorie"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('calorie', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill calories"
                             :style="{ width: progressPercentages.calorie + '%' }"
+                            class="progress-fill calories"
                         ></view>
                     </view>
                 </view>
@@ -208,22 +207,22 @@
                         <view class="progress-label">
                             <view class="progress-icon carbs">🌾</view>
                             <view class="label-group">
-                                <text>碳水化合物</text>
-                                <text class="form-sublabel">每日推荐 250g</text>
+                                <text>{{ $t('nutrition.carbohydrate.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData1.carbohydrate"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('carbohydrate', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill carbs"
                             :style="{ width: progressPercentages.carbohydrate + '%' }"
+                            class="progress-fill carbs"
                         ></view>
                     </view>
                 </view>
@@ -234,22 +233,22 @@
                         <view class="progress-label">
                             <view class="progress-icon protein">🥩</view>
                             <view class="label-group">
-                                <text>蛋白质</text>
-                                <text class="form-sublabel">每日推荐 60g</text>
+                                <text>{{ $t('nutrition.protein.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.protein }} {{ $t('nutrition.protein.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData1.protein"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('protein', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill protein"
                             :style="{ width: progressPercentages.protein + '%' }"
+                            class="progress-fill protein"
                         ></view>
                     </view>
                 </view>
@@ -260,69 +259,66 @@
                         <view class="progress-label">
                             <view class="progress-icon fat">🥑</view>
                             <view class="label-group">
-                                <text>脂肪</text>
-                                <text class="form-sublabel">每日推荐 70g</text>
+                                <text>{{ $t('nutrition.fat') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.fat }} {{ $t('nutrition.fat.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData1.fat"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('fat', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill fat"
                             :style="{ width: progressPercentages.fat + '%' }"
+                            class="progress-fill fat"
                         ></view>
                     </view>
                 </view>
             </view>
 
-            <button class="setup-btn submit-btn" v-if="analysisCompleted" @click="saveData1">保存</button>
+            <button v-if="analysisCompleted" class="setup-btn submit-btn" @click="saveData1">{{ $t('common.save') }}</button>
         </view>
 
         <!-- 手动记录标签页 -->
-        <!-- 结构与拍照识别标签页类似，只是不包含拍照和预览部分 -->
-        <!-- 手动记录标签页 -->
-        <view class="meal-list" v-show="activeTab === 1">
+        <view v-show="activeTab === 1" class="meal-list">
             <view class="meal-category">
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📝</view>
-                        <text>手动记录</text>
+                        <text>{{ $t('page.add.manual.title') }}</text>
                     </view>
                 </view>
 
                 <view class="nutrition-form">
-
                     <!-- 餐食 -->
                     <view class="optional-row">
                         <view
-                            class="meal-option"
                             :class="{ active: formData2.meal === 'breakfast' }"
+                            class="meal-option"
                             @tap="selectMeal2('breakfast')"
                         >
                             <text class="meal-emoji">🌅</text>
-                            <text class="meal-label">早餐</text>
+                            <text class="meal-label">{{ $t('meal.breakfast') }}</text>
                         </view>
                         <view
-                            class="meal-option"
                             :class="{ active: formData2.meal === 'lunch' }"
+                            class="meal-option"
                             @tap="selectMeal2('lunch')"
                         >
                             <text class="meal-emoji">☀️</text>
-                            <text class="meal-label">午餐</text>
+                            <text class="meal-label">{{ $t('meal.lunch') }}</text>
                         </view>
                         <view
-                            class="meal-option"
                             :class="{ active: formData2.meal === 'dinner' }"
+                            class="meal-option"
                             @tap="selectMeal2('dinner')"
                         >
                             <text class="meal-emoji">🌙</text>
-                            <text class="meal-label">晚餐</text>
+                            <text class="meal-label">{{ $t('meal.dinner') }}</text>
                         </view>
                     </view>
 
@@ -330,20 +326,20 @@
                     <view class="row-title">
                         <view class="row-detail">
                             <view class="row-icon">📅</view>
-                            <text class="food-name">日期</text>
+                            <text class="food-name">{{ $t('page.add.form.date') }}</text>
                         </view>
                     </view>
                     <view class="food-row">
                         <picker
-                            mode="date"
-                            :value="formData2.date"
-                            @change="onDateChange2"
-                            :start="startDate"
                             :end="endDate"
+                            :start="startDate"
+                            :value="formData2.date"
                             class="picker-full"
+                            mode="date"
+                            @change="onDateChange2"
                         >
                             <text :class="['picker-text', !formData2.date && 'empty']">
-                                {{ formData2.date || '请选择日期' }}
+                                {{ formData2.date || $t('page.add.form.date-placeholder') }}
                             </text>
                         </picker>
                     </view>
@@ -352,14 +348,14 @@
                     <view class="row-title">
                         <view class="row-detail">
                             <view class="row-icon">🍽️</view>
-                            <text class="food-name">食物名称</text>
+                            <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
                         </view>
                     </view>
                     <view class="food-row">
                         <input
-                            type="text"
-                            class="form-input"
                             v-model="formData2.name"
+                            class="form-input"
+                            type="text"
                         />
                     </view>
 
@@ -368,24 +364,24 @@
                         <view class="row-detail">
                             <view class="row-icon">🔢</view>
                             <view class="food-header">
-                                <text class="food-name">数量</text>
-                                <text class="food-unit">1~99</text>
+                                <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
+                                <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
                             </view>
                         </view>
                     </view>
                     <view class="food-row">
                         <view class="quantity-unit-group">
                             <input
-                                type="number"
-                                class="form-input quantity-input"
                                 v-model="formData2.quantity"
-                                :min="1"
                                 :max="99"
+                                :min="1"
+                                class="form-input quantity-input"
                                 maxlength="2"
+                                type="number"
                                 @input="limitQuantityInput($event, 'formData2')"
                             />
                             <view class="unit-selector" @tap="showUnitSelector2">
-                                <text>{{ formData2.unit || '选择单位' }}</text>
+                                <text>{{ formData2.unit || $t('page.add.form.unit.placeholder') }}</text>
                                 <text class="unit-arrow">▼</text>
                             </view>
                         </view>
@@ -394,7 +390,7 @@
             </view>
         </view>
 
-        <view class="meal-list-progress-group" v-show="activeTab === 1">
+        <view v-show="activeTab === 1" class="meal-list-progress-group">
             <!-- 营养素进度条组 -->
             <view class="progress-group">
                 <!-- 热量 -->
@@ -403,22 +399,22 @@
                         <view class="progress-label">
                             <view class="progress-icon calories">🔥</view>
                             <view class="label-group">
-                                <text>热量</text>
-                                <text class="form-sublabel">每日推荐 {{ dietPlan.calorie }} kcal</text>
+                                <text>{{ $t('nutrition.calorie.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.calorie }} {{ $t('nutrition.calorie.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData2.calorie"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('calorie', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill calories"
                             :style="{ width: progressPercentages.calorie + '%' }"
+                            class="progress-fill calories"
                         ></view>
                     </view>
                 </view>
@@ -429,22 +425,22 @@
                         <view class="progress-label">
                             <view class="progress-icon carbs">🌾</view>
                             <view class="label-group">
-                                <text>碳水化合物</text>
-                                <text class="form-sublabel">每日推荐 {{ dietPlan.carbohydrate }} g</text>
+                                <text>{{ $t('nutrition.carbohydrate.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData2.carbohydrate"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('carbohydrate', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill carbs"
                             :style="{ width: progressPercentages.carbohydrate + '%' }"
+                            class="progress-fill carbs"
                         ></view>
                     </view>
                 </view>
@@ -455,22 +451,22 @@
                         <view class="progress-label">
                             <view class="progress-icon protein">🥩</view>
                             <view class="label-group">
-                                <text>蛋白质</text>
-                                <text class="form-sublabel">每日推荐 {{ dietPlan.protein }} g</text>
+                                <text>{{ $t('nutrition.protein.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.protein }} {{ $t('nutrition.protein.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData2.protein"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('protein', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill protein"
                             :style="{ width: progressPercentages.protein + '%' }"
+                            class="progress-fill protein"
                         ></view>
                     </view>
                 </view>
@@ -481,44 +477,44 @@
                         <view class="progress-label">
                             <view class="progress-icon fat">🥑</view>
                             <view class="label-group">
-                                <text>脂肪</text>
-                                <text class="form-sublabel">每日推荐 {{ dietPlan.fat }} g</text>
+                                <text>{{ $t('nutrition.fat.name') }}</text>
+                                <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.fat }} {{ $t('nutrition.fat.unit') }}</text>
                             </view>
                         </view>
                         <input
-                            type="number"
-                            class="progress-input"
                             v-model="formData2.fat"
+                            class="progress-input"
                             maxlength="4"
+                            type="number"
                             @input="updateProgress('fat', $event)"
                         />
                     </view>
                     <view class="progress-bar">
                         <view
-                            class="progress-fill fat"
                             :style="{ width: progressPercentages.fat + '%' }"
+                            class="progress-fill fat"
                         ></view>
                     </view>
                 </view>
             </view>
 
-            <button class="setup-btn submit-btn" @click="saveData2">保存</button>
+            <button class="setup-btn submit-btn" @click="saveData2">{{ $t('common.save') }}</button>
         </view>
 
         <!-- 单位选择弹窗1 -->
-        <view class="unit-popup" v-if="showUnitPopup1" @tap="closeUnitSelector1">
+        <view v-if="showUnitPopup1" class="unit-popup" @tap="closeUnitSelector1">
             <view class="unit-popup-content" @tap.stop>
                 <view class="unit-popup-header">
-                    <text class="unit-popup-title">选择单位</text>
+                    <text class="unit-popup-title">{{ $t('page.add.form.unit.title') }}</text>
                     <text class="unit-popup-close" @tap="closeUnitSelector1">✕</text>
                 </view>
                 <!-- 常用单位快速选择 -->
                 <view class="quick-units">
                     <view
-                        class="quick-unit-item"
-                        :class="{ active: formData1.unit === unit }"
                         v-for="unit in quickUnits1"
                         :key="unit"
+                        :class="{ active: formData1.unit === unit }"
+                        class="quick-unit-item"
                         @tap="selectUnit1(unit)"
                     >
                         {{ unit }}
@@ -527,32 +523,32 @@
                 <!-- 自定义单位输入 -->
                 <view class="custom-unit">
                     <input
-                        type="text"
-                        class="custom-unit-input"
                         v-model="customUnit1"
-                        placeholder="输入自定义单位"
+                        :placeholder="$t('page.add.form.unit.custom-placeholder')"
+                        class="custom-unit-input"
                         maxlength="10"
+                        type="text"
                         @confirm="addCustomUnit1"
                     />
-                    <button class="custom-unit-btn" @tap="addCustomUnit1">确定</button>
+                    <button class="custom-unit-btn" @tap="addCustomUnit1">{{ $t('common.confirm') }}</button>
                 </view>
             </view>
         </view>
 
         <!-- 单位选择弹窗2 -->
-        <view class="unit-popup" v-if="showUnitPopup2" @tap="closeUnitSelector2">
+        <view v-if="showUnitPopup2" class="unit-popup" @tap="closeUnitSelector2">
             <view class="unit-popup-content" @tap.stop>
                 <view class="unit-popup-header">
-                    <text class="unit-popup-title">选择单位</text>
+                    <text class="unit-popup-title">{{ $t('page.add.form.unit.title') }}</text>
                     <text class="unit-popup-close" @tap="closeUnitSelector2">✕</text>
                 </view>
                 <!-- 常用单位快速选择 -->
                 <view class="quick-units">
                     <view
-                        class="quick-unit-item"
-                        :class="{ active: formData2.unit === unit }"
                         v-for="unit in quickUnits2"
                         :key="unit"
+                        :class="{ active: formData2.unit === unit }"
+                        class="quick-unit-item"
                         @tap="selectUnit2(unit)"
                     >
                         {{ unit }}
@@ -561,14 +557,14 @@
                 <!-- 自定义单位输入 -->
                 <view class="custom-unit">
                     <input
-                        type="text"
-                        class="custom-unit-input"
                         v-model="customUnit2"
-                        placeholder="输入自定义单位"
+                        :placeholder="$t('page.add.form.unit.custom-placeholder')"
+                        class="custom-unit-input"
                         maxlength="10"
+                        type="text"
                         @confirm="addCustomUnit2"
                     />
-                    <button class="custom-unit-btn" @tap="addCustomUnit2">确定</button>
+                    <button class="custom-unit-btn" @tap="addCustomUnit2">{{ $t('common.confirm') }}</button>
                 </view>
             </view>
         </view>
@@ -766,10 +762,10 @@ export default {
                     sourceType: ['camera']
                 })
                 this.previewImage = res.tempFilePaths[0]
-            } catch (e) {
+            } catch (error) {
                 uni.showToast({
-                    title: '拍照失敗',
-                    icon: 'error'
+                    title: this.$t('page.add.message.take-picture'),
+                    icon: 'none'
                 })
             }
         },
@@ -781,10 +777,10 @@ export default {
                     sourceType: ['album']
                 })
                 this.previewImage = res.tempFilePaths[0]
-            } catch (e) {
+            } catch (error) {
                 uni.showToast({
-                    title: '選取圖片失敗',
-                    icon: 'error'
+                    title: this.$t('page.add.message.select-gallery'),
+                    icon: 'none'
                 })
             }
         },
@@ -793,7 +789,10 @@ export default {
         async retakePhoto() {
             try {
                 const res = await uni.showActionSheet({
-                    itemList: ['拍新照片', '從相冊選擇']
+                    itemList: [
+                        this.$t('page.add.photo.take-photo'),
+                        this.$t('page.add.photo.select-gallery')
+                    ]
                 })
 
                 if (res.tapIndex === 0) {
@@ -811,13 +810,13 @@ export default {
         // 取消/删除图片
         cancelImage() {
             uni.showModal({
-                title: '取消選取',
-                content: '确定要取消選取當前圖片吗？',
+                title: this.$t('page.add.photo.cancel-confirm.title'),
+                content: this.$t('page.add.photo.cancel-confirm.content'),
                 success: (res) => {
                     if (res.confirm) {
                         this.previewImage = '';
-                        this.analysisCompleted = false; // 重置分析状态
-                        this.formData1 = {  // 清空表单数据
+                        this.analysisCompleted = false;
+                        this.formData1 = {
                             name: '',
                             meal: '',
                             quantity: '',
@@ -827,7 +826,7 @@ export default {
                             fat: ''
                         };
                         uni.showToast({
-                            title: '已取消選取',
+                            title: this.$t('page.add.photo.cancel-confirm.success'),
                             icon: 'success',
                             duration: 1500
                         });
@@ -843,24 +842,20 @@ export default {
 
             try {
                 uni.showLoading({
-                    title: '正在分析...',
+                    title: this.$t('page.add.photo.analyzing'),
                     mask: true
                 });
 
-                // 处理文件路径
                 let processedFilePath = this.previewImage;
                 if (processedFilePath.startsWith('file://')) {
                     processedFilePath = this.previewImage.replace('file://', '');
                 }
 
-                // 1. 调用分析API
                 const response = await addApi.getVersion(processedFilePath);
 
-                // 2. 处理响应结果
                 if (response.code === 'A0001' && response.data) {
                     const {data} = response;
 
-                    // 3. 映射API返回数据到表单
                     this.formData1 = {
                         name: data.name,
                         calorie: data.calorie,
@@ -873,13 +868,11 @@ export default {
                     this.formData1.quantity = '1';
                     this.formData1.unit = this.quickUnits1[0];
 
-                    // 4. 显示成功提示
                     uni.showToast({
-                        title: '分析成功',
+                        title: this.$t('page.add.photo.analysis-complete'),
                         icon: 'success'
                     });
 
-                    // 5. 更新分析完成状态
                     this.analysisCompleted = true;
 
                 } else {
@@ -894,7 +887,6 @@ export default {
                     icon: 'error'
                 });
 
-                // 6. 分析失败时重置状态
                 this.isLoading = false;
                 this.analysisCompleted = false;
                 this.formData1 = {
@@ -928,21 +920,21 @@ export default {
 
         validateFormData1() {
             const requiredFields = {
-                date: '日期',
-                meal: '餐食类型',
-                name: '食物名称',
-                quantity: '数量',
-                unit: '单位',
-                calorie: '热量',
-                carbohydrate: '碳水化合物',
-                protein: '蛋白质',
-                fat: '脂肪'
+                date: this.$t('page.add.form.date'),
+                meal: this.$t('meal.breakfast'), // 使用通用的餐食类型翻译
+                name: this.$t('page.add.form.food-name'),
+                quantity: this.$t('page.add.form.quantity'),
+                unit: this.$t('page.add.form.unit.title'),
+                calorie: this.$t('nutrition.calorie.name'),
+                carbohydrate: this.$t('nutrition.carbohydrate.name'),
+                protein: this.$t('nutrition.protein.name'),
+                fat: this.$t('nutrition.fat.name')
             };
 
             for (const [field, label] of Object.entries(requiredFields)) {
-                if (!this.formData2[field]) {
+                if (!this.formData1[field]) {
                     uni.showToast({
-                        title: `请填写${label}`,
+                        title: this.$t('page.add.validation.required', {field: label}),
                         icon: 'error'
                     });
                     return false;
@@ -952,10 +944,10 @@ export default {
             // 检查数值字段是否为有效数字
             const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
             for (const field of numericFields) {
-                const value = Number(this.formData2[field]);
+                const value = Number(this.formData1[field]);
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: `${requiredFields[field]}不可以小于0`,
+                        title: this.$t('page.add.validation.positive', {field: requiredFields[field]}),
                         icon: 'error'
                     });
                     return false;
@@ -966,35 +958,35 @@ export default {
         },
 
         validateFormData2() {
+            // 与 validateFormData1 相同的实现，只是使用 formData2
             const requiredFields = {
-                date: '日期',
-                meal: '餐食类型',
-                name: '食物名称',
-                quantity: '数量',
-                unit: '单位',
-                calorie: '热量',
-                carbohydrate: '碳水化合物',
-                protein: '蛋白质',
-                fat: '脂肪'
+                date: this.$t('page.add.form.date'),
+                meal: this.$t('meal.breakfast'),
+                name: this.$t('page.add.form.food-name'),
+                quantity: this.$t('page.add.form.quantity'),
+                unit: this.$t('page.add.form.unit.title'),
+                calorie: this.$t('nutrition.calorie.name'),
+                carbohydrate: this.$t('nutrition.carbohydrate.name'),
+                protein: this.$t('nutrition.protein.name'),
+                fat: this.$t('nutrition.fat.name')
             };
 
             for (const [field, label] of Object.entries(requiredFields)) {
                 if (!this.formData2[field]) {
                     uni.showToast({
-                        title: `请填写${label}`,
+                        title: this.$t('page.add.validation.required', {field: label}),
                         icon: 'error'
                     });
                     return false;
                 }
             }
 
-            // 检查数值字段是否为有效数字
             const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
             for (const field of numericFields) {
                 const value = Number(this.formData2[field]);
-                if (isNaN(value) || value < 0) {
+                if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: `${requiredFields[field]}不可以小于0`,
+                        title: this.$t('page.add.validation.positive', {field: requiredFields[field]}),
                         icon: 'error'
                     });
                     return false;
@@ -1005,9 +997,8 @@ export default {
         },
 
         async saveData1() {
-            if (this.isLoading) return
+            if (this.isLoading) return;
 
-            // 添加表单验证
             if (!this.validateFormData1()) {
                 return;
             }
@@ -1040,9 +1031,9 @@ export default {
         },
 
         async saveData2() {
-            if (this.isLoading) return
+            // 实现与 saveData1 相同，只是使用 formData2
+            if (this.isLoading) return;
 
-            // 添加表单验证
             if (!this.validateFormData2()) {
                 return;
             }
