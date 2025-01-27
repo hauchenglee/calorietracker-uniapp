@@ -14,22 +14,22 @@
             :show="showPicker"
             :type="type"
             :value="currentDate"
-            @confirm="onDatePickerConfirm"
             @cancel="onDatePickerCancel"
+            @confirm="onDatePickerConfirm"
         />
 
         <!-- 有身体数据时显示的内容 -->
-        <view class="nutrition-summary" v-if="isBodyExist">
+        <view v-if="isBodyExist" class="nutrition-summary">
             <view class="progress-item">
                 <view class="progress-header">
                     <view class="progress-label">
                         <view class="progress-icon calories">🔥</view>
-                        <text>卡路里</text>
+                        <text>{{ $t('nutrition.calorie.name') }}</text>
                     </view>
-                    <text>{{ summary.calorieIntake }} / {{ summary.calorieTotal }} kcal</text>
+                    <text>{{ summary.calorieIntake }} / {{ summary.calorieTotal }} {{ $t('nutrition.calorie.unit') }}</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill calories" :style="{ width: summary.caloriePercent + '%' }"></view>
+                    <view :style="{ width: summary.caloriePercent + '%' }" class="progress-fill calories"></view>
                 </view>
             </view>
 
@@ -37,12 +37,12 @@
                 <view class="progress-header">
                     <view class="progress-label">
                         <view class="progress-icon carbs">🌾</view>
-                        <text>碳水化合物</text>
+                        <text>{{ $t('nutrition.carbohydrate.name') }}</text>
                     </view>
-                    <text>{{ summary.carbohydrateIntake }} / {{ summary.carbohydrateTotal }} g</text>
+                    <text>{{ summary.carbohydrateIntake }} / {{ summary.carbohydrateTotal }} {{ $t('nutrition.carbohydrate.unit') }}</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill carbs" :style="{ width: summary.carbohydratePercent + '%' }"></view>
+                    <view :style="{ width: summary.carbohydratePercent + '%' }" class="progress-fill carbs"></view>
                 </view>
             </view>
 
@@ -50,12 +50,12 @@
                 <view class="progress-header">
                     <view class="progress-label">
                         <view class="progress-icon protein">🥩</view>
-                        <text>蛋白质</text>
+                        <text>{{ $t('nutrition.protein.name') }}</text>
                     </view>
-                    <text>{{ summary.proteinIntake }} / {{ summary.proteinTotal }} g</text>
+                    <text>{{ summary.proteinIntake }} / {{ summary.proteinTotal }} {{ $t('nutrition.protein.unit') }}</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill protein" :style="{ width: summary.proteinPercent + '%' }"></view>
+                    <view :style="{ width: summary.proteinPercent + '%' }" class="progress-fill protein"></view>
                 </view>
             </view>
 
@@ -63,23 +63,23 @@
                 <view class="progress-header">
                     <view class="progress-label">
                         <view class="progress-icon fat">🥑</view>
-                        <text>脂肪</text>
+                        <text>{{ $t('nutrition.fat.name') }}</text>
                     </view>
-                    <text>{{ summary.fatIntake }} / {{ summary.fatTotal }} g</text>
+                    <text>{{ summary.fatIntake }} / {{ summary.fatTotal }} {{ $t('nutrition.fat.unit') }}</text>
                 </view>
                 <view class="progress-bar">
-                    <view class="progress-fill fat" :style="{ width: summary.fatPercent + '%' }"></view>
+                    <view :style="{ width: summary.fatPercent + '%' }" class="progress-fill fat"></view>
                 </view>
             </view>
         </view>
 
         <!-- 无身体数据时显示的提示 -->
-        <view class="setup-reminder" v-else>
+        <view v-else class="setup-reminder">
             <view class="reminder-card">
                 <view class="reminder-icon">📝</view>
-                <view class="reminder-title">请先设置身体基本数据</view>
-                <view class="reminder-desc">设置基本数据后，我们将为您计算个性化的营养需求</view>
-                <button class="setup-btn" @tap="navigateToSetup">去设置</button>
+                <view class="reminder-title">{{ $t('page.diary.reminder-title') }}</view>
+                <view class="reminder-desc">{{ $t('page.diary.reminder-desc') }}</view>
+                <button class="setup-btn" @tap="navigateToSetup">{{ $t('page.diary.setup-btn') }}</button>
             </view>
         </view>
 
@@ -90,31 +90,31 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">🌅</view>
-                        <text>早餐</text>
+                        <text>{{ $t('meal.breakfast') }}</text>
                     </view>
-                    <text>{{ calculateMealCalories(dietData.breakfast) }} kcal</text>
+                    <text>{{ calculateMealCalories(dietData.breakfast) }} {{ $t('nutrition.calorie.unit') }}</text>
                 </view>
 
                 <view v-if="dietData.breakfast && dietData.breakfast.length > 0">
-                    <view class="food-row" v-for="food in dietData.breakfast" :key="food.id">
+                    <view v-for="food in dietData.breakfast" :key="food.id" class="food-row">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
-                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
-                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
                         <view class="food-calories">
                             <text class="calories-value">{{ food.calorie }}</text>
-                            <text class="calories-unit">kcal</text>
+                            <text class="calories-unit">{{ $t('nutrition.calorie.unit') }}</text>
                         </view>
                     </view>
                 </view>
                 <view v-else class="empty-state">
-                    <text>暂无记录</text>
+                    <text>{{ $t('page.diary.empty-state') }}</text>
                 </view>
             </view>
 
@@ -123,31 +123,31 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">☀️</view>
-                        <text>午餐</text>
+                        <text>{{ $t('meal.lunch') }}</text>
                     </view>
                     <text>{{ calculateMealCalories(dietData.lunch) }} kcal</text>
                 </view>
 
                 <view v-if="dietData.lunch && dietData.lunch.length > 0">
-                    <view class="food-row" v-for="food in dietData.lunch" :key="food.id">
+                    <view v-for="food in dietData.lunch" :key="food.id" class="food-row">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
-                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
-                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
                         <view class="food-calories">
                             <text class="calories-value">{{ food.calorie }}</text>
-                            <text class="calories-unit">kcal</text>
+                            <text class="calories-unit">{{ $t('nutrition.calorie.unit') }}</text>
                         </view>
                     </view>
                 </view>
                 <view v-else class="empty-state">
-                    <text>暂无记录</text>
+                    <text>{{ $t('page.diary.empty-state') }}</text>
                 </view>
             </view>
 
@@ -156,31 +156,31 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">🌙</view>
-                        <text>晚餐</text>
+                        <text>{{ $t('meal.dinner') }}</text>
                     </view>
                     <text>{{ calculateMealCalories(dietData.dinner) }} kcal</text>
                 </view>
 
                 <view v-if="dietData.dinner && dietData.dinner.length > 0">
-                    <view class="food-row" v-for="food in dietData.dinner" :key="food.id">
+                    <view v-for="food in dietData.dinner" :key="food.id" class="food-row">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">碳水 {{ food.carbohydrate }}g</text>
-                                    <text class="food-protein">蛋白质 {{ food.protein }}g</text>
-                                    <text class="food-fat">脂肪 {{ food.fat }}g</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
                         <view class="food-calories">
                             <text class="calories-value">{{ food.calorie }}</text>
-                            <text class="calories-unit">kcal</text>
+                            <text class="calories-unit">{{ $t('nutrition.calorie.unit') }}</text>
                         </view>
                     </view>
                 </view>
                 <view v-else class="empty-state">
-                    <text>暂无记录</text>
+                    <text>{{ $t('page.diary.empty-state') }}</text>
                 </view>
             </view>
         </view>
@@ -254,7 +254,7 @@ export default {
             await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
             uni.showToast({
-                title: 'onShow error',
+                title: error.message,
                 icon: 'error'
             });
         } finally {
@@ -387,7 +387,7 @@ export default {
                 });
             } else {
                 uni.showToast({
-                    title: '請先設置身體基礎數據',
+                    title: this.$t('page.diary.please-setup-body'),
                     icon: 'error'
                 });
             }

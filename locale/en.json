@@ -1,0 +1,223 @@
+{
+  "index.title": "Hello",
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "reanalyze": "Reanalyze"
+  },
+  "nutrition": {
+    "calorie": {
+      "name": "Calories",
+      "unit": "kcal"
+    },
+    "carbohydrate": {
+      "name": "Carbohydrates",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "Protein",
+      "unit": "g"
+    },
+    "fat": {
+      "name": "Fat",
+      "unit": "g"
+    }
+  },
+  "meal": {
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner"
+  },
+  "page": {
+    "login": {
+      "logo-text": "Diet Records",
+      "logo-subtitle": "Track Foods, Monitor Nutrition",
+      "account": "Account",
+      "account-placeholder": "Enter your account",
+      "password": "Password",
+      "password-placeholder": "Enter your password",
+      "login-button": "Sign In",
+      "register-account": "Create Account",
+      "forgot-password": "Forgot Password",
+      "account-not-exist": "Account not found",
+      "register-confirm": "Register with current credentials?",
+      "registering": "Registering...",
+      "register-login-success": "Registration successful",
+      "register-failed": "Registration failed",
+      "use-other-account": "Sign in with another account",
+      "operation-failed": "Operation failed",
+      "login-success": "Login successful",
+      "register-success": "Registration done",
+      "third-party-login": "Other Sign-in Options",
+      "third-party-google": "Google",
+      "third-party-apple": "Apple",
+      "messages": {
+        "input-required": "Enter account and password",
+        "account-not-exist": "Account not found",
+        "register-confirm": "Register with current credentials?",
+        "registering": "Registering...",
+        "register-login-success": "Registration successful",
+        "register-failed": "Registration failed",
+        "use-other-account": "Use another account",
+        "login-success": "Login successful",
+        "register-success": "Registration done",
+        "developing": "Login in development"
+      }
+    },
+    "diary": {
+      "reminder-title": "Set Body Data First",
+      "reminder-desc": "We'll calculate your nutrition needs after setup",
+      "please-setup-body": "Please set up body data first",
+      "setup-btn": "Set Up Now",
+      "empty-state": "No Records",
+      "date": {
+        "get-data-error": "Failed to load data"
+      }
+    },
+    "add": {
+      "tab": {
+        "photo": "Photo Scan",
+        "manual": "Manual Entry"
+      },
+      "photo": {
+        "title": "Select Method",
+        "take-photo": "Take Photo",
+        "select-gallery": "Choose from Gallery",
+        "preview-title": "Image Preview",
+        "retake": "Choose Again",
+        "analyze": "Start Analysis",
+        "cancel": "Cancel Select",
+        "analyzing": "Analyzing...",
+        "analysis-complete": "Analysis Done",
+        "cancel-confirm": {
+          "title": "Cancel Selection",
+          "content": "Cancel current image selection?",
+          "success": "Selection canceled"
+        }
+      },
+      "manual": {
+        "title": "Manual Entry"
+      },
+      "form": {
+        "date": "Date",
+        "date-placeholder": "Select date",
+        "food-name": "Food Name",
+        "quantity": "Amount",
+        "quantity-range": "1~99",
+        "unit": {
+          "title": "Select Unit",
+          "placeholder": "Choose unit",
+          "custom-placeholder": "Enter custom unit"
+        },
+        "daily-recommended": "Daily Recommended"
+      },
+      "validation": {
+        "required": "Please enter %s",
+        "positive": "%s must not be below 0"
+      },
+      "message": {
+        "take-picture": "Photo failed",
+        "select-gallery": "Selection failed"
+      }
+    },
+    "more": {
+      "greeting": "Hello There",
+      "member-level": "Basic Member",
+      "menu": {
+        "body-data": "Body Data",
+        "diet-plan": "Daily Nutrition Plan",
+        "statistics": "Statistics",
+        "settings": "Settings",
+        "help": "Help Center"
+      },
+      "badge": {
+        "new": "New"
+      },
+      "messages": {
+        "setup-body-first": "Set up body data first",
+        "navigation-failed": "Navigation failed"
+      }
+    },
+    "body": {
+      "header": {
+        "title": "Body Data Setup",
+        "description": "Enter your info for personalized nutrition plan"
+      },
+      "form": {
+        "birthday": {
+          "label": "Birth Date",
+          "placeholder": "Select birth date"
+        },
+        "gender": {
+          "label": "Gender",
+          "male": "Male",
+          "female": "Female"
+        },
+        "height": {
+          "label": "Height",
+          "placeholder": "Enter height",
+          "unit": "cm"
+        },
+        "weight": {
+          "label": "Weight",
+          "placeholder": "Enter weight",
+          "unit": "kg"
+        }
+      },
+      "validation": {
+        "required": "Please enter %s",
+        "positive": "%s must be above 0",
+        "height-range": "Height must be 100-300cm",
+        "weight-range": "Weight must be 20-300kg"
+      }
+    },
+    "diet-plan": {
+      "header": {
+        "title": "Nutrition Plan",
+        "description": "Your personalized nutrition recommendations"
+      },
+      "sources": {
+        "title": "Nutrition Sources",
+        "carbs": {
+          "name": "Carbohydrates",
+          "sources": [
+            "Whole Grains",
+            "Fruits",
+            "Vegetables",
+            "Oats"
+          ]
+        },
+        "protein": {
+          "name": "Protein",
+          "sources": [
+            "Lean Meat",
+            "Fish",
+            "Eggs",
+            "Soy Foods",
+            "Chicken"
+          ]
+        },
+        "fat": {
+          "name": "Fat",
+          "sources": [
+            "Nuts",
+            "Olive Oil",
+            "Avocado",
+            "Fish Oil"
+          ]
+        }
+      },
+      "implementation": {
+        "title": "Implementation Tips",
+        "expand": "Expand",
+        "collapse": "Collapse"
+      },
+      "daily-intake": {
+        "title": "Daily Intake",
+        "suggested-value": "Target"
+      }
+    }
+  }
+}

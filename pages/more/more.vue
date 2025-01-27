@@ -5,8 +5,8 @@
         <view class="profile-card">
             <view class="avatar">👤</view>
             <view class="user-info">
-                <text class="username">Hello 你好</text>
-                <text class="user-level">普通會員</text>
+                <text class="username">{{ $t('page.more.greeting') }}</text>
+                <text class="user-level">{{ $t('page.more.member-level') }}</text>
             </view>
             <text class="arrow">></text>
         </view>
@@ -14,12 +14,16 @@
         <!-- 设置列表 -->
         <view class="menu-section">
             <view class="list-menu">
-                <view class="list-item" v-for="(item, index) in settingItems" :key="index" @tap="navigateTo(item.path)">
+                <view v-for="(item, index) in settingItems"
+                      :key="index"
+                      class="list-item"
+                      @tap="navigateTo(item.path)"
+                >
                     <view class="list-left">
                         <view class="list-icon">{{ item.icon }}</view>
-                        <text>{{ item.label }}</text>
+                        <text>{{ $t(item.labelKey) }}</text>
                     </view>
-                    <text v-if="item.badge" class="badge">{{ item.badge }}</text>
+                    <text v-if="item.badge" class="badge">{{ $t('common.save') }}</text>
                     <text v-else class="arrow">></text>
                 </view>
             </view>
@@ -40,11 +44,32 @@ export default {
             isBodyExist: false, // 如果已设置body数据
 
             settingItems: [
-                {icon: '📝', label: '身体基础数据', path: '/pages/more/body/body'},
-                {icon: '🎯', label: '每日营养建议', path: '/pages/more/diet-plan/diet-plan'},
-                // {icon: '📊', label: '数据统计', path: '/pages/more/statistic/statistic', badge: '新'},
-                {icon: '⚙️', label: '系统设置', path: '/pages/more/setting/setting'},
-                // {icon: '💡', label: '帮助中心', path: '/pages/more/support/support'}
+                {
+                    icon: '📝',
+                    labelKey: 'page.more.menu.body-data',
+                    path: '/pages/more/body/body'
+                },
+                {
+                    icon: '🎯',
+                    labelKey: 'page.more.menu.diet-plan',
+                    path: '/pages/more/diet-plan/diet-plan'
+                },
+                // {
+                //     icon: '📊',
+                //     labelKey: 'page.more.menu.statistics',
+                //     path: '/pages/more/statistic/statistic',
+                //     badge: true
+                // },
+                // {
+                //     icon: '⚙️',
+                //     labelKey: 'page.more.menu.settings',
+                //     path: '/pages/more/setting/setting'
+                // },
+                // {
+                //     icon: '💡',
+                //     labelKey: 'page.more.menu.help',
+                //     path: '/pages/more/support/support'
+                // }
             ]
         }
     },
@@ -62,7 +87,7 @@ export default {
             await this.checkBody();
         } catch (error) {
             uni.showToast({
-                title: 'onShow error',
+                title: error.message,
                 icon: 'error'
             });
         } finally {
@@ -78,7 +103,7 @@ export default {
                 // 如果是diet-plan页面且没有body数据
                 if (!this.isBodyExist) {
                     uni.showToast({
-                        title: '請先設置身體基礎數據',
+                        title: this.$t('page.more.messages.setup-body-first'),
                         icon: 'error'
                     });
                     return; // 阻止路由跳转
@@ -87,10 +112,9 @@ export default {
 
             uni.navigateTo({
                 url: path,
-                fail(err) {
-                    console.error('页面跳转失败：', err)
+                fail(error) {
                     uni.showToast({
-                        title: '页面跳转失败',
+                        title: this.$t('page.more.messages.navigation-failed'),
                         icon: 'error'
                     })
                 }

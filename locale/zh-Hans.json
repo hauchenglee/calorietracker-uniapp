@@ -1,0 +1,223 @@
+{
+  "index.title": "您好",
+  "common": {
+    "confirm": "确定",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "编辑",
+    "reanalyze": "重新分析"
+  },
+  "nutrition": {
+    "calorie": {
+      "name": "卡路里",
+      "unit": "kcal"
+    },
+    "carbohydrate": {
+      "name": "碳水化合物",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "蛋白质",
+      "unit": "g"
+    },
+    "fat": {
+      "name": "脂肪",
+      "unit": "g"
+    }
+  },
+  "meal": {
+    "breakfast": "早餐",
+    "lunch": "午餐",
+    "dinner": "晚餐"
+  },
+  "page": {
+    "login": {
+      "logo-text": "饮食记录",
+      "logo-subtitle": "记录美食，追踪营养",
+      "account": "账号",
+      "account-placeholder": "请输入账号",
+      "password": "密码",
+      "password-placeholder": "请输入密码",
+      "login-button": "登入",
+      "register-account": "注册账号",
+      "forgot-password": "忘记密码",
+      "account-not-exist": "账号不存在",
+      "register-confirm": "是否使用当前账号密码进行注册？",
+      "registering": "正在注册",
+      "register-login-success": "注册并登入成功",
+      "register-failed": "注册失败",
+      "use-other-account": "您可以使用其他账号登入",
+      "operation-failed": "操作失败",
+      "login-success": "登入成功",
+      "register-success": "注册成功",
+      "third-party-login": "其他登入方式",
+      "third-party-google": "Google",
+      "third-party-apple": "Apple",
+      "messages": {
+        "input-required": "请输入账号和密码",
+        "account-not-exist": "账号不存在",
+        "register-confirm": "是否使用当前账号密码进行注册？",
+        "registering": "正在注册",
+        "register-login-success": "注册并登入成功",
+        "register-failed": "注册失败",
+        "use-other-account": "您可以使用其他账号登入",
+        "login-success": "登入成功",
+        "register-success": "注册成功",
+        "developing": "登入开发中"
+      }
+    },
+    "diary": {
+      "reminder-title": "请先设定身体基本数据",
+      "reminder-desc": "设定基本数据后，我们将为您计算个人化的营养需求",
+      "please-setup-body": "请先设置身体基础数据",
+      "setup-btn": "去设置",
+      "empty-state": "暂无记录",
+      "date": {
+        "get-data-error": "获取数据失败"
+      }
+    },
+    "add": {
+      "tab": {
+        "photo": "拍照识别",
+        "manual": "手动记录"
+      },
+      "photo": {
+        "title": "选择方式",
+        "take-photo": "拍照",
+        "select-gallery": "从相册选择",
+        "preview-title": "图片预览",
+        "retake": "重新选择",
+        "analyze": "开始分析",
+        "cancel": "取消选取",
+        "analyzing": "正在分析...",
+        "analysis-complete": "分析成功",
+        "cancel-confirm": {
+          "title": "取消选取",
+          "content": "确定要取消选取当前图片吗？",
+          "success": "已取消选取"
+        }
+      },
+      "manual": {
+        "title": "手动记录"
+      },
+      "form": {
+        "date": "日期",
+        "date-placeholder": "请选择日期",
+        "food-name": "食物名称",
+        "quantity": "数量",
+        "quantity-range": "1~99",
+        "unit": {
+          "title": "选择单位",
+          "placeholder": "选择单位",
+          "custom-placeholder": "输入自定义单位"
+        },
+        "daily-recommended": "每日推荐"
+      },
+      "validation": {
+        "required": "请填写%s",
+        "positive": "%s不可以小于0"
+      },
+      "message": {
+        "take-picture": "拍照失败",
+        "select-gallery": "选取图片失败"
+      }
+    },
+    "more": {
+      "greeting": "Hello 你好",
+      "member-level": "普通会员",
+      "menu": {
+        "body-data": "身体基础数据",
+        "diet-plan": "每日营养建议",
+        "statistics": "数据统计",
+        "settings": "系统设置",
+        "help": "帮助中心"
+      },
+      "badge": {
+        "new": "新"
+      },
+      "messages": {
+        "setup-body-first": "请先设置身体基础数据",
+        "navigation-failed": "导航失败"
+      }
+    },
+    "body": {
+      "header": {
+        "title": "基础数据设置",
+        "description": "请填写您的基本信息，我们将为您计算个性化的营养建议"
+      },
+      "form": {
+        "birthday": {
+          "label": "出生日期",
+          "placeholder": "请选择出生日期"
+        },
+        "gender": {
+          "label": "性别",
+          "male": "男",
+          "female": "女"
+        },
+        "height": {
+          "label": "身高",
+          "placeholder": "请输入身高",
+          "unit": "cm"
+        },
+        "weight": {
+          "label": "体重",
+          "placeholder": "请输入体重",
+          "unit": "kg"
+        }
+      },
+      "validation": {
+        "required": "请填写%s",
+        "positive": "%s必须大于0",
+        "height-range": "身高必须在100-300cm之间",
+        "weight-range": "体重必须在20-300kg之间"
+      }
+    },
+    "diet-plan": {
+      "header": {
+        "title": "营养建议设置",
+        "description": "根据您的身体数据，我们为您计算了以下营养建议值"
+      },
+      "sources": {
+        "title": "营养素来源建议",
+        "carbs": {
+          "name": "碳水化合物",
+          "sources": [
+            "全谷物",
+            "水果",
+            "蔬菜",
+            "燕麦"
+          ]
+        },
+        "protein": {
+          "name": "蛋白质",
+          "sources": [
+            "瘦肉",
+            "鱼",
+            "蛋",
+            "豆制品",
+            "鸡胸肉"
+          ]
+        },
+        "fat": {
+          "name": "脂肪",
+          "sources": [
+            "坚果",
+            "橄榄油",
+            "牛油果",
+            "鱼油"
+          ]
+        }
+      },
+      "implementation": {
+        "title": "具体实施建议",
+        "expand": "展开",
+        "collapse": "收起"
+      },
+      "daily-intake": {
+        "title": "每日推荐摄入",
+        "suggested-value": "建议值"
+      }
+    }
+  }
+}

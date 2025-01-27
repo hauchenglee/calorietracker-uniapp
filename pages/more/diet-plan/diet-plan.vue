@@ -5,8 +5,8 @@
         <view class="setup-reminder">
             <view class="reminder-card">
                 <view class="reminder-icon">📊</view>
-                <view class="reminder-title">营养建议设置</view>
-                <view class="reminder-desc">根据您的身体数据，我们为您计算了以下营养建议值</view>
+                <view class="reminder-title">{{ $t('page.diet-plan.header.title') }}</view>
+                <view class="reminder-desc">{{ $t('page.diet-plan.header.description') }}</view>
             </view>
         </view>
 
@@ -15,7 +15,7 @@
             <view class="category-header">
                 <view class="category-title">
                     <view class="category-icon">🥗</view>
-                    <text>营养素来源建议</text>
+                    <text>{{ $t('page.diet-plan.sources.title') }}</text>
                 </view>
             </view>
 
@@ -24,7 +24,7 @@
                 <view class="food-detail">
                     <view class="progress-icon carbs">🌾</view>
                     <view class="food-info">
-                        <text class="food-name">碳水化合物</text>
+                        <text class="food-name">{{ $t('page.diet-plan.sources.carbs.name') }}</text>
                         <view class="food-sources">
                             <text class="source-tag">全谷物</text>
                             <text class="source-tag">水果</text>
@@ -40,7 +40,7 @@
                 <view class="food-detail">
                     <view class="progress-icon protein">🥩</view>
                     <view class="food-info">
-                        <text class="food-name">蛋白质</text>
+                        <text class="food-name">{{ $t('page.diet-plan.sources.protein.name') }}</text>
                         <view class="food-sources">
                             <text class="source-tag">瘦肉</text>
                             <text class="source-tag">鱼</text>
@@ -57,7 +57,7 @@
                 <view class="food-detail">
                     <view class="progress-icon fat">🥑</view>
                     <view class="food-info">
-                        <text class="food-name">脂肪</text>
+                        <text class="food-name">{{ $t('page.diet-plan.sources.fat.name') }}</text>
                         <view class="food-sources">
                             <text class="source-tag">坚果</text>
                             <text class="source-tag">橄榄油</text>
@@ -74,15 +74,15 @@
             <view class="category-header" @tap="toggleAdvice">
                 <view class="category-title">
                     <view class="category-icon">📝</view>
-                    <text>具体实施建议</text>
+                    <text>{{ $t('page.diet-plan.implementation.title') }}</text>
                 </view>
-                <view class="expand-icon" :class="{ 'is-expanded': isAdviceExpanded }">
+                <view :class="{ 'is-expanded': isAdviceExpanded }" class="expand-icon">
                     <text>↓</text>
                 </view>
             </view>
 
-            <view class="advice-list" :class="{ 'is-expanded': isAdviceExpanded }">
-                <view class="advice-item" v-for="(item, index) in implementationAdvice" :key="index">
+            <view :class="{ 'is-expanded': isAdviceExpanded }" class="advice-list">
+                <view v-for="(item, index) in implementationAdvice" :key="index" class="advice-item">
                     <view class="advice-number">{{ index + 1 }}</view>
                     <text class="advice-text">{{ item }}</text>
                 </view>
@@ -94,7 +94,7 @@
             <view class="category-header">
                 <view class="category-title">
                     <view class="category-icon">⚡️</view>
-                    <text>每日推荐摄入</text>
+                    <text>{{ $t('page.diet-plan.daily-intake.title') }}</text>
                 </view>
             </view>
 
@@ -103,15 +103,15 @@
                 <view class="food-detail">
                     <view class="progress-icon calories">🔥</view>
                     <view class="food-info">
-                        <text class="food-name">卡路里</text>
+                        <text class="food-name">{{ $t('nutrition.calorie.name') }}</text>
                         <view>
-                            <text class="value-tag calories">建议值</text>
+                            <text class="value-tag calories">{{ $t('page.diet-plan.daily-intake.suggested-value') }}</text>
                         </view>
                     </view>
                 </view>
                 <view class="food-calories">
                     <text class="calories-value">{{ dietPlan.calorie }}</text>
-                    <text class="calories-unit">kcal</text>
+                    <text class="calories-unit">{{ $t('nutrition.calorie.unit') }}</text>
                 </view>
                 <button class="edit-btn">✏️</button>
             </view>
@@ -121,7 +121,7 @@
                 <view class="food-detail">
                     <view class="progress-icon carbs">🌾</view>
                     <view class="food-info">
-                        <text class="food-name">碳水化合物</text>
+                        <text class="food-name">{{ $t('nutrition.carbohydrate.name') }}</text>
                         <view>
                             <text class="value-tag carbs">{{ nutritionPercentages.carbs }}%</text>
                         </view>
@@ -129,7 +129,7 @@
                 </view>
                 <view class="food-calories">
                     <text class="calories-value">{{ dietPlan.carbohydrate }}</text>
-                    <text class="calories-unit">g</text>
+                    <text class="calories-unit">{{ $t('nutrition.carbohydrate.unit') }}</text>
                 </view>
                 <button class="edit-btn">✏️</button>
             </view>
@@ -139,7 +139,7 @@
                 <view class="food-detail">
                     <view class="progress-icon protein">🥩</view>
                     <view class="food-info">
-                        <text class="food-name">蛋白质</text>
+                        <text class="food-name">{{ $t('nutrition.protein.name') }}</text>
                         <view>
                             <text class="value-tag protein">{{ nutritionPercentages.protein }}%</text>
                         </view>
@@ -147,7 +147,7 @@
                 </view>
                 <view class="food-calories">
                     <text class="calories-value">{{ dietPlan.protein }}</text>
-                    <text class="calories-unit">g</text>
+                    <text class="calories-unit">{{ $t('nutrition.protein.unit') }}</text>
                 </view>
                 <button class="edit-btn">✏️</button>
             </view>
@@ -157,7 +157,7 @@
                 <view class="food-detail">
                     <view class="progress-icon fat">🥑</view>
                     <view class="food-info">
-                        <text class="food-name">脂肪</text>
+                        <text class="food-name">{{ $t('nutrition.fat.name') }}</text>
                         <view>
                             <text class="value-tag fat">{{ nutritionPercentages.fat }}%</text>
                         </view>
@@ -165,15 +165,15 @@
                 </view>
                 <view class="food-calories">
                     <text class="calories-value">{{ dietPlan.fat }}</text>
-                    <text class="calories-unit">g</text>
+                    <text class="calories-unit">{{ $t('nutrition.fat.unit') }}</text>
                 </view>
                 <button class="edit-btn">✏️</button>
             </view>
 
             <!-- 底部按钮 -->
             <view class="button-group">
-                <button class="reset-btn" @tap="renew">重新分析</button>
-                <button class="setup-btn" @tap="save">保存设置</button>
+                <button class="reset-btn" @tap="renew">{{ $t('common.reanalyze') }}</button>
+                <button class="setup-btn" @tap="save">{{ $t('common.save') }}</button>
             </view>
         </view>
 
@@ -204,7 +204,6 @@ export default {
     },
 
     onLoad() {
-        // 获取状态栏高度
         const systemInfo = uni.getSystemInfoSync()
         this.statusBarHeight = systemInfo.statusBarHeight
     },
@@ -215,7 +214,7 @@ export default {
             await this.initData();
         } catch (error) {
             uni.showToast({
-                title: 'onShow error',
+                title: error.message,
                 icon: 'error'
             });
         } finally {
@@ -251,7 +250,6 @@ export default {
             this.isAdviceExpanded = !this.isAdviceExpanded;
         },
 
-        // 添加一个处理detailedSuggestion的方法
         parseDetailedSuggestion(text) {
             if (!text) return [];
             // 分割文本并移除空行
@@ -271,7 +269,6 @@ export default {
             try {
                 const response = await dietPlanApi.getDietPlan({});
                 if (response.code === 'A0001') {
-                    console.log(response.data)
                     this.dietPlan = new DietPlan(response.data);
                     this.implementationAdvice = this.parseDetailedSuggestion(this.dietPlan.detailedSuggestion);
                 } else {
