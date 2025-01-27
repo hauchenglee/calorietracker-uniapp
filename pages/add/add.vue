@@ -72,7 +72,7 @@
                 <view class="category-header">
                     <view class="category-title">
                         <view class="category-icon">📊</view>
-                        <text>{{ $t('page.add.form.nutrition.title') }}</text>
+                        <text>{{ $t('page.add.category-title') }}</text>
                     </view>
                 </view>
 
@@ -676,12 +676,10 @@ export default {
         },
 
         selectMeal1(meal) {
-            console.log(meal)
             this.formData1.meal = meal
         },
 
         selectMeal2(meal) {
-            console.log(meal)
             this.formData2.meal = meal
         },
 
@@ -864,9 +862,14 @@ export default {
                         fat: data.fat
                     };
 
-                    this.date = new Date().toISOString().split('T')[0];
+                    this.formData1.date = new Date().toISOString().split('T')[0];
                     this.formData1.quantity = '1';
                     this.formData1.unit = this.quickUnits1[0];
+
+                    // 手動更新每個營養素的進度條
+                    ['calorie', 'carbohydrate', 'protein', 'fat'].forEach(nutrient => {
+                        this.updateProgress(nutrient, {detail: {value: this.formData1[nutrient]}});
+                    });
 
                     uni.showToast({
                         title: this.$t('page.add.photo.analysis-complete'),
@@ -921,14 +924,10 @@ export default {
         validateFormData1() {
             const requiredFields = {
                 date: this.$t('page.add.form.date'),
-                meal: this.$t('meal.breakfast'), // 使用通用的餐食类型翻译
+                meal: this.$t('meal.field-name'),
                 name: this.$t('page.add.form.food-name'),
                 quantity: this.$t('page.add.form.quantity'),
                 unit: this.$t('page.add.form.unit.title'),
-                calorie: this.$t('nutrition.calorie.name'),
-                carbohydrate: this.$t('nutrition.carbohydrate.name'),
-                protein: this.$t('nutrition.protein.name'),
-                fat: this.$t('nutrition.fat.name')
             };
 
             for (const [field, label] of Object.entries(requiredFields)) {
@@ -945,7 +944,7 @@ export default {
             const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
             for (const field of numericFields) {
                 const value = Number(this.formData1[field]);
-                if (isNaN(value) || value <= 0) {
+                if (isNaN(value) || value < 0) {
                     uni.showToast({
                         title: this.$t('page.add.validation.positive').replace('%s', requiredFields[field]),
                         icon: 'error'
@@ -961,14 +960,10 @@ export default {
             // 与 validateFormData1 相同的实现，只是使用 formData2
             const requiredFields = {
                 date: this.$t('page.add.form.date'),
-                meal: this.$t('meal.breakfast'),
+                meal: this.$t('meal.field-name'),
                 name: this.$t('page.add.form.food-name'),
                 quantity: this.$t('page.add.form.quantity'),
                 unit: this.$t('page.add.form.unit.title'),
-                calorie: this.$t('nutrition.calorie.name'),
-                carbohydrate: this.$t('nutrition.carbohydrate.name'),
-                protein: this.$t('nutrition.protein.name'),
-                fat: this.$t('nutrition.fat.name')
             };
 
             for (const [field, label] of Object.entries(requiredFields)) {
@@ -984,7 +979,7 @@ export default {
             const numericFields = ['quantity', 'calorie', 'carbohydrate', 'protein', 'fat'];
             for (const field of numericFields) {
                 const value = Number(this.formData2[field]);
-                if (isNaN(value) || value <= 0) {
+                if (isNaN(value) || value < 0) {
                     uni.showToast({
                         title: this.$t('page.add.validation.positive').replace('%s', requiredFields[field]),
                         icon: 'error'

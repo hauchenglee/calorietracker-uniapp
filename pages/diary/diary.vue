@@ -101,9 +101,9 @@
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
-                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
-                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate.name') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein.name') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat.name') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
@@ -134,9 +134,9 @@
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
-                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
-                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate.name') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein.name') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat.name') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
@@ -167,9 +167,9 @@
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
                                 <view>
-                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
-                                    <text class="food-protein">{{ $t('nutrition.protein') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
-                                    <text class="food-fat">{{ $t('nutrition.fat') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
+                                    <text class="food-carbohydrate">{{ $t('nutrition.carbohydrate.name') }} {{ food.carbohydrate }} {{ $t('nutrition.carbohydrate.unit') }}</text>
+                                    <text class="food-protein">{{ $t('nutrition.protein.name') }} {{ food.protein }} {{ $t('nutrition.protein.unit') }}</text>
+                                    <text class="food-fat">{{ $t('nutrition.fat.name') }} {{ food.fat }} {{ $t('nutrition.fat.unit') }}</text>
                                 </view>
                             </view>
                         </view>
@@ -267,7 +267,6 @@ export default {
         // 添加日期变更方法
         async changeDate(days) {
             this.isLoading = true;
-            console.log("change data: " + this.isLoading)
 
             const date = new Date(dateFormatter.formatToSlash(this.currentDate)); // 转换为斜杠格式以确保兼容性
             date.setDate(date.getDate() + days);

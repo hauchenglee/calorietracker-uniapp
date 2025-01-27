@@ -26,6 +26,7 @@
     }
   },
   "meal": {
+    "field-name": "餐食",
     "breakfast": "早餐",
     "lunch": "午餐",
     "dinner": "晚餐"
@@ -97,6 +98,7 @@
           "success": "已取消選取"
         }
       },
+      "category-title": "營養成分分析",
       "manual": {
         "title": "手動記錄"
       },

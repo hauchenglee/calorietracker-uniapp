@@ -21,7 +21,6 @@ export default {
         async validateToken(token) {
             try {
                 await new Promise(resolve => setTimeout(resolve, 500));
-                console.log(token)
                 const response = await loginApi.checkToken({"token": token});
                 if (response.code === 'A0001') {
                     this.isValid = true;

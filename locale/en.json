@@ -26,6 +26,7 @@
     }
   },
   "meal": {
+    "field-name": "meal",
     "breakfast": "Breakfast",
     "lunch": "Lunch",
     "dinner": "Dinner"
@@ -97,6 +98,7 @@
           "success": "Selection canceled"
         }
       },
+      "category-title": "Nutrition Analysis",
       "manual": {
         "title": "Manual Entry"
       },
