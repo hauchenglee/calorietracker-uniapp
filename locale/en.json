@@ -114,8 +114,8 @@
         "daily-recommended": "Daily Recommended"
       },
       "validation": {
-        "required": "Please enter {field}",
-        "positive": "{field} must be above 0"
+        "required": "Please enter %s",
+        "positive": "%s must not be below 0"
       },
       "message": {
         "take-picture": "Photo failed",
@@ -167,8 +167,8 @@
         }
       },
       "validation": {
-        "required": "Please enter {field}",
-        "positive": "{field} must be above 0",
+        "required": "Please enter %s",
+        "positive": "%s must be above 0",
         "height-range": "Height must be 100-300cm",
         "weight-range": "Weight must be 20-300kg"
       }

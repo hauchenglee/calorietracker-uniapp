@@ -114,8 +114,8 @@
         "daily-recommended": "每日推荐"
       },
       "validation": {
-        "required": "请填写{field}",
-        "positive": "{field}不可以小于0"
+        "required": "请填写%s",
+        "positive": "%s不可以小于0"
       },
       "message": {
         "take-picture": "拍照失败",
@@ -167,8 +167,8 @@
         }
       },
       "validation": {
-        "required": "请填写{field}",
-        "positive": "{field}必须大于0",
+        "required": "请填写%s",
+        "positive": "%s必须大于0",
         "height-range": "身高必须在100-300cm之间",
         "weight-range": "体重必须在20-300kg之间"
       }

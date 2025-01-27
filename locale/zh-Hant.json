@@ -114,8 +114,8 @@
         "daily-recommended": "每日推薦"
       },
       "validation": {
-        "required": "請填寫{field}",
-        "positive": "{field}不可以小於0"
+        "required": "請填寫%s",
+        "positive": "%s不可以小於0"
       },
       "message": {
         "take-picture": "拍照失敗",
@@ -167,8 +167,8 @@
         }
       },
       "validation": {
-        "required": "請填寫{field}",
-        "positive": "{field}必須大於0",
+        "required": "請填寫%s",
+        "positive": "%s必須大於0",
         "height-range": "身高必須在100-300cm之間",
         "weight-range": "體重必須在20-300kg之間"
       }

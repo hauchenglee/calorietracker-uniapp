@@ -934,7 +934,7 @@ export default {
             for (const [field, label] of Object.entries(requiredFields)) {
                 if (!this.formData1[field]) {
                     uni.showToast({
-                        title: this.$t('page.add.validation.required', {field: label}),
+                        title: this.$t('page.add.validation.required').replace('%s', label),
                         icon: 'error'
                     });
                     return false;
@@ -947,7 +947,7 @@ export default {
                 const value = Number(this.formData1[field]);
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: this.$t('page.add.validation.positive', {field: requiredFields[field]}),
+                        title: this.$t('page.add.validation.positive').replace('%s', requiredFields[field]),
                         icon: 'error'
                     });
                     return false;
@@ -974,7 +974,7 @@ export default {
             for (const [field, label] of Object.entries(requiredFields)) {
                 if (!this.formData2[field]) {
                     uni.showToast({
-                        title: this.$t('page.add.validation.required', {field: label}),
+                        title: this.$t('page.add.validation.required').replace('%s', label),
                         icon: 'error'
                     });
                     return false;
@@ -986,7 +986,7 @@ export default {
                 const value = Number(this.formData2[field]);
                 if (isNaN(value) || value <= 0) {
                     uni.showToast({
-                        title: this.$t('page.add.validation.positive', {field: requiredFields[field]}),
+                        title: this.$t('page.add.validation.positive').replace('%s', requiredFields[field]),
                         icon: 'error'
                     });
                     return false;
