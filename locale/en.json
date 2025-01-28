@@ -219,6 +219,9 @@
       "daily-intake": {
         "title": "Daily Intake",
         "suggested-value": "Target"
+      },
+      "message": {
+        "total-percentage": "Percentages must add up to 100%"
       }
     }
   }

@@ -104,16 +104,12 @@
                     <view class="progress-icon calories">🔥</view>
                     <view class="food-info">
                         <text class="food-name">{{ $t('nutrition.calorie.name') }}</text>
-                        <view>
-                            <text class="value-tag calories">{{ $t('page.diet-plan.daily-intake.suggested-value') }}</text>
-                        </view>
                     </view>
                 </view>
                 <view class="food-calories">
                     <text class="calories-value">{{ dietPlan.calorie }}</text>
                     <text class="calories-unit">{{ $t('nutrition.calorie.unit') }}</text>
                 </view>
-                <button class="edit-btn">✏️</button>
             </view>
 
             <!-- 碳水化合物 -->
@@ -122,8 +118,17 @@
                     <view class="progress-icon carbs">🌾</view>
                     <view class="food-info">
                         <text class="food-name">{{ $t('nutrition.carbohydrate.name') }}</text>
-                        <view>
-                            <text class="value-tag carbs">{{ nutritionPercentages.carbs }}%</text>
+                        <view class="percentage-adjuster">
+                            <text class="value-tag">{{ nutritionPercentages.carbs }}%</text>
+                            <slider
+                                class="percentage-slider"
+                                :value="nutritionPercentages.carbs"
+                                :min="5"
+                                :max="90"
+                                :step="5"
+                                @changing="(e) => updatePercentage('carbs', e.detail.value)"
+                                @change="(e) => updatePercentage('carbs', e.detail.value)"
+                            />
                         </view>
                     </view>
                 </view>
@@ -131,7 +136,6 @@
                     <text class="calories-value">{{ dietPlan.carbohydrate }}</text>
                     <text class="calories-unit">{{ $t('nutrition.carbohydrate.unit') }}</text>
                 </view>
-                <button class="edit-btn">✏️</button>
             </view>
 
             <!-- 蛋白质 -->
@@ -140,8 +144,17 @@
                     <view class="progress-icon protein">🥩</view>
                     <view class="food-info">
                         <text class="food-name">{{ $t('nutrition.protein.name') }}</text>
-                        <view>
-                            <text class="value-tag protein">{{ nutritionPercentages.protein }}%</text>
+                        <view class="percentage-adjuster">
+                            <text class="value-tag">{{ nutritionPercentages.protein }}%</text>
+                            <slider
+                                class="percentage-slider"
+                                :value="nutritionPercentages.protein"
+                                :min="5"
+                                :max="90"
+                                :step="5"
+                                @changing="(e) => updatePercentage('protein', e.detail.value)"
+                                @change="(e) => updatePercentage('protein', e.detail.value)"
+                            />
                         </view>
                     </view>
                 </view>
@@ -149,7 +162,6 @@
                     <text class="calories-value">{{ dietPlan.protein }}</text>
                     <text class="calories-unit">{{ $t('nutrition.protein.unit') }}</text>
                 </view>
-                <button class="edit-btn">✏️</button>
             </view>
 
             <!-- 脂肪 -->
@@ -158,8 +170,17 @@
                     <view class="progress-icon fat">🥑</view>
                     <view class="food-info">
                         <text class="food-name">{{ $t('nutrition.fat.name') }}</text>
-                        <view>
-                            <text class="value-tag fat">{{ nutritionPercentages.fat }}%</text>
+                        <view class="percentage-adjuster">
+                            <text class="value-tag">{{ nutritionPercentages.fat }}%</text>
+                            <slider
+                                class="percentage-slider"
+                                :value="nutritionPercentages.fat"
+                                :min="5"
+                                :max="90"
+                                :step="5"
+                                @changing="(e) => updatePercentage('fat', e.detail.value)"
+                                @change="(e) => updatePercentage('fat', e.detail.value)"
+                            />
                         </view>
                     </view>
                 </view>
@@ -167,7 +188,6 @@
                     <text class="calories-value">{{ dietPlan.fat }}</text>
                     <text class="calories-unit">{{ $t('nutrition.fat.unit') }}</text>
                 </view>
-                <button class="edit-btn">✏️</button>
             </view>
 
             <!-- 底部按钮 -->
@@ -200,6 +220,12 @@ export default {
             dietPlan: new DietPlan(),
 
             implementationAdvice: [], // 初始化为空数组
+
+            percentages: {
+                carbs: 0,
+                protein: 0,
+                fat: 0
+            }
         }
     },
 
@@ -265,12 +291,41 @@ export default {
             return (calories / this.dietPlan.calorie) * 100;
         },
 
+        updatePercentage(type, value) {
+            // 更新百分比
+            this.percentages[type] = parseInt(value);
+
+            // 更新克数
+            const calories = this.dietPlan.calorie;
+            let grams;
+
+            switch (type) {
+                case 'carbs':
+                    grams = (calories * (value / 100)) / 4;
+                    this.dietPlan.carbohydrate = Math.round(grams);
+                    break;
+                case 'protein':
+                    grams = (calories * (value / 100)) / 4;
+                    this.dietPlan.protein = Math.round(grams);
+                    break;
+                case 'fat':
+                    grams = (calories * (value / 100)) / 9;
+                    this.dietPlan.fat = Math.round(grams);
+                    break;
+            }
+        },
+
         async initData() {
             try {
                 const response = await dietPlanApi.getDietPlan({});
                 if (response.code === 'A0001') {
                     this.dietPlan = new DietPlan(response.data);
                     this.implementationAdvice = this.parseDetailedSuggestion(this.dietPlan.detailedSuggestion);
+
+                    // 设置初始百分比
+                    this.percentages.carbs = this.calculatePercentage(this.dietPlan.carbohydrate * 4);
+                    this.percentages.protein = this.calculatePercentage(this.dietPlan.protein * 4);
+                    this.percentages.fat = this.calculatePercentage(this.dietPlan.fat * 9);
                 } else {
                     uni.showToast({
                         title: response.message,
@@ -313,6 +368,15 @@ export default {
         },
 
         async save() {
+            const totalPercentage = this.percentages.carbs + this.percentages.protein + this.percentages.fat;
+            if (totalPercentage !== 100) {
+                uni.showToast({
+                    title: $t('page.diet-plan.message.total-percentage'),
+                    icon: 'none'
+                });
+                return;
+            }
+
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
@@ -338,6 +402,16 @@ export default {
             } finally {
                 this.isLoading = false;
                 uni.hideLoading();
+            }
+        },
+
+        computed: {
+            nutritionPercentages() {
+                return {
+                    carbs: Math.round(this.percentages.carbs),
+                    protein: Math.round(this.percentages.protein),
+                    fat: Math.round(this.percentages.fat)
+                };
             }
         }
     }
@@ -560,6 +634,18 @@ page {
     border-radius: 8rpx;
 }
 
+.percentage-adjuster {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    margin-top: 8rpx;
+}
+
+.percentage-slider {
+    flex: 1;
+    margin: 0;
+}
+
 /* 复用颜色样式 */
 .calories {
     background: #3b82f6;
@@ -591,14 +677,6 @@ page {
     font-size: 24rpx;
     color: #718096;
     margin-left: 4rpx;
-}
-
-.edit-btn {
-    background: none;
-    border: none;
-    padding: 16rpx;
-    line-height: 1;
-    font-size: 28rpx;
 }
 
 /* 按钮组样式 */

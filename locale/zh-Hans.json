@@ -219,6 +219,9 @@
       "daily-intake": {
         "title": "每日推荐摄入",
         "suggested-value": "建议值"
+      },
+      "message": {
+        "total-percentage": "比例之和必须等于100%"
       }
     }
   }
