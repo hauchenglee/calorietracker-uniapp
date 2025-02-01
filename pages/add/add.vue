@@ -60,6 +60,23 @@
 
                 <image :src="previewImage" class="preview-image" mode="aspectFit"/>
 
+                <view class="description-section">
+                    <view class="row-title">
+                        <view class="row-detail">
+                            <view class="row-icon">📝</view>
+                            <text class="food-name">{{ $t('page.add.photo.description-section-title') }}</text>
+                        </view>
+                    </view>
+                    <view class="food-row">
+                        <input
+                            v-model="userPrompt"
+                            class="form-input"
+                            type="text"
+                            placeholder="{{ $t('page.add.photo.description-section-placeholder') }}"
+                        />
+                    </view>
+                </view>
+
                 <view class="button-group">
                     <button class="reset-btn" @click="retakePhoto">{{ $t('page.add.photo.retake') }}</button>
                     <button class="setup-btn" @click="analyzeImage">{{ $t('page.add.photo.analyze') }}</button>
@@ -588,6 +605,8 @@ export default {
 
             activeTab: 0,
             previewImage: '',
+            userPrompt: '',
+
             isLoading: false,
 
             // 单位量词
@@ -849,7 +868,7 @@ export default {
                     processedFilePath = this.previewImage.replace('file://', '');
                 }
 
-                const response = await addApi.getVersion(processedFilePath);
+                const response = await addApi.getVersion(processedFilePath, this.userPrompt);
 
                 if (response.code === 'A0001' && response.data) {
                     const {data} = response;

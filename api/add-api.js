@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
 export default {
-    getVersion(filePath) {
-        return request.upload('/chatgpt/get-version', {
+    getVersion(filePath, content) {
+        return request.uploadImage('/chatgpt/get-version', {
             filePath: filePath,
-            name: 'image'
+            content
         })
     },
 

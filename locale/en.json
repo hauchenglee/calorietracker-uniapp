@@ -87,6 +87,8 @@
         "take-photo": "Take Photo",
         "select-gallery": "Choose from Gallery",
         "preview-title": "Image Preview",
+        "description-section-title": "Food Description",
+        "description-section-placeholder": "Describe this food, e.g. a plate of noodles, two dumplings etc",
         "retake": "Choose Again",
         "analyze": "Start Analysis",
         "cancel": "Cancel Select",

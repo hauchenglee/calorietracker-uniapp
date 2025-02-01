@@ -87,6 +87,8 @@
         "take-photo": "拍照",
         "select-gallery": "從相冊選擇",
         "preview-title": "圖片預覽",
+        "description-section-title": "食物描述",
+        "description-section-placeholder": "描述這個食物，例如：一盤炒麵、兩個水餃等",
         "retake": "重新選擇",
         "analyze": "開始分析",
         "cancel": "取消選取",

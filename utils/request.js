@@ -53,11 +53,10 @@ const request = {
         })
     },
 
-    // 文件上传
-    async upload(url, {
+    // 文件上传: https://juejin.cn/post/7169410244588601381
+    async uploadImage(url, {
         filePath,
-        name = 'file',
-        formData = {}
+        content
     }) {
         const token = uni.getStorageSync('token')
 
@@ -65,8 +64,10 @@ const request = {
             uni.uploadFile({
                 url: this.baseURL + url,
                 filePath,
-                name: 'image', // 固定为'image'以匹配Java端的@RequestParam("image")
-                formData,
+                name: 'image',
+                formData: {
+                    "content": content
+                },
                 header: {
                     'Authorization': token ? `Bearer ${token}` : '',
                 },
