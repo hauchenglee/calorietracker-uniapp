@@ -39,6 +39,14 @@
       }
     },
     {
+      "path": "pages/food/food",
+      "style": {
+        "navigationBarTitleText": "food",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/more/more",
       "style": {
         "navigationBarTitleText": "more",
@@ -106,6 +114,12 @@
         "text": "Diary",
         "iconPath": "static/images/tabbar/mod_default_3x.png",
         "selectedIconPath": "static/images/tabbar/mod_selected_3x.png"
+      },
+      {
+        "pagePath": "pages/food/food",
+        "text": "Food",
+        "iconPath": "static/images/tabbar/assembly_default_3x.png",
+        "selectedIconPath": "static/images/tabbar/assembly_selected_3x.png"
       },
       {
         "pagePath": "pages/more/more",
