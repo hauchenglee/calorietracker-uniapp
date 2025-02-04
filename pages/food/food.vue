@@ -21,6 +21,21 @@
             </button>
         </view>
 
+        <view class="search-box">
+            <view class="search-input-wrapper">
+                <input
+                    v-model="searchText"
+                    class="search-input"
+                    type="text"
+                    placeholder="搜索食物..."
+                    @input="onSearch"
+                    @confirm="onSearch"
+                />
+                <view v-if="searchText" class="clear-icon" @tap="clearSearch">✕</view>
+                <view class="search-icon" @tap="onSearch">🔍</view>
+            </view>
+        </view>
+
         <!-- 食物列表 -->
         <view class="meal-list">
             <view class="food-row" v-for="food in foodList" :key="food.id">
@@ -65,6 +80,7 @@ export default {
             statusBarHeight: 0,
             activeTab: 0,
             isLoading: false,
+            searchText: '', // 搜索关键词
             foodList: []
         }
     },
@@ -127,6 +143,14 @@ export default {
                 this.isLoading = false
             }, 500)
         },
+
+        onSearch() {
+
+        },
+
+        clearSearch() {
+            this.searchText = '';
+        }
     }
 }
 </script>
@@ -180,6 +204,67 @@ page {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.search-box {
+    background: #ffffff;
+    border-radius: 32rpx;
+    padding: 30rpx 40rpx;
+    margin-bottom: 40rpx;
+    /* #ifdef APP-PLUS */
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+    /* #endif */
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #f7fafc;
+    border-radius: 16rpx;
+    padding: 20rpx 24rpx;
+    gap: 16rpx;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 28rpx;
+    color: #1a1a1a;
+    padding: 0 12rpx;
+}
+
+.search-icon {
+    width: 64rpx;
+    height: 64rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32rpx;
+    background: #718096;
+    border-radius: 12rpx;
+    transition: all 0.2s ease;
+}
+
+.search-icon:active {
+    opacity: 0.9;
+    transform: scale(0.95);
+}
+
+.clear-icon {
+    width: 48rpx;
+    height: 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #718096;
+    font-size: 24rpx;
+    border-radius: 24rpx;
+    background: #edf2f7;
+    transition: all 0.2s ease;
+}
+
+.clear-icon:active {
+    opacity: 0.9;
+    transform: scale(0.95);
 }
 
 .meal-list {
