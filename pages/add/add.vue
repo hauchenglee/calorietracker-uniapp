@@ -1018,7 +1018,7 @@ export default {
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
-                const response = await addApi.save(this.formData1);
+                const response = await addApi.addByManual(this.formData1);
                 if (response.code === 'A0001') {
                     uni.showToast({
                         title: response.message,
@@ -1053,7 +1053,7 @@ export default {
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
-                const response = await addApi.save(this.formData2);
+                const response = await addApi.addByManual(this.formData2);
                 if (response.code === 'A0001') {
                     uni.showToast({
                         title: response.message,
