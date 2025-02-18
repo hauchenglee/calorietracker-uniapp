@@ -83,106 +83,106 @@
                     <button class="reset-btn" @click="cancelImage">{{ $t('page.add.photo.cancel') }}</button>
                 </view>
             </view>
+        </view>
 
-            <!-- 分析结果表单 -->
-            <view v-if="analysisCompleted" class="meal-category">
-                <view class="category-header">
-                    <view class="category-title">
-                        <view class="category-icon">📊</view>
-                        <text>{{ $t('page.add.category-title') }}</text>
+        <!-- 分析结果表单 -->
+        <view v-if="analysisCompleted" v-show="activeTab === 0" class="meal-list">
+            <view class="category-header">
+                <view class="category-title">
+                    <view class="category-icon">📊</view>
+                    <text>{{ $t('page.add.category-title') }}</text>
+                </view>
+            </view>
+
+            <view class="nutrition-form">
+                <view class="optional-row">
+                    <view
+                        :class="{ active: formData1.meal === 'breakfast' }"
+                        class="meal-option"
+                        @tap="selectMeal1('breakfast')"
+                    >
+                        <text class="meal-emoji">🌅</text>
+                        <text class="meal-label">{{ $t('meal.breakfast') }}</text>
+                    </view>
+                    <view
+                        :class="{ active: formData1.meal === 'lunch' }"
+                        class="meal-option"
+                        @tap="selectMeal1('lunch')"
+                    >
+                        <text class="meal-emoji">☀️</text>
+                        <text class="meal-label">{{ $t('meal.lunch') }}</text>
+                    </view>
+                    <view
+                        :class="{ active: formData1.meal === 'dinner' }"
+                        class="meal-option"
+                        @tap="selectMeal1('dinner')"
+                    >
+                        <text class="meal-emoji">🌙</text>
+                        <text class="meal-label">{{ $t('meal.dinner') }}</text>
                     </view>
                 </view>
 
-                <view class="nutrition-form">
-                    <view class="optional-row">
-                        <view
-                            :class="{ active: formData1.meal === 'breakfast' }"
-                            class="meal-option"
-                            @tap="selectMeal1('breakfast')"
-                        >
-                            <text class="meal-emoji">🌅</text>
-                            <text class="meal-label">{{ $t('meal.breakfast') }}</text>
-                        </view>
-                        <view
-                            :class="{ active: formData1.meal === 'lunch' }"
-                            class="meal-option"
-                            @tap="selectMeal1('lunch')"
-                        >
-                            <text class="meal-emoji">☀️</text>
-                            <text class="meal-label">{{ $t('meal.lunch') }}</text>
-                        </view>
-                        <view
-                            :class="{ active: formData1.meal === 'dinner' }"
-                            class="meal-option"
-                            @tap="selectMeal1('dinner')"
-                        >
-                            <text class="meal-emoji">🌙</text>
-                            <text class="meal-label">{{ $t('meal.dinner') }}</text>
-                        </view>
+                <!-- 日期 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">📅</view>
+                        <text class="food-name">{{ $t('page.add.form.date') }}</text>
                     </view>
+                </view>
+                <view class="food-row">
+                    <picker
+                        :end="endDate"
+                        :start="startDate"
+                        :value="formData1.date"
+                        class="picker-full"
+                        mode="date"
+                        @change="onDateChange1"
+                    >
+                        <text :class="['picker-text', !formData1.date && 'empty']">
+                            {{ formData1.date || $t('page.add.form.date-placeholder') }}
+                        </text>
+                    </picker>
+                </view>
 
-                    <!-- 日期 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">📅</view>
-                            <text class="food-name">{{ $t('page.add.form.date') }}</text>
-                        </view>
+                <!-- 食物名称 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">🍽️</view>
+                        <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
                     </view>
-                    <view class="food-row">
-                        <picker
-                            :end="endDate"
-                            :start="startDate"
-                            :value="formData1.date"
-                            class="picker-full"
-                            mode="date"
-                            @change="onDateChange1"
-                        >
-                            <text :class="['picker-text', !formData1.date && 'empty']">
-                                {{ formData1.date || $t('page.add.form.date-placeholder') }}
-                            </text>
-                        </picker>
-                    </view>
+                </view>
+                <view class="food-row">
+                    <input
+                        v-model="formData1.name"
+                        class="form-input"
+                        type="text"
+                    />
+                </view>
 
-                    <!-- 食物名称 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🍽️</view>
-                            <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
+                <!-- 数量和单位 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">🔢</view>
+                        <view class="food-header">
+                            <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
+                            <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
                         </view>
                     </view>
-                    <view class="food-row">
+                </view>
+                <view class="food-row">
+                    <view class="quantity-unit-group">
                         <input
-                            v-model="formData1.name"
-                            class="form-input"
-                            type="text"
+                            v-model="formData1.quantity"
+                            :max="99"
+                            :min="1"
+                            class="form-input quantity-input"
+                            maxlength="2"
+                            type="number"
+                            @input="limitQuantityInput($event, 'formData1')"
                         />
-                    </view>
-
-                    <!-- 数量和单位 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🔢</view>
-                            <view class="food-header">
-                                <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
-                                <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view class="food-row">
-                        <view class="quantity-unit-group">
-                            <input
-                                v-model="formData1.quantity"
-                                :max="99"
-                                :min="1"
-                                class="form-input quantity-input"
-                                maxlength="2"
-                                type="number"
-                                @input="limitQuantityInput($event, 'formData1')"
-                            />
-                            <view class="unit-selector" @tap="showUnitSelector1">
-                                <text>{{ formData1.unit || $t('page.add.form.unit.placeholder') }}</text>
-                                <text class="unit-arrow">▼</text>
-                            </view>
+                        <view class="unit-selector" @tap="showUnitSelector1">
+                            <text>{{ formData1.unit || $t('page.add.form.unit.placeholder') }}</text>
+                            <text class="unit-arrow">▼</text>
                         </view>
                     </view>
                 </view>
@@ -276,7 +276,7 @@
                         <view class="progress-label">
                             <view class="progress-icon fat">🥑</view>
                             <view class="label-group">
-                                <text>{{ $t('nutrition.fat') }}</text>
+                                <text>{{ $t('nutrition.fat.name') }}</text>
                                 <text class="form-sublabel">{{ $t('page.add.form.daily-recommended') }} {{ dietPlan.fat }} {{ $t('nutrition.fat.unit') }}</text>
                             </view>
                         </view>
@@ -302,105 +302,103 @@
 
         <!-- 手动记录标签页 -->
         <view v-show="activeTab === 1" class="meal-list">
-            <view class="meal-category">
-                <view class="category-header">
-                    <view class="category-title">
-                        <view class="category-icon">📝</view>
-                        <text>{{ $t('page.add.manual.title') }}</text>
+            <view class="category-header">
+                <view class="category-title">
+                    <view class="category-icon">📝</view>
+                    <text>{{ $t('page.add.manual.title') }}</text>
+                </view>
+            </view>
+
+            <view class="nutrition-form">
+                <!-- 餐食 -->
+                <view class="optional-row">
+                    <view
+                        :class="{ active: formData2.meal === 'breakfast' }"
+                        class="meal-option"
+                        @tap="selectMeal2('breakfast')"
+                    >
+                        <text class="meal-emoji">🌅</text>
+                        <text class="meal-label">{{ $t('meal.breakfast') }}</text>
+                    </view>
+                    <view
+                        :class="{ active: formData2.meal === 'lunch' }"
+                        class="meal-option"
+                        @tap="selectMeal2('lunch')"
+                    >
+                        <text class="meal-emoji">☀️</text>
+                        <text class="meal-label">{{ $t('meal.lunch') }}</text>
+                    </view>
+                    <view
+                        :class="{ active: formData2.meal === 'dinner' }"
+                        class="meal-option"
+                        @tap="selectMeal2('dinner')"
+                    >
+                        <text class="meal-emoji">🌙</text>
+                        <text class="meal-label">{{ $t('meal.dinner') }}</text>
                     </view>
                 </view>
 
-                <view class="nutrition-form">
-                    <!-- 餐食 -->
-                    <view class="optional-row">
-                        <view
-                            :class="{ active: formData2.meal === 'breakfast' }"
-                            class="meal-option"
-                            @tap="selectMeal2('breakfast')"
-                        >
-                            <text class="meal-emoji">🌅</text>
-                            <text class="meal-label">{{ $t('meal.breakfast') }}</text>
-                        </view>
-                        <view
-                            :class="{ active: formData2.meal === 'lunch' }"
-                            class="meal-option"
-                            @tap="selectMeal2('lunch')"
-                        >
-                            <text class="meal-emoji">☀️</text>
-                            <text class="meal-label">{{ $t('meal.lunch') }}</text>
-                        </view>
-                        <view
-                            :class="{ active: formData2.meal === 'dinner' }"
-                            class="meal-option"
-                            @tap="selectMeal2('dinner')"
-                        >
-                            <text class="meal-emoji">🌙</text>
-                            <text class="meal-label">{{ $t('meal.dinner') }}</text>
-                        </view>
+                <!-- 日期 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">📅</view>
+                        <text class="food-name">{{ $t('page.add.form.date') }}</text>
                     </view>
+                </view>
+                <view class="food-row">
+                    <picker
+                        :end="endDate"
+                        :start="startDate"
+                        :value="formData2.date"
+                        class="picker-full"
+                        mode="date"
+                        @change="onDateChange2"
+                    >
+                        <text :class="['picker-text', !formData2.date && 'empty']">
+                            {{ formData2.date || $t('page.add.form.date-placeholder') }}
+                        </text>
+                    </picker>
+                </view>
 
-                    <!-- 日期 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">📅</view>
-                            <text class="food-name">{{ $t('page.add.form.date') }}</text>
-                        </view>
+                <!-- 食物名称 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">🍽️</view>
+                        <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
                     </view>
-                    <view class="food-row">
-                        <picker
-                            :end="endDate"
-                            :start="startDate"
-                            :value="formData2.date"
-                            class="picker-full"
-                            mode="date"
-                            @change="onDateChange2"
-                        >
-                            <text :class="['picker-text', !formData2.date && 'empty']">
-                                {{ formData2.date || $t('page.add.form.date-placeholder') }}
-                            </text>
-                        </picker>
-                    </view>
+                </view>
+                <view class="food-row">
+                    <input
+                        v-model="formData2.name"
+                        class="form-input"
+                        type="text"
+                    />
+                </view>
 
-                    <!-- 食物名称 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🍽️</view>
-                            <text class="food-name">{{ $t('page.add.form.food-name') }}</text>
+                <!-- 数量和单位 -->
+                <view class="row-title">
+                    <view class="row-detail">
+                        <view class="row-icon">🔢</view>
+                        <view class="food-header">
+                            <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
+                            <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
                         </view>
                     </view>
-                    <view class="food-row">
+                </view>
+                <view class="food-row">
+                    <view class="quantity-unit-group">
                         <input
-                            v-model="formData2.name"
-                            class="form-input"
-                            type="text"
+                            v-model="formData2.quantity"
+                            :max="99"
+                            :min="1"
+                            class="form-input quantity-input"
+                            maxlength="2"
+                            type="number"
+                            @input="limitQuantityInput($event, 'formData2')"
                         />
-                    </view>
-
-                    <!-- 数量和单位 -->
-                    <view class="row-title">
-                        <view class="row-detail">
-                            <view class="row-icon">🔢</view>
-                            <view class="food-header">
-                                <text class="food-name">{{ $t('page.add.form.quantity') }}</text>
-                                <text class="food-unit">{{ $t('page.add.form.quantity-range') }}</text>
-                            </view>
-                        </view>
-                    </view>
-                    <view class="food-row">
-                        <view class="quantity-unit-group">
-                            <input
-                                v-model="formData2.quantity"
-                                :max="99"
-                                :min="1"
-                                class="form-input quantity-input"
-                                maxlength="2"
-                                type="number"
-                                @input="limitQuantityInput($event, 'formData2')"
-                            />
-                            <view class="unit-selector" @tap="showUnitSelector2">
-                                <text>{{ formData2.unit || $t('page.add.form.unit.placeholder') }}</text>
-                                <text class="unit-arrow">▼</text>
-                            </view>
+                        <view class="unit-selector" @tap="showUnitSelector2">
+                            <text>{{ formData2.unit || $t('page.add.form.unit.placeholder') }}</text>
+                            <text class="unit-arrow">▼</text>
                         </view>
                     </view>
                 </view>
@@ -1020,7 +1018,7 @@ export default {
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
-                const response = await addApi.save(this.formData1);
+                const response = await addApi.addByManual(this.formData1);
                 if (response.code === 'A0001') {
                     uni.showToast({
                         title: response.message,
@@ -1055,7 +1053,7 @@ export default {
             try {
                 this.isLoading = true;
                 await new Promise(resolve => setTimeout(resolve, 500));
-                const response = await addApi.save(this.formData2);
+                const response = await addApi.addByManual(this.formData2);
                 if (response.code === 'A0001') {
                     uni.showToast({
                         title: response.message,

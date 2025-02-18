@@ -8,8 +8,8 @@ export default {
         })
     },
 
-    save(data) {
-        return request.post('/diary/save', data)
+    addByManual(data) {
+        return request.post('/diary/add-by-manual', data)
     },
 
     delete(data) {

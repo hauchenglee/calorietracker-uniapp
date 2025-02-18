@@ -96,7 +96,7 @@
                 </view>
 
                 <view v-if="dietData.breakfast && dietData.breakfast.length > 0">
-                    <view v-for="food in dietData.breakfast" :key="food.id" class="food-row">
+                    <view v-for="food in dietData.breakfast" :key="food.id" class="food-row" @click="navigateToDiet">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
@@ -129,7 +129,7 @@
                 </view>
 
                 <view v-if="dietData.lunch && dietData.lunch.length > 0">
-                    <view v-for="food in dietData.lunch" :key="food.id" class="food-row">
+                    <view v-for="food in dietData.lunch" :key="food.id" class="food-row" @click="navigateToDiet">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
@@ -162,7 +162,7 @@
                 </view>
 
                 <view v-if="dietData.dinner && dietData.dinner.length > 0">
-                    <view v-for="food in dietData.dinner" :key="food.id" class="food-row">
+                    <view v-for="food in dietData.dinner" :key="food.id" class="food-row" @click="navigateToDiet">
                         <view class="food-detail">
                             <view class="food-info">
                                 <text class="food-name">{{ food.name }}</text>
@@ -379,6 +379,12 @@ export default {
             });
         },
 
+        navigateToDiet() {
+            uni.navigateTo({
+                url: '/pages/diet/diet'
+            });
+        },
+
         floatingBtnClick() {
             if (this.isBodyExist) {
                 uni.navigateTo({
@@ -564,6 +570,13 @@ page {
     border-radius: 24rpx;
     background: #f7fafc;
     margin-bottom: 20rpx;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.food-row:active {
+    background: #edf2f7;
+    transform: scale(0.98);
 }
 
 .food-row:last-child {
