@@ -31,6 +31,14 @@
       }
     },
     {
+      "path": "pages/diet/diet",
+      "style": {
+        "navigationBarTitleText": "diet",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/add/add",
       "style": {
         "navigationBarTitleText": "add",

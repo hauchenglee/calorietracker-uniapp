@@ -3,14 +3,7 @@
     <view class="container">
 
         <!-- 手动记录标签页 -->
-        <view v-show="activeTab === 1" class="meal-list">
-            <view class="category-header">
-                <view class="category-title">
-                    <view class="category-icon">📝</view>
-                    <text>{{ $t('page.add.manual.title') }}</text>
-                </view>
-            </view>
-
+        <view class="meal-list">
             <view class="nutrition-form">
                 <!-- 餐食 -->
                 <view class="optional-row">
@@ -107,7 +100,7 @@
             </view>
         </view>
 
-        <view v-show="activeTab === 1" class="meal-list-progress-group">
+        <view class="meal-list-progress-group">
             <!-- 营养素进度条组 -->
             <view class="progress-group">
                 <!-- 热量 -->
@@ -259,8 +252,6 @@
 
 <script>
 import loadingOverlay from "@/components/loading-overlay.vue";
-import addApi from "@/api/add-api";
-import dietPlanApi from "@/api/diet-plan-api";
 import DietPlan from '@/models/diet-plan'
 
 export default {
@@ -269,7 +260,6 @@ export default {
         return {
             statusBarHeight: 0,// 适配屏幕高度
 
-            activeTab: 0,
             previewImage: '',
             userPrompt: '',
 
@@ -320,8 +310,7 @@ export default {
 
     async onShow() {
         try {
-            this.isLoading = true;
-            await this.renew();
+
         } catch (error) {
             uni.showToast({
                 title: 'onShow error',
@@ -333,20 +322,8 @@ export default {
     },
 
     methods: {
-        showTab(index) {
-            this.activeTab = index
-        },
-
-        onDateChange1(e) {
-            this.formData1.date = e.detail.value;
-        },
-
         onDateChange2(e) {
             this.formData2.date = e.detail.value;
-        },
-
-        selectMeal1(meal) {
-            this.formData1.meal = meal
         },
 
         selectMeal2(meal) {
@@ -450,65 +427,9 @@ export default {
         },
 
         async saveData2() {
-            // 实现与 saveData1 相同，只是使用 formData2
-            if (this.isLoading) return;
 
-            if (!this.validateFormData2()) {
-                return;
-            }
-
-            try {
-                this.isLoading = true;
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const response = await addApi.addByManual(this.formData2);
-                if (response.code === 'A0001') {
-                    uni.showToast({
-                        title: response.message,
-                        icon: 'success'
-                    })
-                } else {
-                    uni.showToast({
-                        title: response.message,
-                        icon: 'error'
-                    });
-                }
-            } catch (error) {
-                this.isLoading = false;
-                uni.showToast({
-                    title: error.message,
-                    icon: 'error'
-                })
-            } finally {
-                this.isLoading = false;
-                uni.hideLoading();
-            }
         },
 
-        async renew() {
-            try {
-                this.isLoading = true;
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                const response = await dietPlanApi.renew({});
-                if (response.code === 'A0001') {
-                    this.dietPlan = new DietPlan(response.data);
-                } else {
-                    uni.showToast({
-                        title: response.message,
-                        icon: 'error'
-                    });
-                }
-            } catch (error) {
-                this.isLoading = false;
-                uni.showToast({
-                    title: error.message,
-                    icon: 'error'
-                });
-            } finally {
-                this.isLoading = false;
-                uni.hideLoading();
-            }
-        },
     }
 }
 </script>
